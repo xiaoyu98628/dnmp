@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+
+  mysql8.0.27:
+    image: mysql:8.0.27
+    container_name: MySQL80
+    ports:
+      - "3306:3306"
+    volumes:
+      - "/opt/docker/data/MySQL/mysql8.0.27:/var/lib/mysql"   # 数据库文件
+      - "/opt/docker/servers/MySQL/mysql8.0.27:/etc/mysql"    # 配置文件
+    restart: always
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+      - "TZ=Asia/Shanghai"
+    networks:
+      - dump-net
+
+  redis6.2.6:
+    image: redis:6.2.6-alpine
+    container_name: redis6.2.6
+    ports:
+      - "6379:6379"
+    volumes:
+      - "/opt/docker/servers/Redis/redis6.2.6:/etc/redis"     # 配置文件
+      - "/opt/docker/data/Redis/redis6.2.6:/data"             # 数据文件
+      - "/opt/docker/logs/Redis/redis6.2.6:/var/log/redis"    # 日志文件
+    restart: always
+    environment:
+      - "TZ=Asia/Shanghai"
+    entrypoint: ["redis-server", "/etc/redis/redis.conf"]     # 持久化
+    privileged: true
+    networks:
+      - dump-net
+
+  php73:
+    image: php:7.3-fpm-alpine
+    container_name: php73
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - "/opt/docker/servers/PHP/php7.3/:/usr/local/etc/"     # 配置文件
+      - "/opt/docker/www:/var/www/html"                       # 文件路径
+    environment:
+      - "TZ=Asia/Shanghai"
+    networks:
+      - dump-net
+
+  php74:
+    image: php:7.4-fpm-alpine
+    container_name: php74
+    restart: always
+    ports:
+      - "9001:9000"
+    volumes:
+      - "/opt/docker/servers/PHP/php7.4:/usr/local/etc/"      # 配置文件
+      - "/opt/docker/www:/var/www/html"                       # 文件路径
+    environment:
+      - "TZ=Asia/Shanghai"
+    networks:
+      - dump-net
+
+  nginx1.21.4:
+    image: nginx:1.21.4-alpine
+    container_name: nginx1.21.4
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/opt/docker/servers/Nginx/nginx1.21.4:/etc/nginx"    # 配置文件
+      - "/opt/docker/logs/Nginx/nginx1.21.4:/var/log/nginx"   # 日志文件
+      - "/opt/docker/www:/usr/share/nginx/html"               # 文件路径
+    environment:
+      - "TZ=Asia/Shanghai"
+    networks:
+      - dump-net
+
+networks:
+  dump-net:
+
+

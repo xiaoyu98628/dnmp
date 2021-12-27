@@ -1,0 +1,35 @@
+[mysql]
+# 设置mysql客户端默认字符集
+default-character-set=utf8mb4
+
+[mysqld]
+# 默认端口
+port=3306
+# 默认使用“mysql_native_password”插件认证
+default_authentication_plugin=mysql_native_password
+# mysql根目录
+basedir=G:/Services/mysql/mysql-8.0.26/
+# 数据文件存放目录
+datadir=G:/Services/data/mysql-8.0.26/
+# 服务实例的唯一标识
+server-id=1
+# 默认存储引擎
+default-storage-engine=INNODB
+# 服务端使用的字符集默认为utf8mb4
+character-set-server=utf8mb4
+
+# 允许最大连接数
+max_connections=200
+# 允许连接失败的次数，这是为了防止有人从该主机试图攻击数据库系统
+max_connect_errors=10
+
+# 错误日志路径
+log-error=G:/Services/log/mysql-8.0.26/error
+# binlog日志位置
+log_bin=G:/Services/log/mysql-8.0.26/binlog/binlog
+
+[client]
+# 客户端默认端口
+port=3306
+# 客户端默认的字符集
+default-character-set=utf8mb4
