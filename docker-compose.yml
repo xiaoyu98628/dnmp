@@ -13,7 +13,7 @@ services:
     restart: always
     environment:
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
-      - "TZ=Asia/Shanghai"
+      - "TZ=${TZ}"
     networks:
       - dump-net
 
@@ -28,7 +28,7 @@ services:
       - "/opt/docker/logs/Redis/redis6.2.6:/var/log/redis"    # 日志文件
     restart: always
     environment:
-      - "TZ=Asia/Shanghai"
+      - "TZ=${TZ}"
     entrypoint: ["redis-server", "/etc/redis/redis.conf"]     # 持久化
     privileged: true
     networks:
@@ -44,7 +44,7 @@ services:
       - "/opt/docker/servers/PHP/php7.3/:/usr/local/etc/"     # 配置文件
       - "/opt/docker/www:/var/www/html"                       # 文件路径
     environment:
-      - "TZ=Asia/Shanghai"
+      - "TZ=${TZ}"
     networks:
       - dump-net
 
@@ -58,7 +58,7 @@ services:
       - "/opt/docker/servers/PHP/php7.4:/usr/local/etc/"      # 配置文件
       - "/opt/docker/www:/var/www/html"                       # 文件路径
     environment:
-      - "TZ=Asia/Shanghai"
+      - "TZ=${TZ}"
     networks:
       - dump-net
 
@@ -74,7 +74,7 @@ services:
       - "/opt/docker/logs/Nginx/nginx1.21.4:/var/log/nginx"   # 日志文件
       - "/opt/docker/www:/usr/share/nginx/html"               # 文件路径
     environment:
-      - "TZ=Asia/Shanghai"
+      - "TZ=${TZ}"
     networks:
       - dump-net
 
