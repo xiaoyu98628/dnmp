@@ -9,12 +9,22 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g" /etc/apk/repositories
 
 # 安装依赖
 RUN apk add --no-cache --virtual .build-deps \
-            tzdata \
-            gcc \
-            make \
+            gcc make g++ \
             vim \
+            libpng \
+            libpng-dev \
+            freetype \
+            freetype-dev \
+            libwebp \
+            libwebp-dev \
+            libjpeg \
+            jpeg-dev \
+            libjpeg-turbo \
+            libjpeg-turbo-dev \
+            && docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir --with-png-dir --with-zlib-dir --with-freetype-dir -enable-gd-native-ttf \
+            && NUMPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
+            && docker-php-ext-install -j${NUMPROC} gd
 
-# 修改时间
 
 # 安装扩展
 
