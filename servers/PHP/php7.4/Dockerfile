@@ -1,4 +1,4 @@
-# 指定基于 php:7.4-fpm-alpine 创建
+# 指定基于 php:7.4-fpm-alpine3.15 创建
 FROM php:7.4-fpm-alpine3.15
 
 # 声明作者
@@ -15,22 +15,16 @@ RUN apk add --no-cache --virtual .build-deps \
 
 RUN apk add --no-cache --virtual .build-deps \
             # 相关依赖必须手动安装
-            curl \
-            g++ \
-            make \
-            autoconf \
             libpng-dev \
             freetype-dev \
             libwebp-dev \
-            libjpeg-turbo-dev \
             && docker-php-source extract \
             # 安装扩展
             && docker-php-ext-configure gd \
-            --with-freetype-dir=/usr/include \
-            --with-jpeg-dir=/usr/include \
-            --with-png-dir=/usr/include \
-            --with-webp-dir=/usr/include \
+            --with-freetype=/usr/include \
+            --with-jpeg=/usr/include \
             && docker-php-ext-install -j$(nproc) pdo_mysql gd \
+            && docker-php-ext-enable pdo_mysql gd \
             && pecl install redis swoole \
             && docker-php-ext-enable redis swoole \
             && docker-php-source delete \
