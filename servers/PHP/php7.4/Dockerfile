@@ -1,41 +1,38 @@
 # 指定基于 php:7.4-fpm-alpine 创建
-FROM php:7.4-fpm-alpine
+FROM php:7.4-fpm-alpine3.15
 
 # 声明作者
 LABEL MAINTAINER="XiaoYu <1765841705@qq.com>"
 
 # 资源替换 阿里云镜像
-RUN if [ $CONTAINER_PACKAGE_URL ] ; then sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories ; fi
+RUN sed -i "s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g" /etc/apk/repositories
 
 # 修改时间
 RUN apk add --no-cache --virtual .build-deps \
     tzdata \
-    && cp /usr/share/zoneinfo/${TZ} /etc/localtime \
-    && echo "${TZ}" > /etc/timezone
+    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone
 
 RUN apk add --no-cache --virtual .build-deps \
             # 相关依赖必须手动安装
-            gcc make g++ vim \
+            curl \
+            g++ \
+            make \
             autoconf \
-            libpng \
             libpng-dev \
-            freetype \
             freetype-dev \
-            libwebp \
             libwebp-dev \
-            libjpeg \
-            jpeg-dev \
-            libjpeg-turbo \
             libjpeg-turbo-dev \
-            && docker-php-source extract  \
-            # 如果安装的扩展需要自定义配置时
-            && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-            && docker-php-ext-install -j$(nproc) gd \
-#            && docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir --with-png-dir --with-zlib-dir --with-freetype-dir -enable-gd-native-ttf \
-#            && NUMPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
-#            && docker-php-ext-install -j${NUMPROC} gd
-
-            # 扩展安装完成执行
-#            && docker-php-source delete  \
-            # 删除 apk 临时文件
+            && docker-php-source extract \
+            # 安装扩展
+            && docker-php-ext-configure gd \
+            --with-freetype-dir=/usr/include \
+            --with-jpeg-dir=/usr/include \
+            --with-png-dir=/usr/include \
+            --with-webp-dir=/usr/include \
+            && docker-php-ext-install -j$(nproc) pdo_mysql gd \
+            && pecl install redis swoole \
+            && docker-php-ext-enable redis swoole \
+            && docker-php-source delete \
+            && pecl clear-cache \
             && apk del .build-deps
