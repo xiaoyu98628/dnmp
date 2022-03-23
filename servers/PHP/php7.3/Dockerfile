@@ -18,6 +18,7 @@ RUN apk update \
 RUN apk update \
     && apk add --no-cache --virtual .build-deps \
     autoconf \
+    # 安装redis swoole 相关依赖
     g++ \
     make
 
@@ -40,8 +41,14 @@ RUN apk add --no-cache \
     --with-png-dir=/usr/include \
     --with-webp-dir=/usr/include \
     && docker-php-ext-install -j$(nproc) gd pdo_mysql mysqli sockets zip \
+    # 外部扩展
     && pecl install redis swoole \
     && docker-php-ext-enable redis swoole \
     && docker-php-source delete \
-    && pecl clear-cache \
+    && pecl clear-cache
+
+# 安装composer
+RUN apk add --no-cache --virtual .build-deps curl \
+    && curl -sS https://getcomposer.org/installer | php \
+    && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
     && apk del .build-deps
