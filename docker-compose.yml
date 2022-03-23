@@ -37,12 +37,15 @@ services:
   php73:
     build:
       context: ./servers/PHP/php7.3
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
     container_name: php73
     restart: always
     ports:
       - "9000:9000"
     volumes:
-      - "./servers/PHP/php7.3/:/usr/local/etc/"     # 配置文件
+      - "./servers/PHP/php7.3/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
+      - "./servers/PHP/php7.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
       - "./www:/var/www/html"                       # 文件路径
     environment:
       - "TZ=${TZ}"
@@ -52,12 +55,15 @@ services:
   php74:
     build:
       context: ./servers/PHP/php7.4
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
     container_name: php74
     restart: always
     ports:
       - "9001:9000"
     volumes:
-      - "./servers/PHP/php7.4:/usr/local/etc/"      # 配置文件
+      - "./servers/PHP/php7.4/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
+      - "./servers/PHP/php7.4/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
       - "./www:/var/www/html"                       # 文件路径
     environment:
       - "TZ=${TZ}"

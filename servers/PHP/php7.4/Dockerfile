@@ -4,15 +4,10 @@ FROM php:7.4-fpm-alpine3.13
 # 声明作者
 LABEL MAINTAINER="XiaoYu <1765841705@qq.com>"
 
+ARG CONTAINER_PACKAGE_URL
+
 # 资源替换 阿里云镜像
 RUN if [ $CONTAINER_PACKAGE_URL ] ; then sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories ; fi
-
-# 修改时间
-RUN apk update \
-    && apk add --no-cache --virtual .build-deps \
-    tzdata \
-    && cp /usr/share/zoneinfo/${TZ} /etc/localtime \
-    && echo "${TZ}" > /etc/timezone
 
 # 相关依赖必须手动安装 可删除
 RUN apk update \
