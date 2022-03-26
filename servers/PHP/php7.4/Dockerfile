@@ -13,7 +13,6 @@ RUN if [ $CONTAINER_PACKAGE_URL ] ; then sed -i "s/dl-cdn.alpinelinux.org/${CONT
 RUN apk update \
     && apk add --no-cache --virtual .build-deps \
     autoconf \
-    # 安装redis swoole 相关依赖
     g++ \
     make
 
