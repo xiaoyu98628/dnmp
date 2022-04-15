@@ -74,6 +74,26 @@ services:
     networks:
       - dump-net
 
+  php80:
+    build:
+      context: ./servers/PHP/php8.0
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+    container_name: php80
+    restart: always
+    ports:
+      - "9001:9000"
+    volumes:
+      - "./servers/PHP/php8.0/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
+      - "./servers/PHP/php8.0/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
+      - "./servers/PHP/php8.0/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
+      - "./www:/var/www/html"                       # 文件路径
+      - "./servers/panel/sock:/dev/shm" # nginx使用unix连接文件
+    environment:
+      - "TZ=${TZ}"
+    networks:
+      - dump-net
+
   nginx1.21.4:
     image: nginx:1.21.4-alpine
     container_name: nginx1.21.4
