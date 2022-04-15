@@ -36,7 +36,7 @@ services:
 
   php73:
     build:
-      context: ./servers/PHP/php7.3
+      context: ./servers/php/php7.3
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
     container_name: php73
@@ -56,7 +56,7 @@ services:
 
   php74:
     build:
-      context: ./servers/PHP/php7.4
+      context: ./servers/php/php7.4
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
     container_name: php74
@@ -76,7 +76,7 @@ services:
 
   php80:
     build:
-      context: ./servers/PHP/php8.0
+      context: ./servers/php/php8.0
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
     container_name: php80
