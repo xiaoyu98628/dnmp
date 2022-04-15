@@ -17,14 +17,14 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 #### 目录结构
 ```
 |-- data                         数据库数据目录
-|     |--- MySQL                      MySQL 数据目录（多版本）
+|     |--- mysql                      mysql 数据目录（多版本）
 |--- logs                        日志目录
 |--- servers                     服务构建文件和配置文件目录
-|     |--- MySQL                      MySQL 配置文件目录（多版本）
-|     |--- Nginx                      Nginx 配置文件目录（多版本）
-|     |--- PHP                        PHP 配置文件目录（多版本）
-|     |--- Redis                      Redis 配置文件目录（多版本）
-|     |--- panel                      PHP 套接字文件目录
+|     |--- mysql                      mysql 配置文件目录（多版本）
+|     |--- nginx                      nginx 配置文件目录（多版本）
+|     |--- php                        php 配置文件目录（多版本）
+|     |--- redis                      redis 配置文件目录（多版本）
+|     |--- panel                      php 套接字文件目录
 |--- www                         项目文件目录
 |--- .env                        环境配置示例文件
 |--- docker-compose.yml          Docker 服务配置示例文件
