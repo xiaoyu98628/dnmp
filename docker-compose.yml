@@ -8,8 +8,8 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "./data/MySQL/mysql8.0.27:/var/lib/mysql"   # 数据库文件
-      - "./servers/MySQL/mysql8.0.27:/etc/mysql"    # 配置文件
+      - "./data/mysql/mysql8.0.27:/var/lib/mysql"   # 数据库文件
+      - "./servers/mysql/mysql8.0.27:/etc/mysql"    # 配置文件
     restart: always
     environment:
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
@@ -23,9 +23,9 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - "./servers/Redis/redis6.2.6:/etc/redis"     # 配置文件
-      - "./data/Redis/redis6.2.6:/data"             # 数据文件
-      - "./logs/Redis/redis6.2.6:/var/log/redis"    # 日志文件
+      - "./servers/redis/redis6.2.6:/etc/redis"     # 配置文件
+      - "./data/redis/redis6.2.6:/data"             # 数据文件
+      - "./logs/redis/redis6.2.6:/var/log/redis"    # 日志文件
     restart: always
     environment:
       - "TZ=${TZ}"
@@ -44,9 +44,9 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - "./servers/PHP/php7.3/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
-      - "./servers/PHP/php7.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
-      - "./servers/PHP/php7.3/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
+      - "./servers/php/php7.3/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
+      - "./servers/php/php7.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
+      - "./servers/php/php7.3/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
       - "./www:/var/www/html"                       # 文件路径
       - "./servers/panel/sock:/dev/shm" # nginx使用unix sock连接文件
     environment:
@@ -64,9 +64,9 @@ services:
     ports:
       - "9001:9000"
     volumes:
-      - "./servers/PHP/php7.4/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
-      - "./servers/PHP/php7.4/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
-      - "./servers/PHP/php7.4/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
+      - "./servers/php/php7.4/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
+      - "./servers/php/php7.4/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
+      - "./servers/php/php7.4/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
       - "./www:/var/www/html"                       # 文件路径
       - "./servers/panel/sock:/dev/shm" # nginx使用unix连接文件
     environment:
@@ -84,9 +84,9 @@ services:
     ports:
       - "9002:9000"
     volumes:
-      - "./servers/PHP/php8.0/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
-      - "./servers/PHP/php8.0/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
-      - "./servers/PHP/php8.0/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
+      - "./servers/php/php8.0/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
+      - "./servers/php/php8.0/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
+      - "./servers/php/php8.0/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
       - "./www:/var/www/html"                       # 文件路径
       - "./servers/panel/sock:/dev/shm" # nginx使用unix连接文件
     environment:
@@ -102,8 +102,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - "./servers/Nginx/nginx1.21.4:/etc/nginx"    # 配置文件
-      - "./logs/Nginx/nginx1.21.4:/var/log/nginx"   # 日志文件
+      - "./servers/nginx/nginx1.21.4:/etc/nginx"    # 配置文件
+      - "./logs/nginx/nginx1.21.4:/var/log/nginx"   # 日志文件
       - "./www:/usr/share/nginx/html"               # 文件路径
       - "./servers/panel/sock:/dev/shm"             # php unix连接文件
     environment:
