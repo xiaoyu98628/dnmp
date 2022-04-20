@@ -47,7 +47,7 @@ RUN apk add --no-cache \
     --with-jpeg-dir=/usr/include \
     --with-png-dir=/usr/include \
     --with-webp-dir=/usr/include \
-    && docker-php-ext-install -j$(nproc) gd pdo_mysql mysqli opcache sockets zip intl xsl shmop pcntl sodium bz2 soap gettext \
+    && docker-php-ext-install -j$(nproc) gd pdo_mysql mysqli opcache sockets zip intl xsl shmop pcntl sodium bz2 soap gettext bcmath \
     # 外部扩展
     && pecl install redis swoole \
     && docker-php-ext-enable redis swoole \
