@@ -17,20 +17,19 @@ services:
     networks:
       - dump-net
 
-  redis6.2.6:
-    image: redis:6.2.6-alpine
-    container_name: redis6.2.6
+  redis6.2:
+    image: redis:6.2-alpine
+    container_name: redis6.2
     ports:
       - "6379:6379"
     volumes:
-      - "./servers/redis/redis6.2.6:/etc/redis"     # 配置文件
-      - "./data/redis/redis6.2.6:/data"             # 数据文件
-      - "./logs/redis/redis6.2.6:/var/log/redis"    # 日志文件
+      - "./servers/redis/redis6.2:/etc/redis"     # 配置文件
+      - "./data/redis/redis6.2:/data"             # 数据文件
+      - "./logs/redis/redis6.2:/var/log/redis"    # 日志文件
     restart: always
     environment:
       - "TZ=${TZ}"
-    entrypoint: ["redis-server", "/etc/redis/redis.conf"]     # 持久化
-    privileged: true
+    entrypoint: ["redis-server", "/etc/redis/redis.conf"]
     networks:
       - dump-net
 
