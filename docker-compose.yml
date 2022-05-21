@@ -19,7 +19,7 @@ services:
 
   redis6.2:
     image: redis:6.2-alpine
-    container_name: redis6.2
+    container_name: redis62
     ports:
       - "6379:6379"
     volumes:

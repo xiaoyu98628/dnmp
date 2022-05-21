@@ -47,7 +47,7 @@ function getRedisVersion()
     if (extension_loaded('redis')) {
         try {
             $redis = new Redis();
-            $redis->connect('redis6.2', 6379);
+            $redis->connect('redis62', 6379);
             $redis->auth('xiaoyu');
             $info = $redis->info();
             return $info['redis_version'];
