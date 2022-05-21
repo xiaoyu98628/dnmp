@@ -2,14 +2,14 @@ version: '3.8'
 
 services:
 
-  mysql8.0.27:
-    image: mysql:8.0.27
+  mysql8.0:
+    image: mysql:8.0
     container_name: mysql80
     ports:
       - "3306:3306"
     volumes:
-      - "./data/mysql/mysql8.0.27:/var/lib/mysql"   # 数据库文件
-      - "./servers/mysql/mysql8.0.27:/etc/mysql"    # 配置文件
+      - "./data/mysql/mysql8.0:/var/lib/mysql"   # 数据库文件
+      - "./servers/mysql/mysql8.0:/etc/mysql"    # 配置文件
     restart: always
     environment:
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
