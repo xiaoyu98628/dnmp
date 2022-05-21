@@ -19,6 +19,7 @@ printExtensions();
 
 /**
  * 获取MySQL版本
+ * @return string
  */
 function getMysqlVersion()
 {
@@ -27,10 +28,10 @@ function getMysqlVersion()
             $dbh = new PDO('mysql:host=MySQL80;dbname=mysql', 'root', 'root');
             $sth = $dbh->query('SELECT VERSION() as version');
             $info = $sth->fetch();
+            return $info['version'];
         } catch (PDOException $e) {
             return $e->getMessage();
         }
-        return $info['version'];
     } else {
         return 'PDO_MYSQL 扩展未安装 ×';
     }
@@ -39,13 +40,14 @@ function getMysqlVersion()
 
 /**
  * 获取Redis版本
+ * @return string
  */
 function getRedisVersion()
 {
     if (extension_loaded('redis')) {
         try {
             $redis = new Redis();
-            $redis->connect('redis6.2.6', 6379);
+            $redis->connect('redis6.2', 6379);
             $redis->auth('xiaoyu');
             $info = $redis->info();
             return $info['redis_version'];
@@ -59,6 +61,8 @@ function getRedisVersion()
 
 /**
  * 获取MongoDB版本
+ * @return string
+ * @throws \MongoDB\Driver\Exception\Exception
  */
 function getMongoVersion()
 {
