@@ -15,7 +15,7 @@ services:
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
       - "TZ=${TZ}"
     networks:
-      - dump-net
+      - dnmp-net
 
   redis6.2:
     image: redis:6.2-alpine
@@ -31,7 +31,7 @@ services:
       - "TZ=${TZ}"
     entrypoint: ["redis-server", "/etc/redis/docker.conf"]
     networks:
-      - dump-net
+      - dnmp-net
 
   php73:
     build:
@@ -51,7 +51,7 @@ services:
     environment:
       - "TZ=${TZ}"
     networks:
-      - dump-net
+      - dnmp-net
 
   php74:
     build:
@@ -71,7 +71,7 @@ services:
     environment:
       - "TZ=${TZ}"
     networks:
-      - dump-net
+      - dnmp-net
 
   php80:
     build:
@@ -91,7 +91,7 @@ services:
     environment:
       - "TZ=${TZ}"
     networks:
-      - dump-net
+      - dnmp-net
 
   nginx1.21.4:
     image: nginx:1.21.4-alpine
@@ -108,7 +108,7 @@ services:
     environment:
       - "TZ=${TZ}"
     networks:
-      - dump-net
+      - dnmp-net
 
 networks:
-  dump-net:
+  dnmp-net:
