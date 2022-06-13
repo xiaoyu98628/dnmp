@@ -15,6 +15,7 @@ RUN if [ $CONTAINER_PACKAGE_URL ] ; then sed -i "s/dl-cdn.alpinelinux.org/${CONT
 # 安装扩展
 RUN apk update \
     && docker-php-source extract \
+    && apk add --no-cache --virtual .build-deps curl \
     && if [ "${PHP80_EXTENSIONS}" != "" ]; \
         then \
             apk --no-cache add --virtual .build-deps autoconf g++ make; \
@@ -133,11 +134,9 @@ RUN apk update \
             pecl install mongodb; \
             docker-php-ext-enable mongodb; \
         fi \
-    && docker-php-source delete \
-    && pecl clear-cache
-
-# 安装composer
-RUN apk add --no-cache --virtual .build-deps curl \
+    # 安装composer
     && curl -sS https://getcomposer.org/installer | php \
     && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
+    && docker-php-source delete \
+    && pecl clear-cache \
     && apk del .build-deps
