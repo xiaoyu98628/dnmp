@@ -138,5 +138,4 @@ RUN apk update \
     && curl -sS https://getcomposer.org/installer | php \
     && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
     && docker-php-source delete \
-    && pecl clear-cache \
     && apk del .build-deps
