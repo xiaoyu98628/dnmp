@@ -38,6 +38,7 @@ services:
       context: ./servers/php/php7.3
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        PHP73_EXTENSIONS: ${PHP73_EXTENSIONS}
     container_name: php73
     restart: always
     ports:
@@ -58,6 +59,7 @@ services:
       context: ./servers/php/php7.4
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        PHP74_EXTENSIONS: ${PHP74_EXTENSIONS}
     container_name: php74
     restart: always
     ports:
@@ -78,6 +80,7 @@ services:
       context: ./servers/php/php8.0
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        PHP80_EXTENSIONS: ${PHP80_EXTENSIONS}
     container_name: php80
     restart: always
     ports:
