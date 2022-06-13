@@ -17,7 +17,7 @@ RUN apk update \
     && docker-php-source extract \
     && if [ "${PHP80_EXTENSIONS}" != "" ]; \
         then \
-            apk --update --no-cache add --virtual .build-deps autoconf g++ make; \
+            apk --no-cache add --virtual .build-deps autoconf g++ make; \
         fi \
     && if [[ -z "${EXTENSIONS##*,pdo_mysql,*}" ]]; \
         then \
@@ -34,11 +34,6 @@ RUN apk update \
             echo "---------- Install mysqli ----------"; \
             docker-php-ext-install -j$(nproc) mysqli; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,mbstring,*}" ]]; \
-        then \
-            echo "---------- Install mbstring ----------"; \
-            docker-php-ext-install -j$(nproc) mbstring; \
-        fi \
     && if [[ -z "${EXTENSIONS##*,exif,*}" ]]; \
         then \
             echo "---------- Install exif ----------"; \
@@ -54,10 +49,16 @@ RUN apk update \
             echo "---------- Install opcache ----------"; \
             docker-php-ext-install -j$(nproc) opcache; \
         fi \
+    && if [[ -z "${EXTENSIONS##*,gettext,*}" ]]; \
+        then \
+            echo "---------- Install gettext ----------"; \
+            apk --no-cache add gettext-dev; \
+            docker-php-ext-install -j$(nproc) gettext; \
+        fi \
     && if [[ -z "${EXTENSIONS##*,gd,*}" ]]; \
         then \
             echo "---------- Install gd ----------"; \
-            apk --no-cache add libjpeg-turbo-dev libwebp-dev libpng-dev freetype-dev; \
+            apk add --no-cache libjpeg-turbo-dev libwebp-dev libpng-dev freetype-dev; \
             docker-php-ext-configure gd --with-freetype=/usr/include --with-jpeg=/usr/include --with-webp=/usr/include; \
             docker-php-ext-install -j$(nproc) gd; \
         fi \
@@ -65,6 +66,35 @@ RUN apk update \
         then \
             echo "---------- Install sockets ----------"; \
             docker-php-ext-install -j$(nproc) sockets; \
+        fi \
+    && if [[ -z "${EXTENSIONS##*,shmop,*}" ]]; \
+        then \
+            echo "---------- Install shmop ----------"; \
+            docker-php-ext-install -j$(nproc) shmop; \
+        fi \
+    && if [[ -z "${EXTENSIONS##*,intl,*}" ]]; \
+        then \
+            echo "---------- Install intl ----------"; \
+            apk add --no-cache icu-dev; \
+            docker-php-ext-install -j$(nproc) intl; \
+        fi \
+    && if [[ -z "${EXTENSIONS##*,bz2,*}" ]]; \
+        then \
+            echo "---------- Install bz2 ----------"; \
+            apk add --no-cache bzip2-dev; \
+            docker-php-ext-install -j$(nproc) bz2; \
+        fi \
+    && if [[ -z "${EXTENSIONS##*,soap,*}" ]]; \
+        then \
+            echo "---------- Install soap ----------"; \
+            apk add --no-cache libxml2-dev; \
+            docker-php-ext-install -j$(nproc) soap; \
+        fi \
+    && if [[ -z "${EXTENSIONS##*,snmp,*}" ]]; \
+        then \
+            echo "---------- Install snmp ----------"; \
+            apk add --no-cache net-snmp-dev; \
+            docker-php-ext-install -j$(nproc) snmp; \
         fi \
     && if [[ -z "${EXTENSIONS##*,redis,*}" ]]; \
         then \
@@ -78,37 +108,36 @@ RUN apk update \
             pecl install swoole; \
             docker-php-ext-enable swoole; \
         fi \
+    && if [[ -z "${EXTENSIONS##*,memcached,*}" ]]; \
+        then \
+            echo "---------- Install memcached ----------"; \
+            apk add --no-cache libmemcached-dev zlib-dev; \
+            pecl install memcached; \
+            docker-php-ext-enable memcached; \
+        fi \
+    && if [[ -z "${EXTENSIONS##*,memcache,*}" ]]; \
+        then \
+            echo "---------- Install memcache ----------"; \
+            pecl install memcache; \
+            docker-php-ext-enable memcache; \
+        fi \
+    && if [[ -z "${EXTENSIONS##*,xdebug,*}" ]]; \
+        then \
+            echo "---------- Install xdebug ----------"; \
+            pecl install xdebug; \
+            docker-php-ext-enable xdebug; \
+        fi \
+    && if [[ -z "${EXTENSIONS##*,mongodb,*}" ]]; \
+        then \
+            echo "---------- Install mongodb ----------"; \
+            pecl install mongodb; \
+            docker-php-ext-enable mongodb; \
+        fi \
     && docker-php-source delete \
     && pecl clear-cache
 
 # 安装composer
-RUN apk --no-cache add --virtual .build-deps curl \
+RUN apk add --no-cache --virtual .build-deps curl \
     && curl -sS https://getcomposer.org/installer | php \
     && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
     && apk del .build-deps
-
-
-
-## 不可删除的依赖
-#RUN apk add --no-cache \
-#    # zip扩展 相关依赖
-#    libzip-dev \
-#    # GD库扩展 相关依赖
-#    libjpeg-turbo-dev \
-#    libwebp-dev \
-#    libpng-dev \
-#    freetype-dev \
-#    # swoole扩展 相关依赖
-#    libstdc++ \
-#    # 安装扩展
-#    && docker-php-source extract \
-#    && docker-php-ext-configure gd \
-#    --with-freetype=/usr/include \
-#    --with-jpeg=/usr/include \
-#    --with-webp=/usr/include \
-#    && docker-php-ext-install -j$(nproc) gd pdo_mysql mysqli sockets zip \
-#    # 外部扩展
-#    && pecl install redis swoole \
-#    && docker-php-ext-enable redis swoole \
-#    && docker-php-source delete \
-#    && pecl clear-cache
