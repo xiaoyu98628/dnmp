@@ -97,6 +97,18 @@ RUN apk update \
             apk add --no-cache net-snmp-dev; \
             docker-php-ext-install -j$(nproc) snmp; \
         fi \
+    && if [[ -z "${EXTENSIONS##*,zip,*}" ]]; \
+        then \
+            echo "---------- Install zip ----------"; \
+            apk add --no-cache libzip-dev; \
+            docker-php-ext-install -j$(nproc) zip; \
+        fi \
+    && if [[ -z "${EXTENSIONS##*,xsl,*}" ]]; \
+        then \
+            echo "---------- Install xsl ----------"; \
+            apk add --no-cache libxml2-dev libxslt-dev; \
+            docker-php-ext-install -j$(nproc) xsl; \
+        fi \
     && if [[ -z "${EXTENSIONS##*,redis,*}" ]]; \
         then \
             echo "---------- Install redis ----------"; \
