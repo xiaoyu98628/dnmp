@@ -10,7 +10,7 @@ ARG PHP80_EXTENSIONS
 ENV EXTENSIONS=",${PHP80_EXTENSIONS},"
 
 # 资源替换 阿里云镜像
-RUN if [ $CONTAINER_PACKAGE_URL ] ; then sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories ; fi
+RUN if [ ${CONTAINER_PACKAGE_URL} ] ; then sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories ; fi
 
 # 安装扩展
 RUN apk update \
@@ -18,7 +18,7 @@ RUN apk update \
     && apk add --no-cache --virtual .build-deps curl \
     && if [ "${PHP80_EXTENSIONS}" != "" ]; \
         then \
-            apk --no-cache add --virtual .build-deps autoconf g++ make; \
+            apk add --no-cache --virtual .build-deps autoconf g++ make libstdc++; \
         fi \
     && if [[ -z "${EXTENSIONS##*,pdo_mysql,*}" ]]; \
         then \
@@ -53,7 +53,7 @@ RUN apk update \
     && if [[ -z "${EXTENSIONS##*,gettext,*}" ]]; \
         then \
             echo "---------- Install gettext ----------"; \
-            apk --no-cache add gettext-dev; \
+            apk add --no-cache gettext-dev; \
             docker-php-ext-install -j$(nproc) gettext; \
         fi \
     && if [[ -z "${EXTENSIONS##*,gd,*}" ]]; \
@@ -91,12 +91,6 @@ RUN apk update \
             apk add --no-cache libxml2-dev; \
             docker-php-ext-install -j$(nproc) soap; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,snmp,*}" ]]; \
-        then \
-            echo "---------- Install snmp ----------"; \
-            apk add --no-cache net-snmp-dev; \
-            docker-php-ext-install -j$(nproc) snmp; \
-        fi \
     && if [[ -z "${EXTENSIONS##*,zip,*}" ]]; \
         then \
             echo "---------- Install zip ----------"; \
@@ -127,12 +121,6 @@ RUN apk update \
             apk add --no-cache libmemcached-dev zlib-dev; \
             pecl install memcached; \
             docker-php-ext-enable memcached; \
-        fi \
-    && if [[ -z "${EXTENSIONS##*,memcache,*}" ]]; \
-        then \
-            echo "---------- Install memcache ----------"; \
-            pecl install memcache; \
-            docker-php-ext-enable memcache; \
         fi \
     && if [[ -z "${EXTENSIONS##*,xdebug,*}" ]]; \
         then \
