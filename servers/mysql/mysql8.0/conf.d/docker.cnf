@@ -14,3 +14,19 @@ default-storage-engine=INNODB
 character-set-server=utf8mb4
 # 比较规则
 collation-server=utf8mb4_general_ci
+
+# binlog日志位置
+log_bin=/var/log/binlog/binlog
+
+# 慢查询日志
+#slow_query_log=1
+#slow_query_log_file=/var/log/slow
+
+# redolog
+#innodb_log_group_home_dir=/var/log/redo
+
+# 临时文件
+#tmpdir=/var/log/tmpdir
+
+# 错误日志
+#log-error=/var/log/error
