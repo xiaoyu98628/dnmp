@@ -10,7 +10,9 @@ services:
     volumes:
       - "./data/mysql/mysql8.0:/var/lib/mysql"   # 数据库文件
       - "./servers/mysql/mysql8.0:/etc/mysql"    # 配置文件
+      - "./logs/mysql/mysql8.0:/var/log/mysql"    # 日志文件
     restart: always
+    privileged: true
     environment:
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
       - "TZ=${TZ}"
