@@ -16,7 +16,7 @@ character-set-server=utf8mb4
 collation-server=utf8mb4_general_ci
 
 # binlog日志位置
-log_bin=/var/log/binlog/binlog
+# log_bin=/var/log/binlog/binlog
 
 # 慢查询日志
 #slow_query_log=1
