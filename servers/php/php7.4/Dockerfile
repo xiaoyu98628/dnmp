@@ -106,32 +106,32 @@ RUN apk update \
     && if [[ -z "${EXTENSIONS##*,redis,*}" ]]; \
         then \
             echo "---------- Install redis ----------"; \
-            pecl install redis; \
+            printf "\n" | pecl install redis; \
             docker-php-ext-enable redis; \
         fi \
     && if [[ -z "${EXTENSIONS##*,swoole,*}" ]]; \
         then \
             echo "---------- Install swoole ----------"; \
-            pecl install swoole; \
+            printf "\n" | pecl install swoole; \
             docker-php-ext-enable swoole; \
         fi \
     && if [[ -z "${EXTENSIONS##*,memcached,*}" ]]; \
         then \
             echo "---------- Install memcached ----------"; \
             apk add --no-cache libmemcached-dev zlib-dev; \
-            pecl install memcached; \
+            printf "\n" | pecl install memcached; \
             docker-php-ext-enable memcached; \
         fi \
     && if [[ -z "${EXTENSIONS##*,xdebug,*}" ]]; \
         then \
             echo "---------- Install xdebug ----------"; \
-            pecl install xdebug; \
+            printf "\n" | pecl install xdebug; \
             docker-php-ext-enable xdebug; \
         fi \
     && if [[ -z "${EXTENSIONS##*,mongodb,*}" ]]; \
         then \
             echo "---------- Install mongodb ----------"; \
-            pecl install mongodb; \
+            printf "\n" | pecl install mongodb; \
             docker-php-ext-enable mongodb; \
         fi \
     # 安装composer
