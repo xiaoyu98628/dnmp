@@ -37,7 +37,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 docker-compose up         # 创建并启动所有容器
 docker-compose up -d      # 创建并后台运行方式启动所有容器
 docker-compose up nginx php mysql # 创建并启动nginx、php、mysql的多个容器
-docker-compose up -d nginx php  mysql     # 创建并已后台运行的方式启动nginx、php、mysql容器
+docker-compose up -d nginx php mysql     # 创建并已后台运行的方式启动nginx、php、mysql容器
 
 docker-compose start php                  # 启动php服务
 docker-compose stop php                   # 停止php服务
