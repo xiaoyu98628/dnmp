@@ -1,9 +1,6 @@
 # 指定基于 php:8.0-fpm-alpine3.13 创建
 FROM php:8.0-fpm-alpine3.13
 
-# 声明作者
-LABEL MAINTAINER="XiaoYu <1765841705@qq.com>"
-
 ARG CONTAINER_PACKAGE_URL
 ARG PHP80_EXTENSIONS
 
