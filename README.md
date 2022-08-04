@@ -14,7 +14,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 8. 实际项目中应用，确保可用
 9. 一次配置，**Windows、Linux、MacOs**皆可用
 
-### 目录结构
+### 1.目录结构
 ```
 |-- data                         数据库数据目录
 |     |--- mysql                      mysql 数据目录（多版本）
@@ -30,8 +30,8 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 |--- docker-compose.yml          Docker 服务配置示例文件
 ```
 
-### 管理命令
-1. 服务器启动和构建命令
+### 2.管理命令
+#### 2.1. 服务器启动和构建命令
 如需管理服务，请在命令后面加上服务器名称，例如：
 ```shell script
 docker-compose up         # 创建并启动所有容器
@@ -50,8 +50,12 @@ docker-compose rm php                     # 删除并停止php容器
 docker-compose down                       # 停止并删除容器，网络，图像和挂载卷
 ```
 
-### 关于log
+### 3.PHP
+#### 3.1 关于windows下使用PHP
+将PHP的版本改成apline3.12，否则pecl安装的扩展都会失败，[原因](https://www.editcode.net/thread-404502-1-1.html)
+
+### 4.关于log
 Log文件生成的位置依赖于conf下各log配置的值
-#### 1. mysql日志
+#### 4.1. mysql日志
 - 因为MySQL容器中的MySQL使用的是mysql用户启动，它无法自行在/var/log下的增加日志文件。所以，我们把MySQL的日志放在与data一样的目录，即项目的mysql目录下，对应容器中的/var/lib/mysql/目录。
 - 如果真的需要分开，在启动mysql服务后，进入容器在执行：` chown -R mysql:mysql /var/log/mysql ` 然后在` servers/mysql/mysql8.0/conf.d/docker.cnf ` 文件中去掉关于日志的注释，重启即可，日志数据卷默认挂载
