@@ -136,5 +136,25 @@ services:
     networks:
       - dnmp-net
 
+  elasticsearch8.4:
+    image: elasticsearch:8.4.1
+    container_name: es8.4
+    restart: always
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - "./data/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/data" # 数据文件
+      - "./logs/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/logs" # 日志文件
+      - "./plugins/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/plugins" # 插件文件
+      - "./servers/elasticsearch/elasticsearch8.4/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml" # 配置文件
+    environment:
+      - "TZ=${TZ}"
+      - "discovery.type=single-node"  # 单节点设置
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # 设置内存大小
+      - "bootstrap.memory_lock=true" # 锁住内存 提高性能
+    networks:
+      - dnmp-net
+
 networks:
   dnmp-net:
