@@ -54,19 +54,19 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 比如切换为PHP7.2
 打开Nginx配置conf.d下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
 ```shell script
-    location ~ [^/]\.php(/|$) {
-        ...
-        include enable-php-74.conf;
-        ...
-    }
+location ~ [^/]\.php(/|$) {
+    ...
+    include enable-php-74.conf;
+    ...
+}
 ```
 改为：
 ```shell script
-    location ~ [^/]\.php(/|$) {
-        ...
-        include enable-php-72.conf;
-        ...
-    }
+location ~ [^/]\.php(/|$) {
+    ...
+    include enable-php-72.conf;
+    ...
+}
 ```
 最后 **重启 Nginx** 生效
 
@@ -81,8 +81,8 @@ Elasticsearch 挂载目录权限问题，需要给 `./data/elasticsearch`、 `./
 2. 设置composer镜像为国内镜像
     ```shell script
     composer config -g repo.packagist composer https://packagist.phpcomposer.com
-   #或
-   composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
+    #或
+    composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
     ```
 
 ## 4.关于log
