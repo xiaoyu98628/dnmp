@@ -65,7 +65,7 @@ services:
     container_name: php73
     restart: always
     ports:
-      - "9000:9000"
+      - "9001:9000"
     volumes:
       - "./servers/php/php7.3/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
       - "./servers/php/php7.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
@@ -86,7 +86,7 @@ services:
     container_name: php74
     restart: always
     ports:
-      - "9001:9000"
+      - "9002:9000"
     volumes:
       - "./servers/php/php7.4/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
       - "./servers/php/php7.4/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
@@ -107,7 +107,7 @@ services:
     container_name: php80
     restart: always
     ports:
-      - "9002:9000"
+      - "9003:9000"
     volumes:
       - "./servers/php/php8.0/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
       - "./servers/php/php8.0/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
@@ -128,7 +128,7 @@ services:
     container_name: php81
     restart: always
     ports:
-      - "9003:9000"
+      - "9004:9000"
     volumes:
       - "./servers/php/php8.1/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
       - "./servers/php/php8.1/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf

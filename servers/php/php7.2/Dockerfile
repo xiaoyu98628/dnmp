@@ -1,5 +1,5 @@
-# 指定基于 php:7.2-fpm-alpine3.13 创建
-FROM php:7.2-fpm-alpine3.13
+# 指定基于 php:7.2-fpm-alpine 创建
+FROM php:7.2-fpm-alpine
 
 ARG CONTAINER_PACKAGE_URL
 ARG PHP72_EXTENSIONS
