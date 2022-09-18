@@ -1,5 +1,7 @@
 version: '3.8'
 
+# 使用前最好阅读一遍（README.md）说明文件，以便快速上手，遇到问题也能及时排查
+
 services:
 
   mysql8.0:
@@ -166,8 +168,8 @@ services:
       - "9200:9200"
       - "9300:9300"
     volumes:
-#      - "./data/elasticsearch/elasticsearch7.8:/usr/share/elasticsearch/data" # 数据文件 (目前存在权限问题，日后解决)
-#      - "./logs/elasticsearch/elasticsearch7.8:/usr/share/elasticsearch/logs" # 日志文件 (目前存在权限问题，日后解决)
+      - "./data/elasticsearch/elasticsearch7.8:/usr/share/elasticsearch/data" # 数据文件
+      - "./logs/elasticsearch/elasticsearch7.8:/usr/share/elasticsearch/logs" # 日志文件
       - "./plugins/elasticsearch/elasticsearch7.8:/usr/share/elasticsearch/plugins" # 插件文件
       - "./servers/elasticsearch/elasticsearch7.8/config:/usr/share/elasticsearch/config" # 配置文件
     environment:
