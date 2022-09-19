@@ -47,10 +47,11 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
     ```
 
 ## 3.关于容器
-### 3.1 windows下使用PHP
+### 3.1 PHP 
+#### 3.1.1. windows下使用PHP
 将PHP的版本改成apline3.12，否则pecl安装的扩展都会失败，[原因](https://www.editcode.net/thread-404502-1-1.html)
 
-### 3.2 切换Nginx使用PHP版本
+#### 3.1.2 切换Nginx使用PHP版本
 比如切换为PHP7.2
 打开Nginx配置conf.d下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
 ```shell script
@@ -70,10 +71,7 @@ location ~ [^/]\.php(/|$) {
 ```
 最后 **重启 Nginx** 生效
 
-### 3.3 Elasticsearch 挂载目录权限问题
-Elasticsearch 挂载目录权限问题，需要给 `./data/elasticsearch`、 `./logs/elasticsearch` 这两个文件夹赋予权限 `chmod -R 777 ./data/elasticsearch ./logs/elasticsearch` 重启即可
-
-### 3.4 PHP容器中的conposer镜像修改
+#### 3.1.3 PHP容器中的conposer镜像修改
 1. composer查看全局设置
     ```shell script
     composer config -gl
@@ -85,6 +83,44 @@ Elasticsearch 挂载目录权限问题，需要给 `./data/elasticsearch`、 `./
     composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
     ```
 
+### 3.2 Elasticsearch
+1. Elasticsearch 挂载目录权限问题，需要给 `./data/elasticsearch`、 `./logs/elasticsearch` 这两个文件夹赋予权限 `chmod -R 777 ./data/elasticsearch ./logs/elasticsearch` 重启即可
+2. 账号密码设置
+    ```shell script
+     #自动生成密码
+     ./bin/elasticsearch-setup-passwords auto
+     #手动设置密码
+     ./bin/elasticsearch-setup-passwords interactive
+    ```
+    执行后会自动生成密码
+    ```shell script
+     Changed password for user apm_system
+     PASSWORD apm_system = {密码}
+    
+     Changed password for user kibana_system
+     PASSWORD kibana_system = {密码}
+    
+     Changed password for user kibana
+     PASSWORD kibana = {密码}
+    
+     Changed password for user logstash_system
+     PASSWORD logstash_system = {密码}
+    
+     Changed password for user beats_system
+     PASSWORD beats_system = {密码}
+    
+     Changed password for user remote_monitoring_user
+     PASSWORD remote_monitoring_user = {密码}
+    
+     Changed password for user elastic
+     PASSWORD elastic = {密码}
+    ```
+    然后修改对应的Kibana.yml文件
+    ```shell script
+     elasticsearch.username: "kibana_system或kibana"
+     elasticsearch.password: "你生成的密码"
+    ```
+    
 ## 4.关于log
 Log文件生成的位置依赖于conf下各log配置的值
 ### 4.1. mysql日志
