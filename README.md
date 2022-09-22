@@ -54,6 +54,14 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
     # 执行 docker-compose up 之前，建议看一下docker-compose.yml 文件，以便快速上手。
     docker-compose up                                  # 启动服务
     ```
+4.启动之后查看PHP版本
+```shell script
+http://localhost/         # PHP72
+http://localhost/73       # PHP73
+http://localhost/74       # PHP74
+http://localhost/80       # PHP80
+http://localhost/81       # PHP81
+```
 
 ## 3.关于容器
 ### 3.1 PHP 
