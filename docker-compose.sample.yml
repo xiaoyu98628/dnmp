@@ -1,0 +1,233 @@
+version: '3.8'
+
+# 使用前最好阅读一遍（README.md）说明文件，以便快速上手，遇到问题也能及时排查
+
+services:
+
+  mysql8.0:
+    image: mysql:8.0
+    container_name: mysql80
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./data/mysql/mysql8.0:/var/lib/mysql"   # 数据库文件
+      - "./servers/mysql/mysql8.0:/etc/mysql"    # 配置文件
+      - "./logs/mysql/mysql8.0:/var/log/mysql"    # 日志文件
+    restart: always
+    privileged: true
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+      - "TZ=${TZ}"
+    networks:
+      - dnmp-net
+
+  redis6.2:
+    image: redis:6.2-alpine
+    container_name: redis62
+    ports:
+      - "6379:6379"
+    volumes:
+      - "./servers/redis/redis6.2:/etc/redis"     # 配置文件
+      - "./data/redis/redis6.2:/data"             # 数据文件
+      - "./logs/redis/redis6.2:/var/log/redis"    # 日志文件
+    restart: always
+    environment:
+      - "TZ=${TZ}"
+    entrypoint: ["redis-server", "/etc/redis/docker.conf"]
+    networks:
+      - dnmp-net
+
+  php72:
+    build:
+      context: ./servers/php/php7.2
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        PHP72_EXTENSIONS: ${PHP72_EXTENSIONS}
+    container_name: php72
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - "./servers/php/php7.2/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
+      - "./servers/php/php7.2/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
+      - "./servers/php/php7.2/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
+      - "./www:/var/www/html"                       # 文件路径
+      - "./servers/panel/sock:/dev/shm" # nginx使用unix sock连接文件
+    environment:
+      - "TZ=${TZ}"
+    networks:
+      - dnmp-net
+
+  php73:
+    build:
+      context: ./servers/php/php7.3
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        PHP73_EXTENSIONS: ${PHP73_EXTENSIONS}
+    container_name: php73
+    restart: always
+    ports:
+      - "9001:9000"
+    volumes:
+      - "./servers/php/php7.3/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
+      - "./servers/php/php7.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
+      - "./servers/php/php7.3/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
+      - "./www:/var/www/html"                       # 文件路径
+      - "./servers/panel/sock:/dev/shm" # nginx使用unix sock连接文件
+    environment:
+      - "TZ=${TZ}"
+    networks:
+      - dnmp-net
+
+  php74:
+    build:
+      context: ./servers/php/php7.4
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        PHP74_EXTENSIONS: ${PHP74_EXTENSIONS}
+    container_name: php74
+    restart: always
+    ports:
+      - "9002:9000"
+    volumes:
+      - "./servers/php/php7.4/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
+      - "./servers/php/php7.4/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
+      - "./servers/php/php7.4/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
+      - "./www:/var/www/html"                       # 文件路径
+      - "./servers/panel/sock:/dev/shm" # nginx使用unix连接文件
+    environment:
+      - "TZ=${TZ}"
+    networks:
+      - dnmp-net
+
+  php80:
+    build:
+      context: ./servers/php/php8.0
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        PHP80_EXTENSIONS: ${PHP80_EXTENSIONS}
+    container_name: php80
+    restart: always
+    ports:
+      - "9003:9000"
+    volumes:
+      - "./servers/php/php8.0/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
+      - "./servers/php/php8.0/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
+      - "./servers/php/php8.0/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
+      - "./www:/var/www/html"                       # 文件路径
+      - "./servers/panel/sock:/dev/shm" # nginx使用unix连接文件
+    environment:
+      - "TZ=${TZ}"
+    networks:
+      - dnmp-net
+
+  php81:
+    build:
+      context: ./servers/php/php8.1
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        PHP81_EXTENSIONS: ${PHP81_EXTENSIONS}
+    container_name: php81
+    restart: always
+    ports:
+      - "9004:9000"
+    volumes:
+      - "./servers/php/php8.1/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
+      - "./servers/php/php8.1/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
+      - "./servers/php/php8.1/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
+      - "./www:/var/www/html"                       # 文件路径
+      - "./servers/panel/sock:/dev/shm" # nginx使用unix连接文件
+    environment:
+      - "TZ=${TZ}"
+    networks:
+      - dnmp-net
+
+  nginx1.21.4:
+    image: nginx:1.21.4-alpine
+    container_name: nginx1.21.4
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./servers/nginx/nginx1.21.4:/etc/nginx"    # 配置文件
+      - "./logs/nginx/nginx1.21.4:/var/log/nginx"   # 日志文件
+      - "./www:/usr/share/nginx/html"               # 文件路径
+      - "./servers/panel/sock:/dev/shm"             # php unix连接文件
+    environment:
+      - "TZ=${TZ}"
+    networks:
+      - dnmp-net
+
+#  elasticsearch7.8:
+#    image: elasticsearch:7.8.0
+#    container_name: elasticsearch7.8
+#    restart: always
+#    privileged: true
+#    ports:
+#      - "9200:9200"
+#      - "9300:9300"
+#    volumes:
+#      - "./data/elasticsearch/elasticsearch7.8:/usr/share/elasticsearch/data" # 数据文件
+#      - "./logs/elasticsearch/elasticsearch7.8:/usr/share/elasticsearch/logs" # 日志文件
+#      - "./plugins/elasticsearch/elasticsearch7.8:/usr/share/elasticsearch/plugins" # 插件文件
+#      - "./servers/elasticsearch/elasticsearch7.8/config:/usr/share/elasticsearch/config" # 配置文件
+#    environment:
+#      - "TZ=${TZ}"
+#      - "discovery.type=single-node"  # 单节点设置
+#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # 设置内存大小
+#    networks:
+#      - dnmp-net
+
+  elasticsearch8.4:
+    image: elasticsearch:8.4.0
+    container_name: elasticsearch8.4
+    restart: always
+    privileged: true
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - "./data/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/data" # 数据文件
+      - "./logs/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/logs" # 日志文件
+      - "./plugins/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/plugins" # 插件文件
+      - "./servers/elasticsearch/elasticsearch8.4/config:/usr/share/elasticsearch/config" # 配置文件
+    environment:
+      - "TZ=${TZ}"
+      - "discovery.type=single-node"  # 单节点设置
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # 设置内存大小
+    networks:
+      - dnmp-net
+
+#  kibana7.8:
+#    image: kibana:7.8.0
+#    container_name: kibana7.8
+#    restart: always
+#    ports:
+#      - "5601:5601"
+#    volumes:
+#      - "./servers/kibana/kibana7.8/kibana.yml:/usr/share/kibana/config/kibana.yml:ro" # 配置文件
+#    environment:
+#      - "TZ=${TZ}"
+#    depends_on: # 依赖ES先启动
+#      - elasticsearch7.8
+#    networks:
+#      - dnmp-net
+
+  kibana8.4:
+    image: kibana:8.4.0
+    container_name: kibana8.4
+    restart: always
+    ports:
+      - "5601:5601"
+    volumes:
+      - "./servers/kibana/kibana8.4/kibana.yml:/usr/share/kibana/config/kibana.yml:ro" # 配置文件
+    environment:
+      - "TZ=${TZ}"
+    depends_on: # 依赖ES先启动
+      - elasticsearch8.4
+    networks:
+      - dnmp-net
+
+networks:
+  dnmp-net:
