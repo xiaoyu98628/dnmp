@@ -130,6 +130,13 @@ RUN apk update \
             && printf "\n" | pecl install mongodb \
             && docker-php-ext-enable mongodb; \
         fi \
+    && if [[ -z "${EXTENSIONS##*,amqp,*}" ]]; \
+        then \
+            echo "---------- Install amqp ----------" \
+            && apk add --no-cache rabbitmq-c-dev \
+            && printf "\n" | pecl install amqp \
+            && docker-php-ext-enable amqp; \
+        fi \
     # 安装composer
     && apk add --no-cache --virtual .build-deps curl \
     && curl -sS https://getcomposer.org/installer | php \
