@@ -16,8 +16,11 @@ services:
     restart: always
     privileged: true
     environment:
-      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
       - "TZ=${TZ}"
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+      - "MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}"
+      - "MYSQL_USER=${MYSQL_USER}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
     networks:
       - dnmp-net
 
