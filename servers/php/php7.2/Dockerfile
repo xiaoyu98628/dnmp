@@ -7,14 +7,15 @@ ARG PHP72_EXTENSIONS
 ENV EXTENSIONS=",${PHP72_EXTENSIONS},"
 
 # 资源替换 阿里云镜像
-RUN if [ ${CONTAINER_PACKAGE_URL} ] ; then sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories ; fi
+RUN sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories
 
 # 安装扩展
 RUN apk update \
     && docker-php-source extract \
     && if [ "${PHP72_EXTENSIONS}" != "" ]; \
         then \
-            apk add --no-cache --virtual .build-deps autoconf g++ make libstdc++; \
+            apk add --no-cache --virtual .build-deps autoconf g++ make \
+            && apk add --no-cache libstdc++; \
         fi \
     && if [[ -z "${EXTENSIONS##*,pdo_mysql,*}" ]]; \
         then \
@@ -143,3 +144,7 @@ RUN apk update \
     && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
     && docker-php-source delete \
     && apk del .build-deps
+
+# https://github.com/docker-library/php/issues/240
+RUN apk add --no-cache --repository https://${CONTAINER_PACKAGE_URL}/alpine/edge/testing gnu-libiconv
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
