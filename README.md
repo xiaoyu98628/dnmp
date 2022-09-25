@@ -158,8 +158,7 @@ location ~ [^/]\.php(/|$) {
 ## 4.关于log
 Log文件生成的位置依赖于conf下各log配置的值
 ### 4.1. mysql日志
-- 因为MySQL容器中的MySQL使用的是mysql用户启动，它无法自行在/var/log下的增加日志文件。所以，我们把MySQL的日志放在与data一样的目录，即项目的mysql目录下，对应容器中的/var/lib/mysql/目录。
-- 如果真的需要分开，在启动mysql服务后，进入容器在执行：` chown -R mysql:mysql /var/log/mysql ` 然后在` ./servers/mysql/mysql8.0/conf.d/docker.cnf ` 文件中去掉关于日志的注释，重启即可，日志数据卷默认挂载
+1. mysql 挂载目录权限问题，需要给 `./logs/mysql` 文件夹赋予权限 `chmod -R 777 ./logs/mysql` 重启即可
 
 ## 5.管理命令
 ### 5.1. 服务器启动和构建命令
