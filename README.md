@@ -1,5 +1,7 @@
 DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安装程序，可多版本
 
+其中部分代码参考[**yeszao/dnmp**](https://github.com/yeszao/dnmp)
+
 > 使用前最好阅读一遍下面的说明文件，以便快速上手，遇到问题也能及时排查
 
 ### 项目特点
@@ -66,12 +68,12 @@ http://localhost/81       # PHP81
 ## 3.关于容器
 ### 3.1 PHP 
 #### 3.1.1. windows下使用PHP
-将PHP的版本改成apline3.12，否则pecl安装的扩展都会失败，[原因](https://www.editcode.net/thread-404502-1-1.html)
+将PHP的版本改成apline3.12，否则pecl安装的扩展都会失败，[**原因**](https://www.editcode.net/thread-404502-1-1.html)
 
 #### 3.1.2 切换Nginx使用PHP版本
 比如切换为PHP7.2
 打开Nginx配置conf.d下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
-```shell script
+```shell
 location ~ [^/]\.php(/|$) {
     ...
     include enable-php-74.conf;
@@ -79,7 +81,7 @@ location ~ [^/]\.php(/|$) {
 }
 ```
 改为：
-```shell script
+```shell
 location ~ [^/]\.php(/|$) {
     ...
     include enable-php-72.conf;
@@ -90,11 +92,11 @@ location ~ [^/]\.php(/|$) {
 
 #### 3.1.3 PHP容器中的conposer镜像修改
 1. composer查看全局设置
-    ```shell script
+    ```shell
     composer config -gl
     ```
 2. 设置composer镜像为国内镜像
-    ```shell script
+    ```shell
     composer config -g repo.packagist composer https://packagist.phpcomposer.com
     #或
     composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
@@ -103,14 +105,14 @@ location ~ [^/]\.php(/|$) {
 ### 3.2 Elasticsearch
 1. Elasticsearch 挂载目录权限问题，需要给 `./data/elasticsearch`、 `./logs/elasticsearch` 这两个文件夹赋予权限 `chmod -R 777 ./data/elasticsearch ./logs/elasticsearch` 重启即可
 2. 账号密码设置
-    ```shell script
+    ```shell
      #自动生成密码
      ./bin/elasticsearch-setup-passwords auto
      #手动设置密码
      ./bin/elasticsearch-setup-passwords interactive
     ```
     执行后会自动生成密码
-    ```shell script
+    ```shell
      Changed password for user apm_system
      PASSWORD apm_system = {密码}
     
@@ -133,11 +135,26 @@ location ~ [^/]\.php(/|$) {
      PASSWORD elastic = {密码}
     ```
     然后修改对应的Kibana.yml文件
-    ```shell script
+    ```shell
      elasticsearch.username: "kibana_system或kibana"
      elasticsearch.password: "你生成的密码"
     ```
-    
+
+### 3.3 宿主机中使用PHP命令行
+1. 参考[bashrc.sample](bashrc.sample)示例文件，将对应的php-cli函数拷贝到主机的 `~/.bashrc` 文件中。
+2. 让文件起效：
+   ```shell
+   source ~/.bashrc
+   ```
+3. 然后就可以在主机中执行PHP命令了：
+   ```shell
+   [root@VM-16-4-centos ~]# php72 -v
+   PHP 7.2.34 (cli) (built: Dec 17 2020 10:32:53) ( NTS )
+   Copyright (c) 1997-2018 The PHP Group
+   Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
+   [root@VM-16-4-centos ~]#
+   ```
+
 ## 4.关于log
 Log文件生成的位置依赖于conf下各log配置的值
 ### 4.1. mysql日志
@@ -147,7 +164,7 @@ Log文件生成的位置依赖于conf下各log配置的值
 ## 5.管理命令
 ### 5.1. 服务器启动和构建命令
 如需管理服务，请在命令后面加上服务器名称，例如：
-```shell script
+```shell
 docker-compose up         # 创建并启动所有容器
 docker-compose up -d      # 创建并后台运行方式启动所有容器
 docker-compose up nginx php mysql # 创建并启动nginx、php、mysql的多个容器
