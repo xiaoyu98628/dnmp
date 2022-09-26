@@ -33,7 +33,7 @@ function getMysqlVersion()
 {
     if (extension_loaded('PDO_MYSQL')) {
         try {
-            $dbh = new PDO('mysql:host=mysql80;dbname=mysql', 'root', 'root');
+            $dbh = new PDO('mysql:host=mysql80;dbname=mysql', 'xiaoyu', 'xiaoyu');
             $sth = $dbh->query('SELECT VERSION() as version');
             $info = $sth->fetch();
             return $info['version'];
