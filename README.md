@@ -154,6 +154,8 @@ location ~ [^/]\.php(/|$) {
    Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
    [root@VM-16-4-centos ~]#
    ```
+### 3.4 phpstorm 配置 xdebug
+[phpstorm 配置 xdebug](resource/phpstorm-xdebug.md)
 
 ## 4.关于log
 Log文件生成的位置依赖于conf下各log配置的值

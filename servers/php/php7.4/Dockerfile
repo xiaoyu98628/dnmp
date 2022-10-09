@@ -123,7 +123,25 @@ RUN apk update \
         then \
             echo "---------- Install xdebug ----------" \
             && printf "\n" | pecl install xdebug \
-            && docker-php-ext-enable xdebug; \
+            && docker-php-ext-enable xdebug \
+            && echo "[xdebug]" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.profiler_enable = off ;启用性能检测分析" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.auto_trace = off ;启用代码自动跟踪" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.collect_params = on ;允许收集传递给函数的参数变量" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.collect_return = on ;允许收集函数调用的返回值" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.show_exception_trace = On ;开启异常跟踪" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.remote_autostart = Off ;开启远程调试自动启动" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.remote_enable = On ;开启远程调试" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            # 下面两个一样主要是因为不确定xdebug是2.x还是3.x 同下
+            && echo "xdebug.remote_port = 9010" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.client_port = 9010" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.default_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.remote_log=/var/log/xdebug.log" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.remote_connect_back=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.client_host = host.docker.internal ;phpstorm 官方文档上面有写 https://www.jetbrains.com/help/phpstorm/configuring-xdebug.html#feac0d97" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+            && echo "xdebug.remote_host = host.docker.internal ;phpstorm 官方文档上面有写 https://www.jetbrains.com/help/phpstorm/configuring-xdebug.html#feac0d97" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
         fi \
     && if [[ -z "${EXTENSIONS##*,mongodb,*}" ]]; \
         then \
