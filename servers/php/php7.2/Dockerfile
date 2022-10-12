@@ -1,17 +1,26 @@
 # 指定基于 php:7.2-fpm-alpine 创建
 FROM php:7.2-fpm-alpine
 
+LABEL MAINTAINER="XiaoYu <1765841705@qq.com>"
+
 ARG CONTAINER_PACKAGE_URL
 ARG PHP72_EXTENSIONS
+ARG TZ
 
 ENV EXTENSIONS=",${PHP72_EXTENSIONS},"
 
 # 资源替换 阿里云镜像
 RUN sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories
 
-# 安装扩展
+# 修改时间
 RUN apk update \
-    && docker-php-source extract \
+    && apk add --no-cache --virtual .build-deps \
+    tzdata \
+    && cp "/usr/share/zoneinfo/${TZ}" /etc/localtime \
+    && echo "${TZ}" > /etc/timezone
+
+# 安装扩展
+RUN docker-php-source extract \
     && if [ "${PHP72_EXTENSIONS}" != "" ]; \
         then \
             apk add --no-cache --virtual .build-deps autoconf g++ make \

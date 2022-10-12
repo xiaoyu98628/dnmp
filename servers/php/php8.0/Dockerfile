@@ -1,17 +1,26 @@
 # 指定基于 php:8.0-fpm-alpine3.13 创建
 FROM php:8.0-fpm-alpine3.13
 
+LABEL MAINTAINER="XiaoYu <1765841705@qq.com>"
+
 ARG CONTAINER_PACKAGE_URL
 ARG PHP80_EXTENSIONS
+ARG TZ
 
 ENV EXTENSIONS=",${PHP80_EXTENSIONS},"
 
 # 资源替换 阿里云镜像
 RUN sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories
 
-# 安装扩展
+# 修改时间
 RUN apk update \
-    && docker-php-source extract \
+    && apk add --no-cache --virtual .build-deps \
+    tzdata \
+    && cp "/usr/share/zoneinfo/${TZ}" /etc/localtime \
+    && echo "${TZ}" > /etc/timezone
+
+# 安装扩展
+RUN docker-php-source extract \
     && if [ "${PHP80_EXTENSIONS}" != "" ]; \
         then \
             apk add --no-cache --virtual .build-deps autoconf g++ make \
