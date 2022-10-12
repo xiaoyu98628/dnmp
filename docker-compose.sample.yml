@@ -46,6 +46,7 @@ services:
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP72_EXTENSIONS: ${PHP72_EXTENSIONS}
+        TZ: ${TZ}
     container_name: php72
     restart: always
     ports:
@@ -56,8 +57,6 @@ services:
       - "./servers/php/php7.2/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
       - "./www:/var/www/html"                       # 文件路径
       - "./servers/panel/sock:/dev/shm" # nginx使用unix sock连接文件
-    environment:
-      - "TZ=${TZ}"
     networks:
       - dnmp-net
 
@@ -67,6 +66,7 @@ services:
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP73_EXTENSIONS: ${PHP73_EXTENSIONS}
+        TZ: ${TZ}
     container_name: php73
     restart: always
     ports:
@@ -77,8 +77,6 @@ services:
       - "./servers/php/php7.3/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
       - "./www:/var/www/html"                       # 文件路径
       - "./servers/panel/sock:/dev/shm" # nginx使用unix sock连接文件
-    environment:
-      - "TZ=${TZ}"
     networks:
       - dnmp-net
 
@@ -88,6 +86,7 @@ services:
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP74_EXTENSIONS: ${PHP74_EXTENSIONS}
+        TZ: ${TZ}
     container_name: php74
     restart: always
     ports:
@@ -98,8 +97,6 @@ services:
       - "./servers/php/php7.4/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
       - "./www:/var/www/html"                       # 文件路径
       - "./servers/panel/sock:/dev/shm" # nginx使用unix连接文件
-    environment:
-      - "TZ=${TZ}"
     networks:
       - dnmp-net
 
@@ -109,6 +106,7 @@ services:
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP80_EXTENSIONS: ${PHP80_EXTENSIONS}
+        TZ: ${TZ}
     container_name: php80
     restart: always
     ports:
@@ -119,8 +117,6 @@ services:
       - "./servers/php/php8.0/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
       - "./www:/var/www/html"                       # 文件路径
       - "./servers/panel/sock:/dev/shm" # nginx使用unix连接文件
-    environment:
-      - "TZ=${TZ}"
     networks:
       - dnmp-net
 
@@ -130,6 +126,7 @@ services:
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP81_EXTENSIONS: ${PHP81_EXTENSIONS}
+        TZ: ${TZ}
     container_name: php81
     restart: always
     ports:
@@ -140,8 +137,6 @@ services:
       - "./servers/php/php8.1/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
       - "./www:/var/www/html"                       # 文件路径
       - "./servers/panel/sock:/dev/shm" # nginx使用unix连接文件
-    environment:
-      - "TZ=${TZ}"
     networks:
       - dnmp-net
 

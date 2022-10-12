@@ -14,10 +14,9 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/reposi
 
 # 修改时间
 RUN apk update \
-    && apk add --no-cache --virtual .build-deps \
-    tzdata \
-    && cp "/usr/share/zoneinfo/${TZ}" /etc/localtime \
-    && echo "${TZ}" > /etc/timezone
+    && apk add --no-cache --virtual .build-deps tzdata \
+    && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime \
+    && echo "${TZ}" >> /etc/timezone
 
 # 安装扩展
 RUN docker-php-source extract \
