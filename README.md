@@ -227,6 +227,6 @@ PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装
 
 ### 6.5 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'
 1. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置并且有且仅有`MYSQL_ROOT_PASSWORD`这个参数，你将不会出现这个问题
-2. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置了`MYSQL_ROOT_PASSWORD`、`MYSQL_ROOT_HOST`、`MYSQL_USER`、`MYSQL_PASSWORD`，并且你的连接不是使用`root`用户连接的将会出现这个问题
+2. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置了`MYSQL_ROOT_PASSWORD`、`MYSQL_ROOT_HOST`、`MYSQL_USER`、`MYSQL_PASSWORD`，并且你的连接不是使用`root`用户连接的将会出现这个问题  
 （1）：问题：权限问题(默认只有`information_schema`这个库的权限)  
 （2）：解决办法：[**MySQL数据库远程连接创建用户权限等**](./resource/MySQL-user-Permissions.md)
