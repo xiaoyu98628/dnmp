@@ -140,16 +140,16 @@ services:
     networks:
       - dnmp-net
 
-  nginx1.21.4:
-    image: nginx:1.21.4-alpine
-    container_name: nginx1.21.4
+  nginx1.21:
+    image: nginx:1.21-alpine
+    container_name: nginx1.21
     restart: always
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - "./servers/nginx/nginx1.21.4:/etc/nginx"    # 配置文件
-      - "./logs/nginx/nginx1.21.4:/var/log/nginx"   # 日志文件
+      - "./servers/nginx/nginx1.21:/etc/nginx"      # 配置文件
+      - "./logs/nginx/nginx1.21:/var/log/nginx"     # 日志文件
       - "./www:/usr/share/nginx/html"               # 文件路径
       - "./servers/panel/sock:/dev/shm"             # php unix连接文件
     environment:
