@@ -77,12 +77,12 @@ privilege, database_name, table_name：同授权部分
 ```sql
 REVOKE SELECT ON *.* FROM 'pig'@'%';
 ```
-## 注意:
+## 4. 注意:
 假如你在给用户'pig'@'%'授权的时候是这样的（或类似的）：GRANT SELECT ON test.user TO 'pig'@'%'，则在使用REVOKE SELECT ON *.* FROM 'pig'@'%';命令并不能撤销该用户对test数据库中user表的SELECT 操作。相反，如果授权使用的是GRANT SELECT ON *.* TO 'pig'@'%';则REVOKE SELECT ON test.user FROM 'pig'@'%';命令也不能撤销该用户对test数据库中user表的Select权限。
 
 具体信息可以用命令SHOW GRANTS FOR 'pig'@'%'; 查看。
 # 五.删除用户
-## 命令:
+## 1. 命令:
 
 ```sql
 DROP USER 'username'@'host';
