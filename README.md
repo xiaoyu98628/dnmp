@@ -155,7 +155,7 @@ location ~ [^/]\.php(/|$) {
    [root@VM-16-4-centos ~]#
    ```
 ### 3.4 phpstorm 配置 xdebug
-[phpstorm 配置 xdebug](resource/phpstorm-xdebug.md)
+[**phpstorm 配置 xdebug**](resource/phpstorm-xdebug.md)
 
 ## 4. 关于log
 Log文件生成的位置依赖于conf下各log配置的值
@@ -196,7 +196,7 @@ docker-compose down                       # 停止并删除容器，网络，图
 （2）文件夹：不管是宿主机还是容器内修改，新增，删除都会相互同步
 
 ### 6.2 容器内时间问题
-容器时间在.env文件中配置`TZ`变量，所有支持的时区请查看[时区列表·维基百科](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) 或者 [PHP所支持的时区列表·PHP官网](https://www.php.net/manual/zh/timezones.php) 。
+容器时间在.env文件中配置`TZ`变量，所有支持的时区请查看[**时区列表·维基百科**](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) 或者 [**PHP所支持的时区列表·PHP官网**](https://www.php.net/manual/zh/timezones.php) 。
 
 ### 6.3 如何链接MySQL和Redis服务器
 这要分两种情况
@@ -209,10 +209,16 @@ $pdo = new PDO('mysql:host=mysql80;dbname=数据库名称', 'MySQL账号', 'MySQ
 $redis = new Redis();
 $redis->connect('redis', 6379);
 ```
-因为容器与容器是`expose`端口联通的，而且在同一个`networks`下，所以连接的`host`参数直接用容器名称，`port`参数就是容器内部的端口。更多请参考[《docker-compose ports和expose的区别》](https://www.awaimai.com/2138.html) 。
+因为容器与容器是`expose`端口联通的，而且在同一个`networks`下，所以连接的`host`参数直接用容器名称，`port`参数就是容器内部的端口。更多请参考[**《docker-compose ports和expose的区别》**](https://www.awaimai.com/2138.html) 。
 
 第二种情况，**在主机中**通过**命令行**或者**Navicat**等工具连接，主机要连接mysql和redis，要求容器必须经过`ports`把端口映射到主机，以mysql为例，`docker-compose.yml`文件中有`ports`配置：`3306:3306`，就是主机的3306和容器的3306端口形成了映射，所以我们可以这样连接：
 ```shell script
 $ mysql -h127.0.0.1 -uroot -p123456 -P3306
 $ redis-cli -h127.0.0.1 -p6379
 ```
+
+### 6.4 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'
+1. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置并且有且仅有`MYSQL_ROOT_PASSWORD`这个参数，你将不会出现这个问题
+2. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置了`MYSQL_ROOT_PASSWORD`、`MYSQL_ROOT_HOST`、`MYSQL_USER`、`MYSQL_PASSWORD`，并且你的连接不是使用`root`用户连接的将会出现这个问题  
+问题：权限问题(没有`mysql`库的权限,默认只有`information_schema`这个库的权限)，可以直接授权  
+解决办法：[**MySQL数据库远程连接创建用户权限等**](./resource/MySQL-user-Permissions.md)
