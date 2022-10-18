@@ -44,18 +44,18 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
     - `Docker`
     - `docker-compose`
 2. `clone` 项目
-    ```gitignore
-    git clone https://gitee.com/xiaoyucc521/dnmp.git
-    ```
+```gitignore
+git clone https://gitee.com/xiaoyucc521/dnmp.git
+```
 3. 拷贝并命名配置文件，启动：
-    ```shell script
-    cd dnmp                                            # 进入项目目录
-    cp sample.env .env                                 # 复制并改名 .env 配置文件
-    cp docker-compose.sample.yml docker-compose.yml    # 复制并改名 docker-compose.yml 配置文件
-    
-    # 执行 docker-compose up 之前，建议看一下docker-compose.yml 文件，以便快速上手。
-    docker-compose up                                  # 启动服务
-    ```
+```shell script
+cd dnmp                                            # 进入项目目录
+cp sample.env .env                                 # 复制并改名 .env 配置文件
+cp docker-compose.sample.yml docker-compose.yml    # 复制并改名 docker-compose.yml 配置文件
+
+# 执行 docker-compose up 之前，建议看一下docker-compose.yml 文件，以便快速上手。
+docker-compose up                                  # 启动服务
+```
 4.启动之后查看PHP版本
 ```shell script
 http://localhost/         # PHP72
@@ -66,11 +66,40 @@ http://localhost/81       # PHP81
 ```
 
 ## 3. 关于容器
-### 3.1 PHP 
-#### 3.1.1. windows下使用PHP
-将PHP的版本改成apline3.12，否则pecl安装的扩展都会失败，[**原因**](https://www.editcode.net/thread-404502-1-1.html)
 
-#### 3.1.2 切换Nginx使用PHP版本
+### 3.1 PHP 
+#### 3.1.1 phpstorm 配置 xdebug
+[**phpstorm 配置 xdebug**](resource/phpstorm-xdebug.md)
+
+#### 3.1.2 宿主机中使用PHP命令行
+1. 参考[bashrc.sample](bashrc.sample)示例文件，将对应的php-cli函数拷贝到主机的 `~/.bashrc` 文件中。
+2. 让文件起效：
+```shell
+source ~/.bashrc
+```
+3. 然后就可以在主机中执行PHP命令了：
+```shell
+[root@VM-16-4-centos ~]# php72 -v
+PHP 7.2.34 (cli) (built: Dec 17 2020 10:32:53) ( NTS )
+Copyright (c) 1997-2018 The PHP Group
+Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
+[root@VM-16-4-centos ~]#
+```
+
+#### 3.1.3 PHP容器中的composer镜像修改
+1. composer查看全局设置
+```shell
+composer config -gl
+```
+2. 设置composer镜像为国内镜像
+```shell
+composer config -g repo.packagist composer https://packagist.phpcomposer.com
+# 或
+composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
+```
+
+### 3.2 Nginx
+#### 3.2.1 切换Nginx使用PHP版本
 比如切换为PHP7.2
 打开Nginx配置conf.d下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
 ```shell
@@ -90,72 +119,47 @@ location ~ [^/]\.php(/|$) {
 ```
 最后 **重启 Nginx** 生效
 
-#### 3.1.3 PHP容器中的conposer镜像修改
-1. composer查看全局设置
-    ```shell
-    composer config -gl
-    ```
-2. 设置composer镜像为国内镜像
-    ```shell
-    composer config -g repo.packagist composer https://packagist.phpcomposer.com
-    # 或
-    composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
-    ```
+### 3.3 Elasticsearch
+#### 3.3.1 Elasticsearch 挂载目录权限问题
+需要给 `./data/elasticsearch`、 `./logs/elasticsearch` 这两个文件夹赋予权限 `chmod -R 777 ./data/elasticsearch ./logs/elasticsearch` 重启即可
 
-### 3.2 Elasticsearch
-1. Elasticsearch 挂载目录权限问题，需要给 `./data/elasticsearch`、 `./logs/elasticsearch` 这两个文件夹赋予权限 `chmod -R 777 ./data/elasticsearch ./logs/elasticsearch` 重启即可
-2. 账号密码设置
-    ```shell
-     #自动生成密码
-     ./bin/elasticsearch-setup-passwords auto
-     #手动设置密码
-     ./bin/elasticsearch-setup-passwords interactive
-    ```
-    执行后会自动生成密码
-    ```shell
-     Changed password for user apm_system
-     PASSWORD apm_system = {密码}
-    
-     Changed password for user kibana_system
-     PASSWORD kibana_system = {密码}
-    
-     Changed password for user kibana
-     PASSWORD kibana = {密码}
-    
-     Changed password for user logstash_system
-     PASSWORD logstash_system = {密码}
-    
-     Changed password for user beats_system
-     PASSWORD beats_system = {密码}
-    
-     Changed password for user remote_monitoring_user
-     PASSWORD remote_monitoring_user = {密码}
-    
-     Changed password for user elastic
-     PASSWORD elastic = {密码}
-    ```
-    然后修改对应的Kibana.yml文件
-    ```shell
-     elasticsearch.username: "kibana_system或kibana"
-     elasticsearch.password: "你生成的密码"
-    ```
+#### 3.3.2 Elasticsearch账号密码设置
+```shell
+ #自动生成密码
+ ./bin/elasticsearch-setup-passwords auto
+ #手动设置密码
+ ./bin/elasticsearch-setup-passwords interactive
+```
+执行后会自动生成密码
+```shell
+ Changed password for user apm_system
+ PASSWORD apm_system = {密码}
 
-### 3.3 宿主机中使用PHP命令行
-1. 参考[bashrc.sample](bashrc.sample)示例文件，将对应的php-cli函数拷贝到主机的 `~/.bashrc` 文件中。
-2. 让文件起效：
-   ```shell
-   source ~/.bashrc
-   ```
-3. 然后就可以在主机中执行PHP命令了：
-   ```shell
-   [root@VM-16-4-centos ~]# php72 -v
-   PHP 7.2.34 (cli) (built: Dec 17 2020 10:32:53) ( NTS )
-   Copyright (c) 1997-2018 The PHP Group
-   Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
-   [root@VM-16-4-centos ~]#
-   ```
-### 3.4 phpstorm 配置 xdebug
-[**phpstorm 配置 xdebug**](resource/phpstorm-xdebug.md)
+ Changed password for user kibana_system
+ PASSWORD kibana_system = {密码}
+
+ Changed password for user kibana
+ PASSWORD kibana = {密码}
+
+ Changed password for user logstash_system
+ PASSWORD logstash_system = {密码}
+
+ Changed password for user beats_system
+ PASSWORD beats_system = {密码}
+
+ Changed password for user remote_monitoring_user
+ PASSWORD remote_monitoring_user = {密码}
+
+ Changed password for user elastic
+ PASSWORD elastic = {密码}
+```
+
+### 3.4 Kibana
+#### 3.4.1 Kibana连接Elasticsearch问题
+```shell
+ elasticsearch.username: "kibana_system或kibana"
+ elasticsearch.password: "上面Elasticsearch生成的密码"
+```
 
 ## 4. 关于log
 Log文件生成的位置依赖于conf下各log配置的值
@@ -166,21 +170,22 @@ Log文件生成的位置依赖于conf下各log配置的值
 ### 5.1. 服务器启动和构建命令
 如需管理服务，请在命令后面加上服务器名称，例如：
 ```shell
-docker-compose up         # 创建并启动所有容器
-docker-compose up -d      # 创建并后台运行方式启动所有容器
-docker-compose up nginx php mysql # 创建并启动nginx、php、mysql的多个容器
-docker-compose up -d nginx php mysql     # 创建并已后台运行的方式启动nginx、php、mysql容器
+docker-compose up                                   # 创建并启动所有容器
+docker-compose up -d                                # 创建并后台运行方式启动所有容器
+docker-compose up nginx1.21 php72 mysql8.0          # 创建并启动nginx1.21 php72 mysql8.0  的多个容器
+docker-compose up -d nginx1.21 php72 mysql8.0       # 创建并已后台运行的方式启动nginx1.21 php72 mysql8.0  容器
 
-docker-compose start php                  # 启动php服务
-docker-compose stop php                   # 停止php服务
-docker-compose restart php                # 重启php服务
+docker-compose start php72                  # 启动php72服务
+docker-compose stop php72                   # 停止php72服务
+docker-compose restart php72                # 重启php72服务
 
-docker-compose build php                  # 构建或者重新构建服务
+docker-compose build php72                  # 构建或者重新构建服务
 
-docker-compose rm php                     # 删除并停止php容器
+docker-compose rm php72                     # 删除并停止php72容器
 
 docker-compose down                       # 停止并删除容器，网络，图像和挂载卷
 ```
+
 ## 6. 其他问题
 ### 6.1 `docker-compose.sample.yml` 文件中 `volumes` 的 rw、ro详解
 众所周知，如果启动容器不使用挂载宿主机的文件或文件夹，容器中的配置文件只能进入容器才能修改，输出的日志文件也是在容器里面，查看不方便，也不利于日志收集，所以一般都是使用参数来挂载文件或文件夹。  
@@ -217,7 +222,10 @@ $ mysql -h127.0.0.1 -uroot -p123456 -P3306
 $ redis-cli -h127.0.0.1 -p6379
 ```
 
-### 6.4 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'
+### 6.4 windows下使用PHP
+PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装的扩展都会失败，[**原因**](https://www.editcode.net/thread-404502-1-1.html)
+
+### 6.5 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'
 1. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置并且有且仅有`MYSQL_ROOT_PASSWORD`这个参数，你将不会出现这个问题
 2. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置了`MYSQL_ROOT_PASSWORD`、`MYSQL_ROOT_HOST`、`MYSQL_USER`、`MYSQL_PASSWORD`，并且你的连接不是使用`root`用户连接的将会出现这个问题  
 问题：权限问题(没有`mysql`库的权限,默认只有`information_schema`这个库的权限)，可以直接授权  
