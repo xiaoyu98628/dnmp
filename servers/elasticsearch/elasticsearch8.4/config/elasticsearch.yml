@@ -16,17 +16,12 @@ xpack.security.enrollment.enabled: true # 是否需要用户名密码
 # Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents
 xpack.security.http.ssl.enabled: false # 客户端访问是否使用https协议
 xpack.security.http.ssl.keystore.path: certs/http.p12
-#xpack.security.http.ssl.keystore.password: RJNR4e6MRDCpQF80WcXJQQ
-#xpack.security.http.ssl.truststore.path: certs/http.p12
-#xpack.security.http.ssl.truststore.password: RJNR4e6MRDCpQF80WcXJQQ
 
 # Enable encryption and mutual authentication between cluster nodes
 xpack.security.transport.ssl.enabled: true # 集群节点间交换是否使用https协议
 xpack.security.transport.ssl.verification_mode: certificate # ssl证书模式
 xpack.security.transport.ssl.keystore.type: PKCS12
 xpack.security.transport.ssl.keystore.path: certs/transport.p12 # 信任存储库文件的存放位置
-#xpack.security.transport.ssl.keystore.password: 44A_E4YQSW2O10IYmnkX9w
 xpack.security.transport.ssl.truststore.type: PKCS12
 xpack.security.transport.ssl.truststore.path: certs/transport.p12 # 密钥存储库文件的存放位置
-#xpack.security.transport.ssl.truststore.password: 44A_E4YQSW2O10IYmnkX9w
 #----------------------- END SECURITY AUTO CONFIGURATION -------------------------
