@@ -68,17 +68,40 @@ http://localhost/81       # PHP81
 ## 3. 关于容器
 
 ### 3.1 PHP 
-#### 3.1.1 phpstorm 配置 xdebug
+#### 3.1.1 docker容器里安装PHP扩展常用命令
+* `docker-php-source`
+> 此命令，实际上就是在PHP容器中创建一个`/usr/src/php`的目录，里面放了一些自带的文件而已。我们就把它当作一个从互联网中下载下来的PHP扩展源码的存放目录即可。事实上，所有PHP扩展源码扩展存放的路径： `/usr/src/php/ext` 里面。
+* `docker-php-ext-install`
+> 这个命令，就是用来启动 PHP扩展 的。我们使用pecl安装PHP扩展的时候，默认是没有启动这个扩展的，如果想要使用这个扩展必须要在php.ini这个配置文件中去配置一下才能使用这个PHP扩展。而 `docker-php-ext-enable` 这个命令则是自动给我们来启动PHP扩展的，不需要你去php.ini这个配置文件中去配置。
+* `docker-php-ext-enable`
+> 这个命令，是用来安装并启动PHP扩展的。命令格：`docker-php-ext-install "源码包目录名"`
+* `docker-php-ext-configure`
+> 一般都是需要跟 docker-php-ext-install搭配使用的。它的作用就是，当你安装扩展的时候，需要自定义配置时，就可以使用它来帮你做到。
+* [**Docker容器里 PHP安装扩展**](resource/php-install-ext.md)
+
+#### 3.1.2 PHP容器中的composer镜像修改
+1. composer查看全局设置
+```shell script
+composer config -gl
+```
+2. 设置composer镜像为国内镜像
+```shell script
+composer config -g repo.packagist composer https://packagist.phpcomposer.com
+# 或
+composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
+```
+
+#### 3.1.3 phpstorm 配置 xdebug
 [**phpstorm 配置 xdebug**](resource/phpstorm-xdebug.md)
 
-#### 3.1.2 宿主机中使用PHP命令行
+#### 3.1.4 宿主机中使用PHP命令行
 1. 参考[bashrc.sample](bashrc.sample)示例文件，将对应的php-cli函数拷贝到主机的 `~/.bashrc` 文件中。
 2. 让文件起效：
-```shell
+```shell script
 source ~/.bashrc
 ```
 3. 然后就可以在主机中执行PHP命令了：
-```shell
+```shell script
 [root@VM-16-4-centos ~]# php72 -v
 PHP 7.2.34 (cli) (built: Dec 17 2020 10:32:53) ( NTS )
 Copyright (c) 1997-2018 The PHP Group
@@ -86,23 +109,11 @@ Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
 [root@VM-16-4-centos ~]#
 ```
 
-#### 3.1.3 PHP容器中的composer镜像修改
-1. composer查看全局设置
-```shell
-composer config -gl
-```
-2. 设置composer镜像为国内镜像
-```shell
-composer config -g repo.packagist composer https://packagist.phpcomposer.com
-# 或
-composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
-```
-
 ### 3.2 Nginx
 #### 3.2.1 切换Nginx使用PHP版本
 比如切换为PHP7.2
 打开Nginx配置conf.d下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
-```shell
+```shell script
 location ~ [^/]\.php(/|$) {
     ...
     include enable-php-74.conf;
@@ -110,7 +121,7 @@ location ~ [^/]\.php(/|$) {
 }
 ```
 改为：
-```shell
+```shell script
 location ~ [^/]\.php(/|$) {
     ...
     include enable-php-72.conf;
@@ -124,14 +135,14 @@ location ~ [^/]\.php(/|$) {
 需要给 `./data/elasticsearch`、 `./logs/elasticsearch` 这两个文件夹赋予权限 `chmod -R 777 ./data/elasticsearch ./logs/elasticsearch` 重启即可
 
 #### 3.3.2 Elasticsearch账号密码设置
-```shell
+```shell script
  #自动生成密码
  ./bin/elasticsearch-setup-passwords auto
  #手动设置密码
  ./bin/elasticsearch-setup-passwords interactive
 ```
 执行后会自动生成密码
-```shell
+```shell script
  Changed password for user apm_system
  PASSWORD apm_system = {密码}
 
@@ -156,7 +167,7 @@ location ~ [^/]\.php(/|$) {
 
 ### 3.4 Kibana
 #### 3.4.1 Kibana连接Elasticsearch问题
-```shell
+```shell script
  elasticsearch.username: "kibana_system或kibana"
  elasticsearch.password: "上面Elasticsearch生成的密码"
 ```
@@ -169,7 +180,7 @@ Log文件生成的位置依赖于conf下各log配置的值
 ## 5. 管理命令
 ### 5.1. 服务器启动和构建命令
 如需管理服务，请在命令后面加上服务器名称，例如：
-```shell
+```shell script
 docker-compose up                                   # 创建并启动所有容器
 docker-compose up -d                                # 创建并后台运行方式启动所有容器
 docker-compose up nginx1.21 php72 mysql8.0          # 创建并启动nginx1.21 php72 mysql8.0  的多个容器
