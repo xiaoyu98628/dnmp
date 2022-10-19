@@ -110,7 +110,7 @@ Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
 ```
 
 ### 3.2 Nginx
-#### 3.2.1 切换Nginx使用PHP版本
+#### 3.2.1 切换PHP版本
 比如切换为PHP7.2
 打开Nginx配置conf.d下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
 ```shell script
