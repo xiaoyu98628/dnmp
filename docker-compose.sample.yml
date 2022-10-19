@@ -10,8 +10,8 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "./data/mysql/mysql8.0:/var/lib/mysql"   # 数据库文件
-      - "./servers/mysql/mysql8.0:/etc/mysql"    # 配置文件
+      - "./data/mysql/mysql8.0:/var/lib/mysql"    # 数据库文件
+      - "./servers/mysql/mysql8.0:/etc/mysql"     # 配置文件
       - "./logs/mysql/mysql8.0:/var/log/mysql"    # 日志文件
     restart: always
     privileged: true
@@ -52,11 +52,11 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - "./servers/php/php7.2/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
-      - "./servers/php/php7.2/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
-      - "./servers/php/php7.2/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
-      - "./www:/var/www/html"                       # 文件路径
-      - "./servers/panel/sock:/dev/shm" # nginx使用unix sock连接文件
+      - "./servers/php/php7.2/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
+      - "./servers/php/php7.2/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
+      - "./servers/php/php7.2/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/panel/sock:/dev/shm"                                     # nginx使用unix sock连接文件
     networks:
       - dnmp-net
 
@@ -72,11 +72,11 @@ services:
     ports:
       - "9001:9000"
     volumes:
-      - "./servers/php/php7.3/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
-      - "./servers/php/php7.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
-      - "./servers/php/php7.3/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
-      - "./www:/var/www/html"                       # 文件路径
-      - "./servers/panel/sock:/dev/shm" # nginx使用unix sock连接文件
+      - "./servers/php/php7.3/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
+      - "./servers/php/php7.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
+      - "./servers/php/php7.3/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/panel/sock:/dev/shm"                                     # nginx使用unix sock连接文件
     networks:
       - dnmp-net
 
@@ -92,11 +92,11 @@ services:
     ports:
       - "9002:9000"
     volumes:
-      - "./servers/php/php7.4/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
-      - "./servers/php/php7.4/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
-      - "./servers/php/php7.4/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
-      - "./www:/var/www/html"                       # 文件路径
-      - "./servers/panel/sock:/dev/shm" # nginx使用unix连接文件
+      - "./servers/php/php7.4/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
+      - "./servers/php/php7.4/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
+      - "./servers/php/php7.4/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/panel/sock:/dev/shm"                                     # nginx使用unix连接文件
     networks:
       - dnmp-net
 
@@ -112,11 +112,11 @@ services:
     ports:
       - "9003:9000"
     volumes:
-      - "./servers/php/php8.0/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
-      - "./servers/php/php8.0/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
-      - "./servers/php/php8.0/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
-      - "./www:/var/www/html"                       # 文件路径
-      - "./servers/panel/sock:/dev/shm" # nginx使用unix连接文件
+      - "./servers/php/php8.0/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
+      - "./servers/php/php8.0/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
+      - "./servers/php/php8.0/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/panel/sock:/dev/shm"                                     # nginx使用unix连接文件
     networks:
       - dnmp-net
 
@@ -132,11 +132,11 @@ services:
     ports:
       - "9004:9000"
     volumes:
-      - "./servers/php/php8.1/php.ini:/usr/local/etc/php/php.ini:ro" # php.ini
-      - "./servers/php/php8.1/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw" # php-fpm.conf
-      - "./servers/php/php8.1/php-fpm.d:/usr/local/etc/php-fpm.d" # php-fpm.d
-      - "./www:/var/www/html"                       # 文件路径
-      - "./servers/panel/sock:/dev/shm" # nginx使用unix连接文件
+      - "./servers/php/php8.1/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
+      - "./servers/php/php8.1/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
+      - "./servers/php/php8.1/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/panel/sock:/dev/shm"                                     # nginx使用unix连接文件
     networks:
       - dnmp-net
 
@@ -154,6 +154,24 @@ services:
       - "./servers/panel/sock:/dev/shm"             # php unix连接文件
     environment:
       - "TZ=${TZ}"
+    networks:
+      - dnmp-net
+
+  mongo6.0:
+    image: mongo:6.0
+    container_name: mongodb60
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - "./data/mongo/mongo6.0:/var/lib/mongodb:rw"                 # 数据库文件
+      - "./logs/mongo/mongo6.0:/var/log/mongodb:rw"                 # 日志文件
+      - "./servers/mongo/mongo6.0/mongo.conf:/etc/mongo.conf:ro"  # 配置文件
+    environment:
+      - "TZ=${TZ}"
+      - "MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}"
+      - "MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}"
+    command: "mongod --config /etc/mongo.conf"
     networks:
       - dnmp-net
 
@@ -186,14 +204,14 @@ services:
       - "9200:9200"
       - "9300:9300"
     volumes:
-      - "./data/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/data" # 数据文件
-      - "./logs/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/logs" # 日志文件
-      - "./plugins/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/plugins" # 插件文件
+      - "./data/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/data"             # 数据文件
+      - "./logs/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/logs"             # 日志文件
+      - "./plugins/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/plugins"       # 插件文件
       - "./servers/elasticsearch/elasticsearch8.4/config:/usr/share/elasticsearch/config" # 配置文件
     environment:
       - "TZ=${TZ}"
-      - "discovery.type=single-node"  # 单节点设置
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # 设置内存大小
+      - "discovery.type=single-node"      # 单节点设置
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # 设置内存大小
     networks:
       - dnmp-net
 

@@ -14,7 +14,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 7. 可一键配置常用服务（后续会增加）
     - 多PHP版本：PHP7.2、PHP7.3、PHP7.4、PHP8.0、PHP8.1
     - Web服务：Nginx1.21
-    - 数据库：MySQL8.0、Redis6.2、Elasticsearch
+    - 数据库：MySQL8.0、Redis6.2、Elasticsearch、Mongo
     - 辅助工具：Kibana
 8. 实际项目中应用，确保可用
 9. 一次配置，**Windows、Linux、MacOs**皆可用
@@ -131,10 +131,7 @@ location ~ [^/]\.php(/|$) {
 最后 **重启 Nginx** 生效
 
 ### 3.3 Elasticsearch
-#### 3.3.1 Elasticsearch 挂载目录权限问题
-需要给 `./data/elasticsearch`、 `./logs/elasticsearch` 这两个文件夹赋予权限 `chmod -R 777 ./data/elasticsearch ./logs/elasticsearch` 重启即可
-
-#### 3.3.2 Elasticsearch账号密码设置
+#### 3.3.1 Elasticsearch账号密码设置
 ```shell script
  #自动生成密码
  ./bin/elasticsearch-setup-passwords auto
@@ -172,10 +169,26 @@ location ~ [^/]\.php(/|$) {
  elasticsearch.password: "上面Elasticsearch生成的密码"
 ```
 
-## 4. 关于log
-Log文件生成的位置依赖于conf下各log配置的值
-### 4.1. mysql日志
-1. mysql 挂载目录权限问题，需要给 `./logs/mysql` 文件夹赋予权限 `chmod -R 777 ./logs/mysql` 重启即可
+### 3.5 Mongo
+#### `system.sessions`文档没权限访问
+* 授权
+```javascript
+db.grantRolesToUser('userName',[{role:"<role>",db:"<database>"}])
+
+// 例如
+db.grantRolesToUser('root',[{role:"__system",db:"admin"}])
+```
+
+## 4. 关于挂载权限问题
+由于数据卷和日志卷分离的原因，部分容器启动需要对应的权限，然而宿主机上没有与之对应的权限，所以我们直接赋予`777`权限即可
+### 4.1. mysql
+需要给 `./logs/mysql` 文件夹赋予权限 `chmod -R 777 ./logs/mysql` 重启即可
+
+### 4.2 Elasticsearch
+需要给 `./data/elasticsearch`、 `./logs/elasticsearch` 文件夹赋予权限 `chmod -R 777 ./data/elasticsearch ./logs/elasticsearch` 重启即可
+
+### 4.3 Mongo 
+需要给 `./data/mongo`、 `./logs/mongo` 文件夹赋予权限 `chmod -R 777 ./data/mongo ./logs/mongo` 重启即可
 
 ## 5. 管理命令
 ### 5.1. 服务器启动和构建命令
