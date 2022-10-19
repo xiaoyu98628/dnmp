@@ -170,7 +170,7 @@ location ~ [^/]\.php(/|$) {
 ```
 
 ### 3.5 Mongo
-#### `system.sessions`文档没权限访问
+#### 3.5.1 `system.sessions`文档没权限访问
 * 授权
 ```javascript
 db.grantRolesToUser('userName',[{role:"<role>",db:"<database>"}])
