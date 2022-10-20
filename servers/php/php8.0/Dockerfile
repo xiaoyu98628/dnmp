@@ -12,8 +12,8 @@ ENV EXTENSIONS=",${PHP80_EXTENSIONS},"
 # 资源替换 阿里云镜像
 RUN sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories
 
-# 修改时间
-RUN apk update \
+# 更新apk 修改时间
+RUN apk update && apk upgrade \
     && apk add --no-cache --virtual .build-deps tzdata \
     && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime \
     && echo "${TZ}" > /etc/timezone
