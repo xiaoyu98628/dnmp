@@ -13,8 +13,8 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 6. 默认支持`pdo_mysql`、`mysqli`、`mbstring`、`gd`、`curl`、`opcache`等常用热门扩展，根据环境灵活配置
 7. 可一键配置常用服务（后续会增加）
     - 多PHP版本：PHP7.2、PHP7.3、PHP7.4、PHP8.0、PHP8.1
-    - Web服务：Nginx1.21
-    - 数据库：MySQL8.0、Redis6.2、Elasticsearch、Mongo
+    - Web服务：Nginx
+    - 数据库：MySQL、Redis、Elasticsearch、Mongo
     - 辅助工具：Kibana
 8. 实际项目中应用，确保可用
 9. 一次配置，**Windows、Linux、MacOs**皆可用
@@ -29,6 +29,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 |     |--- elasticsearch              elasticsearch 配置文件目录（多版本）
 |     |--- kibana                     kibana 配置文件目录（多版本）
 |     |--- mysql                      mysql 配置文件目录（多版本）
+|     |--- mongo                      mongo 配置文件目录（多版本）
 |     |--- nginx                      nginx 配置文件目录（多版本）
 |     |--- php                        php 配置文件目录（多版本）
 |     |--- redis                      redis 配置文件目录（多版本）
@@ -227,29 +228,10 @@ docker-compose down                       # 停止并删除容器，网络，图
 ### 6.2 容器内时间问题
 容器时间在.env文件中配置`TZ`变量，所有支持的时区请查看[**时区列表·维基百科**](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) 或者 [**PHP所支持的时区列表·PHP官网**](https://www.php.net/manual/zh/timezones.php) 。
 
-### 6.3 如何链接MySQL和Redis服务器
-这要分两种情况
-第一种情况，在PHP代码中。
-```php
-// 连接MySQL
-$pdo = new PDO('mysql:host=mysql80;dbname=数据库名称', 'MySQL账号', 'MySQL密码');
-
-// 连接Redis
-$redis = new Redis();
-$redis->connect('redis', 6379);
-```
-因为容器与容器是`expose`端口联通的，而且在同一个`networks`下，所以连接的`host`参数直接用容器名称，`port`参数就是容器内部的端口。更多请参考[**《docker-compose ports和expose的区别》**](https://www.awaimai.com/2138.html) 。
-
-第二种情况，**在主机中**通过**命令行**或者**Navicat**等工具连接，主机要连接mysql和redis，要求容器必须经过`ports`把端口映射到主机，以mysql为例，`docker-compose.yml`文件中有`ports`配置：`3306:3306`，就是主机的3306和容器的3306端口形成了映射，所以我们可以这样连接：
-```shell script
-$ mysql -h127.0.0.1 -uroot -p123456 -P3306
-$ redis-cli -h127.0.0.1 -p6379
-```
-
-### 6.4 windows下使用PHP
+### 6.3 windows下使用PHP
 PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装的扩展都会失败，[**原因**](https://www.editcode.net/thread-404502-1-1.html)
 
-### 6.5 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'
+### 6.4 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'
 1. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置并且有且仅有`MYSQL_ROOT_PASSWORD`这个参数，你将不会出现这个问题
 2. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置了`MYSQL_ROOT_PASSWORD`、`MYSQL_ROOT_HOST`、`MYSQL_USER`、`MYSQL_PASSWORD`，并且你的连接不是使用`root`用户连接的将会出现这个问题  
 （1）：问题：权限问题(默认只有`information_schema`这个库的权限)  
