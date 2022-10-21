@@ -201,7 +201,7 @@ location ~ [^/]\.php(/|$) {
 ```sql
 db.grantRolesToUser('userName',[{role:"<role>",db:"<database>"}])
 
-// 例如
+# 例如
 db.grantRolesToUser('root',[{role:"__system",db:"admin"}])
 ```
 
