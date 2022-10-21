@@ -79,7 +79,29 @@ http://localhost/81       # PHP81
 > 这个命令，是用来安装并启动PHP扩展的。命令格：`docker-php-ext-install "源码包目录名"`
 * `docker-php-ext-configure`
 > 一般都是需要跟 docker-php-ext-install搭配使用的。它的作用就是，当你安装扩展的时候，需要自定义配置时，就可以使用它来帮你做到。
-* [**Docker容器里 PHP安装扩展**](resource/php-install-ext.md)
+* [**Docker容器里 PHP安装扩展**](resource/php-install-ext.md)  
+>注意：如果是在容器内安装扩展，容器删除，扩展会失效，建议直接在.env文件里对应的版本下添加对应的扩展，然后重新`docker-compose build php72`
+```dotenv
+# +--------------+
+# PHP72
+# +--------------+
+#
+# +--------------------------------------------------------------------------------------------+
+# Default installed:
+#
+# Core,ctype,curl,date,dom,fileinfo,filter,ftp,hash,iconv,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,
+# pdo_sqlite,Phar,posix,readline,Reflection,session,SimpleXML,sodium,SPL,sqlite3,standard,tokenizer,xml,
+# xmlreader,xmlwriter,zlib
+#
+# Available PHP_EXTENSIONS:
+#
+# pdo_mysql,pcntl,mysqli,exif,bcmath,opcache,gettext,gd,sockets,shmop,intl,bz2,soap,zip,xsl
+# redis,swoole,memcached,xdebug,mongodb,amqp
+#
+# You can let it empty to avoid installing any extensions,
+# +--------------------------------------------------------------------------------------------+
+PHP72_EXTENSIONS=pdo_mysql,mysqli,gd,redis
+```
 
 #### 3.1.2 PHP容器中的composer镜像修改
 1. composer查看全局设置
