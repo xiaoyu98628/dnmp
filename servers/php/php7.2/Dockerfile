@@ -4,10 +4,10 @@ FROM php:7.2-fpm-alpine
 LABEL MAINTAINER="XiaoYu <1765841705@qq.com>"
 
 ARG CONTAINER_PACKAGE_URL
-ARG PHP72_EXTENSIONS
+ARG PHP_EXTENSIONS_72
 ARG TZ
 
-ENV EXTENSIONS=",${PHP72_EXTENSIONS},"
+ENV EXTENSIONS=",${PHP_EXTENSIONS_72},"
 
 # 资源替换 阿里云镜像
 RUN sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories
@@ -20,7 +20,7 @@ RUN apk update && apk upgrade \
 
 # 安装扩展
 RUN docker-php-source extract \
-    && if [ "${PHP72_EXTENSIONS}" != "" ]; \
+    && if [ "${PHP_EXTENSIONS_72}" != "" ]; \
         then \
             apk add --no-cache --virtual .build-deps autoconf g++ make \
             && apk add --no-cache libstdc++; \

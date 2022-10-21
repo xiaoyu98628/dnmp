@@ -14,7 +14,8 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 7. 可一键配置常用服务（后续会增加）
     - 多PHP版本：PHP7.2、PHP7.3、PHP7.4、PHP8.0、PHP8.1
     - Web服务：Nginx
-    - 数据库：MySQL、Redis、Elasticsearch、Mongo
+    - 数据库：MySQL、Redis、Elasticsearch、Mongo、
+    - 消息队列：RabbitMQ
     - 辅助工具：Kibana、mongo-express
 8. 实际项目中应用，确保`100%`可用
 9. 所有镜像源于[**Docker官方仓库**](https://hub.docker.com)，安全可靠
@@ -27,7 +28,8 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 |--- logs                        日志目录
 |     |--- mysql                      mysql 数据目录（多版本）
 |--- plugins                     插件目录
-|--- resource                    资源目录(存放一天图片和.md的说明文件)
+|     |--- elasticsearch              elasticsearch 插件目录（多版本）
+|--- resource                    资源目录(存放图片和.md的说明文件)
 |--- servers                     服务构建文件和配置文件目录
 |     |--- elasticsearch              elasticsearch 配置文件目录（多版本）
 |     |--- kibana                     kibana 配置文件目录（多版本）
@@ -36,6 +38,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 |     |--- nginx                      nginx 配置文件目录（多版本）
 |     |--- php                        php 配置文件目录（多版本）
 |     |--- redis                      redis 配置文件目录（多版本）
+|     |--- rabbitmq                   rabbitmq 配置文件目录（多版本）
 |     |--- panel                      php 套接字文件目录
 |--- www                         项目文件目录
 |--- bashrc.sample               .bashrc 配置示例文件(宿主机使用容器内命令)
@@ -48,75 +51,78 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
     - `git`
     - `Docker`
     - `docker-compose`
-2. `clone` 项目
-```gitignore
-git clone https://gitee.com/xiaoyucc521/dnmp.git
-```
-3. 拷贝并命名配置文件，启动：
-```shell script
-cd dnmp                                            # 进入项目目录
-cp sample.env .env                                 # 复制并改名 .env 配置文件
-cp docker-compose.sample.yml docker-compose.yml    # 复制并改名 docker-compose.yml 配置文件
 
-# 执行 docker-compose up 之前，建议看一下docker-compose.yml 文件，以便快速上手。
-docker-compose up                                  # 启动服务
-```
-4.启动之后查看PHP版本
-```shell script
-http://localhost/         # PHP72
-http://localhost/73       # PHP73
-http://localhost/74       # PHP74
-http://localhost/80       # PHP80
-http://localhost/81       # PHP81
-```
+2. `clone` 项目
+   ```gitignore
+   git clone https://gitee.com/xiaoyucc521/dnmp.git
+   ```
+
+3. 拷贝并命名配置文件，启动：
+   ```shell script
+   cd dnmp                                          # 进入项目目录
+   cp sample.env .env                               # 复制并改名 .env 配置文件
+   cp docker-compose.sample.yml docker-compose.yml  # 复制并改名 docker-compose.yml 配置文件
+   
+   # 执行 docker-compose up 之前，建议看一下docker-compose.yml 文件，以便快速上手。
+   docker-compose up                                # 启动服务
+   ```
+
+4. 启动之后查看PHP版本
+   ```shell script
+   http://localhost/         # PHP72
+   http://localhost/73       # PHP73
+   http://localhost/74       # PHP74
+   http://localhost/80       # PHP80
+   http://localhost/81       # PHP81
+   ```
 
 ## 3. 关于容器
 
 ### 3.1 PHP 
 #### 3.1.1 docker容器里安装PHP扩展常用命令
 * `docker-php-source`
-> 此命令，实际上就是在PHP容器中创建一个`/usr/src/php`的目录，里面放了一些自带的文件而已。我们就把它当作一个从互联网中下载下来的PHP扩展源码的存放目录即可。事实上，所有PHP扩展源码扩展存放的路径： `/usr/src/php/ext` 里面。
+   > 此命令，实际上就是在PHP容器中创建一个`/usr/src/php`的目录，里面放了一些自带的文件而已。我们就把它当作一个从互联网中下载下来的PHP扩展源码的存放目录即可。事实上，所有PHP扩展源码扩展存放的路径： `/usr/src/php/ext` 里面。
 * `docker-php-ext-install`
-> 这个命令，就是用来启动 PHP扩展 的。我们使用pecl安装PHP扩展的时候，默认是没有启动这个扩展的，如果想要使用这个扩展必须要在php.ini这个配置文件中去配置一下才能使用这个PHP扩展。而 `docker-php-ext-enable` 这个命令则是自动给我们来启动PHP扩展的，不需要你去php.ini这个配置文件中去配置。
+   > 这个命令，就是用来启动 PHP扩展 的。我们使用pecl安装PHP扩展的时候，默认是没有启动这个扩展的，如果想要使用这个扩展必须要在php.ini这个配置文件中去配置一下才能使用这个PHP扩展。而 `docker-php-ext-enable` 这个命令则是自动给我们来启动PHP扩展的，不需要你去php.ini这个配置文件中去配置。
 * `docker-php-ext-enable`
-> 这个命令，是用来安装并启动PHP扩展的。命令格：`docker-php-ext-install "源码包目录名"`
+   > 这个命令，是用来安装并启动PHP扩展的。命令格：`docker-php-ext-install "源码包目录名"`
 * `docker-php-ext-configure`
-> 一般都是需要跟 docker-php-ext-install搭配使用的。它的作用就是，当你安装扩展的时候，需要自定义配置时，就可以使用它来帮你做到。
+   > 一般都是需要跟 docker-php-ext-install搭配使用的。它的作用就是，当你安装扩展的时候，需要自定义配置时，就可以使用它来帮你做到。
 * [**Docker容器里 PHP安装扩展**](resource/php-install-ext.md)  
->**注意：如果是在容器内安装扩展，容器删除，扩展会失效，建议直接在.env文件里对应的版本下添加对应的扩展，然后重新`docker-compose build php72`**
-```dotenv
-# +--------------+
-# PHP72
-# +--------------+
-#
-# +--------------------------------------------------------------------------------------------+
-# Default installed:
-#
-# Core,ctype,curl,date,dom,fileinfo,filter,ftp,hash,iconv,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,
-# pdo_sqlite,Phar,posix,readline,Reflection,session,SimpleXML,sodium,SPL,sqlite3,standard,tokenizer,xml,
-# xmlreader,xmlwriter,zlib
-#
-# Available PHP_EXTENSIONS:
-#
-# pdo_mysql,pcntl,mysqli,exif,bcmath,opcache,gettext,gd,sockets,shmop,intl,bz2,soap,zip,xsl
-# redis,swoole,memcached,xdebug,mongodb,amqp
-#
-# You can let it empty to avoid installing any extensions,
-# +--------------------------------------------------------------------------------------------+
-PHP72_EXTENSIONS=pdo_mysql,mysqli,gd,redis
-```
+   >**注意：如果是在容器内安装扩展，容器删除，扩展会失效，建议直接在.env文件里对应的版本下添加对应的扩展，然后重新`docker-compose build php72`**
+   ```dotenv
+   # +--------------+
+   # PHP7.2
+   # +--------------+
+   #
+   # +--------------------------------------------------------------------------------------------+
+   # Default installed:
+   #
+   # Core,ctype,curl,date,dom,fileinfo,filter,ftp,hash,iconv,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,
+   # pdo_sqlite,Phar,posix,readline,Reflection,session,SimpleXML,sodium,SPL,sqlite3,standard,tokenizer,xml,
+   # xmlreader,xmlwriter,zlib
+   #
+   # Available PHP_EXTENSIONS:
+   #
+   # pdo_mysql,pcntl,mysqli,exif,bcmath,opcache,gettext,gd,sockets,shmop,intl,bz2,soap,zip,xsl
+   # redis,swoole,memcached,xdebug,mongodb,amqp
+   #
+   # You can let it empty to avoid installing any extensions,
+   # +--------------------------------------------------------------------------------------------+
+   PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis
+   ```
 
 #### 3.1.2 PHP容器中的composer镜像修改
 1. composer查看全局设置
-```shell script
-composer config -gl
-```
+   ```shell script
+   composer config -gl
+   ```
 2. 设置composer镜像为国内镜像
-```shell script
-composer config -g repo.packagist composer https://packagist.phpcomposer.com
-# 或
-composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
-```
+   ```shell script
+   composer config -g repo.packagist composer https://packagist.phpcomposer.com
+   # 或
+   composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
+   ```
 
 #### 3.1.3 phpstorm 配置 xdebug
 [**phpstorm 配置 xdebug**](resource/phpstorm-xdebug.md)
@@ -124,17 +130,17 @@ composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
 #### 3.1.4 宿主机中使用PHP命令行
 1. 参考[bashrc.sample](bashrc.sample)示例文件，将对应的php-cli函数拷贝到主机的 `~/.bashrc` 文件中。
 2. 让文件起效：
-```shell script
-source ~/.bashrc
-```
+   ```shell script
+   source ~/.bashrc
+   ```
 3. 然后就可以在主机中执行PHP命令了：
-```shell script
-[root@centos ~]# php72 -v
-PHP 7.2.34 (cli) (built: Dec 17 2020 10:32:53) ( NTS )
-Copyright (c) 1997-2018 The PHP Group
-Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
-[root@centos ~]#
-```
+   ```shell script
+   [root@centos ~]# php72 -v
+   PHP 7.2.34 (cli) (built: Dec 17 2020 10:32:53) ( NTS )
+   Copyright (c) 1997-2018 The PHP Group
+   Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
+   [root@centos ~]#
+   ```
 
 ### 3.2 Nginx
 #### 3.2.1 切换PHP版本
@@ -198,7 +204,7 @@ location ~ [^/]\.php(/|$) {
 
 ### 3.5 Mongo
 #### 3.5.1 `system.sessions`文档没权限访问
-* 授权
+授权
 ```javascript
 db.grantRolesToUser('userName',[{role:"<role>",db:"<database>"}])
 
@@ -221,16 +227,20 @@ db.grantRolesToUser('root',[{role:"__system",db:"admin"}])
 ### 5.1. 服务器启动和构建命令
 如需管理服务，请在命令后面加上服务器名称，例如：
 ```shell script
-docker-compose up                                   # 创建并启动所有容器
-docker-compose up -d                                # 创建并后台运行方式启动所有容器
-docker-compose up nginx1.21 php72 mysql8.0          # 创建并启动nginx1.21 php72 mysql8.0  的多个容器
-docker-compose up -d nginx1.21 php72 mysql8.0       # 创建并已后台运行的方式启动nginx1.21 php72 mysql8.0  容器
-docker-compose start php72                          # 启动php72服务
-docker-compose stop php72                           # 停止php72服务
-docker-compose restart php72                        # 重启php72服务
-docker-compose build php72                          # 构建或者重新构建服务
-docker-compose rm php72                             # 删除并停止php72容器
-docker-compose down                                 # 停止并删除容器，网络，图像和挂载卷
+docker-compose up                       # 创建并启动所有服务
+docker-compose up -d                    # 创建并以后台运行方式启动所有服务
+docker-compose up "服务名..."            # 创建并启动服务
+docker-compose up -d "服务名..."         # 创建并以后台运行的方式启动服务
+
+docker-compose start "服务名..."         # 启动服务
+docker-compose stop "服务名..."          # 停止服务
+docker-compose restart "服务名..."       # 重启服务
+
+docker-compose build "服务名..."         # 构建或者重新构建服务
+
+docker-compose rm "服务名..."            # 删除并停止
+
+docker-compose down                     # 停止并删除容器，网络，图像和挂载卷
 ```
 
 ## 6. 其他问题
@@ -256,8 +266,8 @@ PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装
 ### 6.4 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'
 1. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置并且有且仅有`MYSQL_ROOT_PASSWORD`这个参数，你将不会出现这个问题
 2. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置了`MYSQL_ROOT_PASSWORD`、`MYSQL_ROOT_HOST`、`MYSQL_USER`、`MYSQL_PASSWORD`，并且你的连接不是使用`root`用户连接的将会出现这个问题  
-（1）：问题：权限问题(默认只有`information_schema`这个库的权限)  
-（2）：解决办法：[**MySQL数据库远程连接创建用户权限等**](./resource/MySQL-user-Permissions.md)
+   (1)：问题：权限问题(默认只有`information_schema`这个库的权限)  
+   (2)：解决办法：[**MySQL数据库远程连接创建用户权限等**](./resource/MySQL-user-Permissions.md)
 
 ## 7. 正式环境中使用
 1. 权限认证

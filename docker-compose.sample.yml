@@ -17,10 +17,10 @@ services:
     privileged: true
     environment:
       - "TZ=${TZ}"
-      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
-      - "MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}"
-      - "MYSQL_USER=${MYSQL_USER}"
-      - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD_80}"
+      - "MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST_80}"
+      - "MYSQL_USER=${MYSQL_USER_80}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD_80}"
     networks:
       - dnmp-net
 
@@ -45,7 +45,7 @@ services:
       context: ./servers/php/php7.2
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
-        PHP72_EXTENSIONS: ${PHP72_EXTENSIONS}
+        PHP_EXTENSIONS_72: ${PHP_EXTENSIONS_72}
         TZ: ${TZ}
     container_name: php72
     restart: always
@@ -65,7 +65,7 @@ services:
       context: ./servers/php/php7.3
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
-        PHP73_EXTENSIONS: ${PHP73_EXTENSIONS}
+        PHP_EXTENSIONS_73: ${PHP_EXTENSIONS_73}
         TZ: ${TZ}
     container_name: php73
     restart: always
@@ -85,7 +85,7 @@ services:
       context: ./servers/php/php7.4
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
-        PHP74_EXTENSIONS: ${PHP74_EXTENSIONS}
+        PHP_EXTENSIONS_74: ${PHP_EXTENSIONS_74}
         TZ: ${TZ}
     container_name: php74
     restart: always
@@ -105,7 +105,7 @@ services:
       context: ./servers/php/php8.0
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
-        PHP80_EXTENSIONS: ${PHP80_EXTENSIONS}
+        PHP_EXTENSIONS_80: ${PHP_EXTENSIONS_80}
         TZ: ${TZ}
     container_name: php80
     restart: always
@@ -125,7 +125,7 @@ services:
       context: ./servers/php/php8.1
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
-        PHP81_EXTENSIONS: ${PHP81_EXTENSIONS}
+        PHP_EXTENSIONS_81: ${PHP_EXTENSIONS_81}
         TZ: ${TZ}
     container_name: php81
     restart: always
@@ -169,8 +169,8 @@ services:
       - "./servers/mongo/mongo6.0/mongo.conf:/etc/mongo.conf:ro"    # 配置文件
     environment:
       - "TZ=${TZ}"
-      - "MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}"
-      - "MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}"
+      - "MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME_60}"
+      - "MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD_60}"
     command: "mongod --config /etc/mongo.conf"
     networks:
       - dnmp-net
@@ -183,8 +183,8 @@ services:
       - "8081:8081"
     environment:
       - "TZ=${TZ}"
-      - "ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME}"
-      - "ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD}"
+      - "ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME_60}"
+      - "ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD_60}"
       - "ME_CONFIG_MONGODB_URL=${ME_CONFIG_MONGODB_URL}"
     depends_on:
       - mongo6.0
@@ -196,7 +196,7 @@ services:
       context: ./servers/rabbitmq/rabbitmq3.11
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
-        RABBITMQ3_PLUGINS_3_11: ${RABBITMQ3_11_PLUGINS}
+        RABBITMQ_PLUGINS_3_11: ${RABBITMQ_PLUGINS_3_11}
         TZ: ${TZ}
     container_name: rabbitmq3.11
     hostname: rabbitmq3.11          # RabbitMQ的一个重要注意事项是它根据所谓的 “节点名称” 存储数据，默认为主机名

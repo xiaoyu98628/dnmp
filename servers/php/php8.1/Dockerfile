@@ -4,10 +4,10 @@ FROM php:8.1-fpm-alpine
 LABEL MAINTAINER="XiaoYu <1765841705@qq.com>"
 
 ARG CONTAINER_PACKAGE_URL
-ARG PHP81_EXTENSIONS
+ARG PHP_EXTENSIONS_81
 ARG TZ
 
-ENV EXTENSIONS=",${PHP81_EXTENSIONS},"
+ENV EXTENSIONS=",${PHP_EXTENSIONS_81},"
 
 # 资源替换 阿里云镜像
 RUN sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories
@@ -20,7 +20,7 @@ RUN apk update && apk upgrade \
 
 # 安装扩展
 RUN docker-php-source extract \
-    && if [ "${PHP81_EXTENSIONS}" != "" ]; \
+    && if [ "${PHP_EXTENSIONS_81}" != "" ]; \
         then \
             apk add --no-cache --virtual .build-deps autoconf g++ make \
             && apk add --no-cache libstdc++; \
