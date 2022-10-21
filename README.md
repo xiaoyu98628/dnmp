@@ -129,11 +129,11 @@ source ~/.bashrc
 ```
 3. 然后就可以在主机中执行PHP命令了：
 ```shell script
-[root@VM-16-4-centos ~]# php72 -v
+[root@centos ~]# php72 -v
 PHP 7.2.34 (cli) (built: Dec 17 2020 10:32:53) ( NTS )
 Copyright (c) 1997-2018 The PHP Group
 Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
-[root@VM-16-4-centos ~]#
+[root@centos ~]#
 ```
 
 ### 3.2 Nginx
