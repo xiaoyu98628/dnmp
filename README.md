@@ -258,3 +258,11 @@ PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装
 2. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置了`MYSQL_ROOT_PASSWORD`、`MYSQL_ROOT_HOST`、`MYSQL_USER`、`MYSQL_PASSWORD`，并且你的连接不是使用`root`用户连接的将会出现这个问题  
 （1）：问题：权限问题(默认只有`information_schema`这个库的权限)  
 （2）：解决办法：[**MySQL数据库远程连接创建用户权限等**](./resource/MySQL-user-Permissions.md)
+
+## 7. 正式环境中使用
+1. 权限认证
+2. 日志文件
+以上两点，容器中都存在，如果还是感觉哪里不妥，请自行修改
+
+## License
+MIT
