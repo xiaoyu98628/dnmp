@@ -21,11 +21,13 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 10. 一次配置，**Windows、Linux、MacOs**皆可用
 
 ## 1. 目录结构
-```
+```markdown
 |-- data                         数据库数据目录
 |     |--- mysql                      mysql 数据目录（多版本）
 |--- logs                        日志目录
+|     |--- mysql                      mysql 数据目录（多版本）
 |--- plugins                     插件目录
+|--- resource                    资源目录(存放一天图片和.md的说明文件)
 |--- servers                     服务构建文件和配置文件目录
 |     |--- elasticsearch              elasticsearch 配置文件目录（多版本）
 |     |--- kibana                     kibana 配置文件目录（多版本）
@@ -196,7 +198,7 @@ location ~ [^/]\.php(/|$) {
 ### 3.5 Mongo
 #### 3.5.1 `system.sessions`文档没权限访问
 * 授权
-```javascript
+```sql
 db.grantRolesToUser('userName',[{role:"<role>",db:"<database>"}])
 
 // 例如
@@ -222,16 +224,12 @@ docker-compose up                                   # 创建并启动所有容�
 docker-compose up -d                                # 创建并后台运行方式启动所有容器
 docker-compose up nginx1.21 php72 mysql8.0          # 创建并启动nginx1.21 php72 mysql8.0  的多个容器
 docker-compose up -d nginx1.21 php72 mysql8.0       # 创建并已后台运行的方式启动nginx1.21 php72 mysql8.0  容器
-
-docker-compose start php72                  # 启动php72服务
-docker-compose stop php72                   # 停止php72服务
-docker-compose restart php72                # 重启php72服务
-
-docker-compose build php72                  # 构建或者重新构建服务
-
-docker-compose rm php72                     # 删除并停止php72容器
-
-docker-compose down                       # 停止并删除容器，网络，图像和挂载卷
+docker-compose start php72                          # 启动php72服务
+docker-compose stop php72                           # 停止php72服务
+docker-compose restart php72                        # 重启php72服务
+docker-compose build php72                          # 构建或者重新构建服务
+docker-compose rm php72                             # 删除并停止php72容器
+docker-compose down                                 # 停止并删除容器，网络，图像和挂载卷
 ```
 
 ## 6. 其他问题
