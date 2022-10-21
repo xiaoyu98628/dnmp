@@ -223,6 +223,9 @@ db.grantRolesToUser('root',[{role:"__system",db:"admin"}])
 ### 4.3 Mongo 
 需要给 `./data/mongo`、 `./logs/mongo` 文件夹赋予权限 `chmod -R 777 ./data/mongo ./logs/mongo` 重启即可
 
+### 4.4 RabbitMQ
+需要给 `./data/rabbitmq`、 `./logs/rabbitmq` 文件夹赋予权限 `chmod -R 777 ./data/rabbitmq ./logs/rabbitmq` 重启即可
+
 ## 5. 管理命令
 ### 5.1. 服务器启动和构建命令
 如需管理服务，请在命令后面加上服务器名称，例如：

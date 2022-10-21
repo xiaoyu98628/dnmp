@@ -206,8 +206,8 @@ services:
       - "15672:15672"
     volumes:
       - "./servers/rabbitmq/rabbitmq3.11/conf.d/10-defaults.conf:/etc/rabbitmq/conf.d/10-defaults.conf:ro"   # 配置文件
-      - "./data/rabbitmq/rabbitmq3.11:/var/lib/rabbitmq:rw"            # 数据文件
-      - "./logs/rabbitmq/rabbitmq3.11:/var/log/rabbitmq:rw"            # 日志文件
+      - "./data/rabbitmq/rabbitmq3.11:/var/lib/rabbitmq/mnesia:rw"            # 数据文件
+      - "./logs/rabbitmq/rabbitmq3.11:/var/log/rabbitmq:rw"                   # 日志文件
     environment:
       - "RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER_3_11}"
       - "RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS_3_11}"
