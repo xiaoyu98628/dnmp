@@ -166,7 +166,7 @@ services:
     volumes:
       - "./data/mongo/mongo6.0:/var/lib/mongodb:rw"                 # 数据库文件
       - "./logs/mongo/mongo6.0:/var/log/mongodb:rw"                 # 日志文件
-      - "./servers/mongo/mongo6.0/mongo.conf:/etc/mongo.conf:ro"  # 配置文件
+      - "./servers/mongo/mongo6.0/mongo.conf:/etc/mongo.conf:ro"    # 配置文件
     environment:
       - "TZ=${TZ}"
       - "MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}"
@@ -185,7 +185,7 @@ services:
       - "TZ=${TZ}"
       - "ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME}"
       - "ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD}"
-      - "ME_CONFIG_MONGODB_URL=mongodb://root:root@mongodb60:27017/"
+      - "ME_CONFIG_MONGODB_URL=${ME_CONFIG_MONGODB_URL}"
     depends_on:
       - mongo6.0
     networks:
