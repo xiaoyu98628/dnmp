@@ -191,6 +191,29 @@ services:
     networks:
       - dnmp-net
 
+  rabbitmq3.11:
+    build:
+      context: ./servers/rabbitmq/rabbitmq3.11
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        RABBITMQ3_PLUGINS_3_11: ${RABBITMQ3_11_PLUGINS}
+        TZ: ${TZ}
+    container_name: rabbitmq3.11
+    hostname: rabbitmq3.11          # RabbitMQ的一个重要注意事项是它根据所谓的 “节点名称” 存储数据，默认为主机名
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - "./servers/rabbitmq/rabbitmq3.11/conf.d/10-defaults.conf:/etc/rabbitmq/conf.d/10-defaults.conf:ro"   # 配置文件
+      - "./data/rabbitmq/rabbitmq3.11:/var/lib/rabbitmq:rw"            # 数据文件
+      - "./logs/rabbitmq/rabbitmq3.11:/var/log/rabbitmq:rw"            # 日志文件
+    environment:
+      - "RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER_3_11}"
+      - "RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS_3_11}"
+    networks:
+      - dnmp-net
+
 #  elasticsearch7.8:
 #    image: elasticsearch:7.8.0
 #    container_name: elasticsearch7.8
