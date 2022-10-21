@@ -80,7 +80,7 @@ http://localhost/81       # PHP81
 * `docker-php-ext-configure`
 > 一般都是需要跟 docker-php-ext-install搭配使用的。它的作用就是，当你安装扩展的时候，需要自定义配置时，就可以使用它来帮你做到。
 * [**Docker容器里 PHP安装扩展**](resource/php-install-ext.md)  
->注意：如果是在容器内安装扩展，容器删除，扩展会失效，建议直接在.env文件里对应的版本下添加对应的扩展，然后重新`docker-compose build php72`
+>**注意：如果是在容器内安装扩展，容器删除，扩展会失效，建议直接在.env文件里对应的版本下添加对应的扩展，然后重新`docker-compose build php72`**
 ```dotenv
 # +--------------+
 # PHP72
