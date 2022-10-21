@@ -198,10 +198,10 @@ location ~ [^/]\.php(/|$) {
 ### 3.5 Mongo
 #### 3.5.1 `system.sessions`文档没权限访问
 * 授权
-```sql
+```javascript
 db.grantRolesToUser('userName',[{role:"<role>",db:"<database>"}])
 
-# 例如
+// 例如
 db.grantRolesToUser('root',[{role:"__system",db:"admin"}])
 ```
 
