@@ -1,20 +1,9 @@
 # 指定基于 elasticsearch:8.4.0 创建
 FROM elasticsearch:8.4.0
 
-ARG CONTAINER_PACKAGE_URL
 ARG ELASTICSEARCH_PLUGINS_8_4
-ARG TZ
 
 ENV PLUGINS=",${ELASTICSEARCH_PLUGINS_8_4},"
-
-# 资源替换 阿里云镜像
-RUN sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories
-
-# 更新apk 修改时间
-RUN apk update && apk upgrade \
-    && apk add --no-cache --virtual .build-deps tzdata \
-    && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime \
-    && echo "${TZ}" > /etc/timezone
 
 # 安装插件
 RUN if [ -z "${PLUGINS##*,amazon-ec2,*}" ]; \
