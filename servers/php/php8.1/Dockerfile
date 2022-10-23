@@ -25,109 +25,109 @@ RUN docker-php-source extract \
             apk add --no-cache --virtual .build-deps autoconf g++ make \
             && apk add --no-cache libstdc++; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,pdo_mysql,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,pdo_mysql,*}" ]; \
         then \
             echo "---------- Install pdo_mysql ----------" \
             && docker-php-ext-install -j$(nproc) pdo_mysql; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,pcntl,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,pcntl,*}" ]; \
         then \
             echo "---------- Install pcntl ----------" \
             && docker-php-ext-install -j$(nproc) pcntl; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,mysqli,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,mysqli,*}" ]; \
         then \
             echo "---------- Install mysqli ----------" \
             && docker-php-ext-install -j$(nproc) mysqli; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,exif,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,exif,*}" ]; \
         then \
             echo "---------- Install exif ----------" \
             && docker-php-ext-install -j$(nproc) exif; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,bcmath,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,bcmath,*}" ]; \
         then \
             echo "---------- Install bcmath ----------" \
             && docker-php-ext-install -j$(nproc) bcmath; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,opcache,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,opcache,*}" ]; \
         then \
             echo "---------- Install opcache ----------" \
             && docker-php-ext-install -j$(nproc) opcache; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,gettext,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,gettext,*}" ]; \
         then \
             echo "---------- Install gettext ----------" \
             && apk add --no-cache gettext-dev \
             && docker-php-ext-install -j$(nproc) gettext; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,gd,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,gd,*}" ]; \
         then \
             echo "---------- Install gd ----------" \
             && apk add --no-cache libjpeg-turbo-dev libwebp-dev libpng-dev freetype-dev \
             && docker-php-ext-configure gd --with-freetype=/usr/include --with-jpeg=/usr/include --with-webp=/usr/include \
             && docker-php-ext-install -j$(nproc) gd; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,sockets,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,sockets,*}" ]; \
         then \
             echo "---------- Install sockets ----------" \
             && docker-php-ext-install -j$(nproc) sockets; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,shmop,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,shmop,*}" ]; \
         then \
             echo "---------- Install shmop ----------" \
             && docker-php-ext-install -j$(nproc) shmop; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,intl,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,intl,*}" ]; \
         then \
             echo "---------- Install intl ----------" \
             && apk add --no-cache icu-dev \
             && docker-php-ext-install -j$(nproc) intl; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,bz2,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,bz2,*}" ]; \
         then \
             echo "---------- Install bz2 ----------" \
             && apk add --no-cache bzip2-dev \
             && docker-php-ext-install -j$(nproc) bz2; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,soap,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,soap,*}" ]; \
         then \
             echo "---------- Install soap ----------" \
             && apk add --no-cache libxml2-dev \
             && docker-php-ext-install -j$(nproc) soap; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,zip,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,zip,*}" ]; \
         then \
             echo "---------- Install zip ----------" \
             && apk add --no-cache libzip-dev \
             && docker-php-ext-install -j$(nproc) zip; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,xsl,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,xsl,*}" ]; \
         then \
             echo "---------- Install xsl ----------" \
             && apk add --no-cache libxml2-dev libxslt-dev \
             && docker-php-ext-install -j$(nproc) xsl; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,redis,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,redis,*}" ]; \
         then \
             echo "---------- Install redis ----------" \
             && printf "\n" | pecl install redis \
             && docker-php-ext-enable redis; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,swoole,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,swoole,*}" ]; \
         then \
             echo "---------- Install swoole ----------" \
             && printf "\n" | pecl install swoole \
             && docker-php-ext-enable swoole; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,memcached,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,memcached,*}" ]; \
         then \
             echo "---------- Install memcached ----------" \
             && apk add --no-cache libmemcached-dev zlib-dev \
             && printf "\n" | pecl install memcached \
             && docker-php-ext-enable memcached; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,xdebug,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,xdebug,*}" ]; \
         then \
             echo "---------- Install xdebug ----------" \
             && printf "\n" | pecl install xdebug \
@@ -151,14 +151,14 @@ RUN docker-php-source extract \
             && echo "xdebug.client_host = host.docker.internal ;phpstorm 官方文档上面有写 https://www.jetbrains.com/help/phpstorm/configuring-xdebug.html#feac0d97" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
             && echo "xdebug.remote_host = host.docker.internal ;phpstorm 官方文档上面有写 https://www.jetbrains.com/help/phpstorm/configuring-xdebug.html#feac0d97" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,mongodb,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,mongodb,*}" ]; \
         then \
             echo "---------- Install mongodb ----------" \
             && apk add --no-cache curl-dev openssl-dev \
             && printf "\n" | pecl install mongodb \
             && docker-php-ext-enable mongodb; \
         fi \
-    && if [[ -z "${EXTENSIONS##*,amqp,*}" ]]; \
+    && if [ -z "${EXTENSIONS##*,amqp,*}" ]; \
         then \
             echo "---------- Install amqp ----------" \
             && apk add --no-cache rabbitmq-c-dev \
