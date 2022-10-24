@@ -2,3 +2,4 @@
 .env
 docker-compose*
 !docker-compose.sample.yml
+/.DS_Store
