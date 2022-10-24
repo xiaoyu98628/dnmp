@@ -165,6 +165,12 @@ RUN docker-php-source extract \
             && printf "\n" | pecl install amqp \
             && docker-php-ext-enable amqp; \
         fi \
+    && if [ -z "${EXTENSIONS##*,protobuf,*}" ]; \
+        then \
+            echo "---------- Install protobuf ----------" \
+            && printf "\n" | pecl install protobuf \
+            && docker-php-ext-enable protobuf; \
+        fi \
     # 安装composer
     && apk add --no-cache --virtual .build-deps curl \
     && curl -sS https://getcomposer.org/installer | php \
