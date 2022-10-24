@@ -77,7 +77,7 @@ function getMongoVersion()
 {
     if (extension_loaded('mongodb')) {
         try {
-            $manager = new MongoDB\Driver\Manager('mongodb://root:root@mongo60:27017');
+            $manager = new MongoDB\Driver\Manager('mongodb://root:root@mongodb60:27017');
             $command = new MongoDB\Driver\Command(array('serverStatus'=>true));
 
             $cursor = $manager->executeCommand('admin', $command)->toArray();
