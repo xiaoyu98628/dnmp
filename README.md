@@ -272,6 +272,9 @@ PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装
    (1)：问题：权限问题(默认只有`information_schema`这个库的权限)  
    (2)：解决办法：[**MySQL数据库远程连接创建用户权限等**](./resource/MySQL-user-Permissions.md)
 
+### 6.5 `[output clipped, Log limit 1MiB reached]` 日志限制达到1MiB
+如果在`docker-compose build "服务名"` 出现了这句话并且构建失败，命令改成` COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=0 docker-compose build "服务名"` 可以看到的错误信息，方便修改
+
 ## 7. 正式环境中使用
 1. 权限认证
 2. 日志文件
