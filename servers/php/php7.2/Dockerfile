@@ -22,7 +22,7 @@ RUN apk update && apk upgrade \
 RUN docker-php-source extract \
     && if [ "${PHP_EXTENSIONS_72}" != "" ]; \
         then \
-            apk add --no-cache --virtual .build-deps autoconf g++ make \
+            apk add --no-cache --virtual .build-deps autoconf g++ make libtool linux-headers \
             && apk add --no-cache libstdc++; \
         fi \
     && if [ -z "${EXTENSIONS##*,pdo_mysql,*}" ]; \
@@ -170,6 +170,13 @@ RUN docker-php-source extract \
             echo "---------- Install protobuf ----------" \
             && printf "\n" | pecl install protobuf \
             && docker-php-ext-enable protobuf; \
+        fi \
+    && if [ -z "${EXTENSIONS##*,grpc,*}" ]; \
+        then \
+            echo "---------- Install grpc ----------" \
+            && apk add --no-cache zlib-dev \
+            && printf "\n" | pecl install grpc \
+            && docker-php-ext-enable grpc; \
         fi \
     # 安装composer
     && apk add --no-cache --virtual .build-deps curl \
