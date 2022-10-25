@@ -1,5 +1,5 @@
-# 指定基于 php:7.3-fpm-alpine3.13 创建
-FROM php:7.3-fpm-alpine3.13
+# 指定基于 php:7.3-fpm-alpine 创建
+FROM php:7.3-fpm-alpine
 
 LABEL MAINTAINER="XiaoYu <1765841705@qq.com>"
 
