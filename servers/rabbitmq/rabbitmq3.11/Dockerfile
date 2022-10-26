@@ -1,6 +1,8 @@
 # 指定基于 rabbitmq:3.11-alpine 创建
 FROM rabbitmq:3.11-alpine
 
+LABEL MAINTAINER="XiaoYu <1765841705@qq.com>"
+
 ARG CONTAINER_PACKAGE_URL
 ARG RABBITMQ_PLUGINS_3_11
 ARG TZ
