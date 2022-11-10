@@ -1,3 +1,19 @@
+# 存放位置 ~/.bashrc
+# ------------------------ start ------------------------
+env=$HOME/".env"
+if [ -d ${env} ]; then
+	for file in `ls ${env}`
+	do
+		if [ -f ${env}"/"${file} ]
+; then
+			 . ${env}"/"${file}
+		fi
+	done
+fi
+# ------------------------ end ------------------------
+
+# 存放位置 ~/.env/php.sh
+# ------------------------ start ------------------------
 php72()
 {
     tty=
@@ -62,3 +78,22 @@ php81()
         --workdir /var/www/html \
         dnmp_php80 php "$@"
 }
+
+# ------------------------ end ------------------------
+
+# 存放位置 ~/.env/node
+# ------------------------ start ------------------------
+node()
+{
+    tty=
+    tty -s && tty=--tty
+    docker run \
+        $tty \
+        --interactive \
+        --rm \
+        --volume $PWD:/srv \
+        --workdir /srv
+        dnmp_node19.0 "$@"
+}
+
+# ------------------------ end ------------------------
