@@ -5,12 +5,16 @@ LABEL MAINTAINER="XiaoYu <1765841705@qq.com>"
 
 ARG CONTAINER_PACKAGE_URL
 ARG PHP_EXTENSIONS_73
+ARG COMPOSER_IMAGE_URL
 ARG TZ
 
 ENV EXTENSIONS=",${PHP_EXTENSIONS_73},"
 
 # 资源替换 阿里云镜像
-RUN sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories
+RUN if [ ${CONTAINER_PACKAGE_URL} ]; \
+    then \
+      sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories; \
+    fi
 
 # 更新apk 修改时间
 RUN apk update && apk upgrade \
@@ -182,6 +186,7 @@ RUN docker-php-source extract \
     && apk add --no-cache --virtual .build-deps curl \
     && curl -sS https://getcomposer.org/installer | php \
     && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
+    && composer config -g repo.packagist composer ${COMPOSER_IMAGE_URL} \
     && docker-php-source delete \
     && apk del .build-deps
 
