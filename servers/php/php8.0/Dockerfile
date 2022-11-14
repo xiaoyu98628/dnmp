@@ -186,7 +186,7 @@ RUN docker-php-source extract \
     && apk add --no-cache --virtual .build-deps curl \
     && curl -sS https://getcomposer.org/installer | php \
     && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
-    && composer config -g repo.packagist composer ${COMPOSER_IMAGE_URL} \
+    && if [ ${COMPOSER_IMAGE_URL} ]; then composer config -g repo.packagist composer ${COMPOSER_IMAGE_URL}; fi \
     && docker-php-source delete \
     && apk del .build-deps
 
