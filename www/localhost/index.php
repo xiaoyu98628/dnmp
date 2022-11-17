@@ -1,15 +1,15 @@
-<?php
+php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 echo '<h1 style="text-align: center;">欢迎使用DNMP！</h1>';
 echo '<h2>版本选择</h2>';
 echo '<div style="display:flex;justify-content: space-evenly;">';
-echo '<h3><a href="/">PHP72</a></h3>';
-echo '<h3><a href="/73/">PHP73</a></h3>';
-echo '<h3><a href="/74/">PHP74</a></h3>';
-echo '<h3><a href="/80/">PHP80</a></h3>';
-echo '<h3><a href="/81/">PHP81</a></h3>';
+echo '<h3><a href="/">PHP7.2</a></h3>';
+echo '<h3><a href="/73/">PHP7.3</a></h3>';
+echo '<h3><a href="/74/">PHP7.4</a></h3>';
+echo '<h3><a href="/80/">PHP8.0</a></h3>';
+echo '<h3><a href="/81/">PHP8.1</a></h3>';
 echo '</div>';
 echo '<h2>版本信息</h2>';
 
