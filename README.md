@@ -105,7 +105,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
    # Available PHP_EXTENSIONS:
    #
    # pdo_mysql,pcntl,mysqli,exif,bcmath,opcache,gettext,gd,sockets,shmop,intl,bz2,soap,zip,xsl
-   # redis,swoole,memcached,xdebug,mongodb,amqp,protobuf,grpc
+   # redis,swoole,memcached,xdebug,mongodb,amqp,protobuf,grpc,xlswriter
    #
    # You can let it empty to avoid installing any extensions,
    # +--------------------------------------------------------------------------------------------+

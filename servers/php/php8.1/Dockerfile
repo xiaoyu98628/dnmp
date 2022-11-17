@@ -182,6 +182,13 @@ RUN docker-php-source extract \
             && printf "\n" | pecl install grpc \
             && docker-php-ext-enable grpc; \
         fi \
+    && if [ -z "${EXTENSIONS##*,xlswriter,*}" ]; \
+        then \
+            echo "---------- Install xlswriter ----------" \
+            && apk add --no-cache zlib-dev \
+            && printf "\n" | pecl install xlswriter \
+            && docker-php-ext-enable xlswriter; \
+        fi \
     # 安装composer
     && apk add --no-cache --virtual .build-deps curl \
     && curl -sS https://getcomposer.org/installer | php \
