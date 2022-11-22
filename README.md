@@ -39,7 +39,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 |     |--- php                        php 配置文件目录（多版本）
 |     |--- redis                      redis 配置文件目录（多版本）
 |     |--- rabbitmq                   rabbitmq 配置文件目录（多版本）
-|     |--- panel                      php 套接字文件目录
+|     |--- panel                      服务面板
 |--- www                         项目文件目录
 |--- bashrc.sample               .bashrc 配置示例文件(宿主机使用容器内命令)
 |--- sample.env                  环境配置示例文件
