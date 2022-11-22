@@ -280,5 +280,13 @@ PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装
 2. 日志文件  
 以上两点，服务中都存在，如果还是感觉哪里不妥，请自行修改
 
+## 开源共建
+1. 欢迎提交 [pull request](https://gitee.com/xiaoyucc521/dnmp/pulls)
+2. 欢迎提交 [issue](https://gitee.com/xiaoyucc521/dnmp/issues)，请写清楚遇到问题的原因、复显步骤。
+
+感谢每一位贡献代码的朋友。
+
+如果对您有帮助，您可以点右上角 💘Star💘 支持,提前感谢 😁
+
 ## License
 MIT
