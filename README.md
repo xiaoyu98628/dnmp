@@ -145,7 +145,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 ### 3.2 Nginx
 #### 3.2.1 切换PHP版本
 比如切换为PHP7.2
-打开Nginx配置conf.d下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
+打开Nginx站点配置文件`./servers/panel/vhost/nginx`下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
 ```shell script
 location ~ [^/]\.php(/|$) {
     ...
