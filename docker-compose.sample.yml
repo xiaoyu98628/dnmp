@@ -145,6 +145,27 @@ services:
     networks:
       - dnmp-net
 
+  php82:
+    build:
+      context: ./servers/php/php8.2
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        PHP_EXTENSIONS_82: ${PHP_EXTENSIONS_82}
+        COMPOSER_IMAGE_URL: ${COMPOSER_IMAGE_URL}
+        TZ: ${TZ}
+    container_name: php82
+    restart: always
+    ports:
+      - "9005:9000"
+    volumes:
+      - "./servers/php/php8.2/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
+      - "./servers/php/php8.2/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
+      - "./servers/php/php8.2/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
+    networks:
+      - dnmp-net
+
   nginx1.21:
     image: nginx:1.21-alpine
     container_name: nginx1.21
