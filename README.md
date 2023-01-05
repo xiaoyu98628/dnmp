@@ -12,7 +12,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 5. **PHP源代码、MySQL数据、配置文件、日志文件**都可在主机中直接修改查看
 6. 默认支持`pdo_mysql`、`mysqli`、`mbstring`、`gd`、`curl`等常用热门扩展，根据环境灵活配置
 7. 可一键配置常用服务（后续会增加）
-    - 多PHP版本：PHP7.2、PHP7.3、PHP7.4、PHP8.0、PHP8.1
+    - 多PHP版本：PHP7.2、PHP7.3、PHP7.4、PHP8.0、PHP8.1、PHP8.2
     - Web服务：Nginx
     - 数据库：MySQL、Redis、Elasticsearch、Mongo、
     - 消息队列：RabbitMQ
