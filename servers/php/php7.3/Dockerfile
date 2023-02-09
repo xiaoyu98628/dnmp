@@ -189,6 +189,12 @@ RUN docker-php-source extract \
             && printf "\n" | pecl install grpc \
             && docker-php-ext-enable grpc; \
         fi \
+    && if [ -z "${EXTENSIONS##*,igbinary,*}" ]; \
+        then \
+            echo "---------- Install igbinary ----------" \
+            && printf "\n" | pecl install igbinary \
+            && docker-php-ext-enable igbinary; \
+        fi \
     && if [ -z "${EXTENSIONS##*,xlswriter,*}" ]; \
         then \
             echo "---------- Install xlswriter ----------" \
