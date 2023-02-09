@@ -94,6 +94,11 @@ RUN docker-php-source extract \
             && apk add --no-cache bzip2-dev \
             && docker-php-ext-install -j$(nproc) bz2; \
         fi \
+    && if [ -z "${EXTENSIONS##*,calendar,*}" ]; \
+        then \
+            echo "---------- Install calendar ----------" \
+            && docker-php-ext-install -j$(nproc) calendar; \
+        fi \
     && if [ -z "${EXTENSIONS##*,soap,*}" ]; \
         then \
             echo "---------- Install soap ----------" \
