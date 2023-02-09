@@ -105,6 +105,11 @@ RUN docker-php-source extract \
             echo "---------- Install sysvsem ----------" \
             && docker-php-ext-install -j$(nproc) sysvsem; \
         fi \
+    && if [ -z "${EXTENSIONS##*,sysvshm,*}" ]; \
+        then \
+            echo "---------- Install sysvshm ----------" \
+            && docker-php-ext-install -j$(nproc) sysvshm; \
+        fi \
     && if [ -z "${EXTENSIONS##*,sysvmsg,*}" ]; \
         then \
             echo "---------- Install sysvmsg ----------" \
