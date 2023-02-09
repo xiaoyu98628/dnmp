@@ -100,6 +100,11 @@ RUN docker-php-source extract \
             && apk add --no-cache libxml2-dev \
             && docker-php-ext-install -j$(nproc) soap; \
         fi \
+    && if [ -z "${EXTENSIONS##*,sysvsem,*}" ]; \
+        then \
+            echo "---------- Install sysvsem ----------" \
+            && docker-php-ext-install -j$(nproc) sysvsem; \
+        fi \
     && if [ -z "${EXTENSIONS##*,sysvmsg,*}" ]; \
         then \
             echo "---------- Install sysvmsg ----------" \
