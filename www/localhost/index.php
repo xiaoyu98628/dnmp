@@ -30,7 +30,7 @@ printExtensions();
  * 获取MySQL版本
  * @return string
  */
-function getMysqlVersion()
+function getMysqlVersion(): string
 {
     if (extension_loaded('PDO_MYSQL')) {
         try {
@@ -51,14 +51,14 @@ function getMysqlVersion()
  * 获取Redis版本
  * @return string
  */
-function getRedisVersion()
+function getRedisVersion(): string
 {
     if (extension_loaded('redis')) {
         try {
             $redis = new Redis();
             $redis->connect('redis62', 6379);
             $redis->auth('123456');
-            /** @var Redis $info */
+            /** @var array|Redis $info */
             $info = $redis->info();
             return $info['redis_version'];
         } catch (Exception $e) {
@@ -72,9 +72,8 @@ function getRedisVersion()
 /**
  * 获取MongoDB版本
  * @return string
- * @throws \MongoDB\Driver\Exception\Exception
  */
-function getMongoVersion()
+function getMongoVersion(): string
 {
     if (extension_loaded('mongodb')) {
         try {
@@ -84,7 +83,9 @@ function getMongoVersion()
             $cursor = $manager->executeCommand('admin', $command)->toArray();
 
             return $cursor[0]->version;
-        } catch (Exception $e) {
+        }  catch (\MongoDB\Driver\Exception\Exception $e) {
+            return $e->getMessage();
+        }catch (Exception $e) {
             return $e->getMessage();
         }
     } else {
@@ -95,10 +96,10 @@ function getMongoVersion()
 /**
  * 获取已安装扩展列表
  */
-function printExtensions()
+function printExtensions(): void
 {
     echo '<ol>';
-    foreach (get_loaded_extensions() as $i => $name) {
+    foreach (get_loaded_extensions() as $name) {
         echo "<li>", $name, '=', phpversion($name), '</li>';
     }
     echo '</ol>';
