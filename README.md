@@ -1,8 +1,8 @@
 DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安装程序，可多版本
 
-其中部分代码参考：
-[[**yeszao/dnmp(github)**]](https://github.com/yeszao/dnmp)
-[[**yeszao/dnmp(gitee)**]](https://gitee.com/yeszao/dnmp)
+其中部分代码参考：  
+[**yeszao/dnmp(github)**](https://github.com/yeszao/dnmp)  
+[**yeszao/dnmp(gitee)**](https://gitee.com/yeszao/dnmp)
 
 > 使用前最好阅读一遍下面的说明文件，以便快速上手，遇到问题也能及时排查
 
