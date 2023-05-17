@@ -182,6 +182,21 @@ RUN docker-php-source extract \
             && printf "\n" | pecl install protobuf \
             && docker-php-ext-enable protobuf; \
         fi \
+    && if [ -z "${EXTENSIONS##*,psr,*}" ]; \
+        then \
+            echo "---------- Install psr ----------" \
+            # php72 最高支持 psr 1.1.0 版本
+            && printf "\n" | pecl install psr-1.1.0 \
+            && docker-php-ext-enable psr; \
+        fi \
+    && if [ -z "${EXTENSIONS##*,phalcon,*}" ]; \
+        then \
+            echo "---------- Install phalcon ----------" \
+            # 对于 phalcon 4.x，需要完成诸如安装 psr 之类的附加步骤 php72 最高版本4.1.2
+            # 查看 pecl支持的版本 https://pecl.php.net/package/phalcon
+            && printf "\n" | pecl install psr-1.1.0 phalcon-4.1.2 \
+            && docker-php-ext-enable psr phalcon; \
+        fi \
     && if [ -z "${EXTENSIONS##*,grpc,*}" ]; \
         then \
             echo "---------- Install grpc ----------" \
