@@ -154,7 +154,7 @@ RUN docker-php-source extract \
     && if [ -z "${EXTENSIONS##*,xdebug,*}" ]; \
         then \
             echo "---------- Install xdebug ----------" \
-            && printf "\n" | pecl install xdebug-3.1.6 \
+            && printf "\n" | pecl install xdebug \
             && docker-php-ext-enable xdebug \
             && echo "[xdebug]" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
             && echo "xdebug.client_port = 9010" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
