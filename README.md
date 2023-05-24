@@ -1,8 +1,8 @@
 DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安装程序，可多版本
 
 其中部分代码参考：  
-[**yeszao/dnmp(github)**](https://github.com/yeszao/dnmp)  
-[**yeszao/dnmp(gitee)**](https://gitee.com/yeszao/dnmp)
+<a href="https://github.com/yeszao/dnmp" target="_blank">**yeszao/dnmp(github)**</a>  
+<a href="https://gitee.com/yeszao/dnmp" target="_blank">**yeszao/dnmp(gitee)**</a>
 
 > 使用前最好阅读一遍下面的说明文件，以便快速上手，遇到问题也能及时排查
 
@@ -20,7 +20,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
     - 消息队列：RabbitMQ
     - 辅助工具：Kibana、mongo-express
 8. 实际项目中应用，确保`100%`可用
-9. 所有镜像源于[**Docker官方仓库**](https://hub.docker.com)，安全可靠
+9. 所有镜像源于 <a href="https://hub.docker.com" target="_blank">**Docker官方仓库**</a>，安全可靠
 10. 一次配置，**Windows、Linux、MacOs**皆可用
 
 ## 1. 目录结构
@@ -76,11 +76,12 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
    http://localhost/74       # PHP74
    http://localhost/80       # PHP80
    http://localhost/81       # PHP81
+   http://localhost/82       # PHP82
    ```
 
 ## 3. 关于容器
 
-### 3.1 PHP 
+### 3.1 PHP
 #### 3.1.1 docker容器里安装PHP扩展常用命令
 * `docker-php-source`
    > 此命令，实际上就是在PHP容器中创建一个`/usr/src/php`的目录，里面放了一些自带的文件而已。我们就把它当作一个从互联网中下载下来的PHP扩展源码的存放目录即可。事实上，所有PHP扩展源码扩展存放的路径： `/usr/src/php/ext` 里面。
@@ -98,13 +99,13 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
    # +--------------+
    #
    # +--------------------------------------------------------------------------------------------+
-   # Default installed:
+   # Default installed（默认安装的扩展）:
    #
    # Core,ctype,curl,date,dom,fileinfo,filter,ftp,hash,iconv,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,
    # pdo_sqlite,Phar,posix,readline,Reflection,session,SimpleXML,sodium,SPL,sqlite3,standard,tokenizer,xml,
    # xmlreader,xmlwriter,zlib
    #
-   # Available PHP_EXTENSIONS:
+   # Available PHP_EXTENSIONS（可选择安装的扩展）:
    #
    # pdo_mysql,pcnl,mysqli,exif,bcmath,opcache,gettext,gd,sockets,shmop,intl,bz2,soap,zip,xsl,sysvmsg,sysvsem,
    # sysvshm,calendar,
@@ -264,10 +265,10 @@ docker-compose down                     # 停止并删除容器，网络，图�
    (2)文件夹：不管是宿主机还是容器内修改，新增，删除都会相互同步
 
 ### 6.2 容器内时间问题
-容器时间在.env文件中配置`TZ`变量，所有支持的时区请查看[**时区列表·维基百科**](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) 或者 [**PHP所支持的时区列表·PHP官网**](https://www.php.net/manual/zh/timezones.php) 。
+容器时间在.env文件中配置`TZ`变量，所有支持的时区请查看 <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">**时区列表·维基百科**</a> 或者 <a href="https://www.php.net/manual/zh/timezones.php" target="_blank">**PHP所支持的时区列表·PHP官网**</a>。
 
 ### 6.3 windows下使用PHP
-PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装的扩展都会失败，[**原因**](https://www.editcode.net/thread-404502-1-1.html)
+PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装的扩展都会失败，<a href="https://www.editcode.net/thread-404502-1-1.html" target="_blank">**原因**</a>
 
 ### 6.4 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'
 1. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置并且有且仅有`MYSQL_ROOT_PASSWORD`这个参数，你将不会出现这个问题
