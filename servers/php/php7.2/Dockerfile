@@ -236,6 +236,13 @@ RUN docker-php-source extract \
             && printf "\n" | pecl install xlswriter \
             && docker-php-ext-enable xlswriter; \
         fi \
+    && if [ -z "${EXTENSIONS##*,yaml,*}" ]; \
+        then \
+            echo "---------- Install yaml ----------" \
+            && apk add --no-cache yaml-dev \
+            && printf "\n" | pecl install yaml \
+            && docker-php-ext-enable yaml; \
+        fi \
     # 安装composer
     && apk add --no-cache --virtual .build-deps curl \
     && curl -sS https://getcomposer.org/installer | php \
