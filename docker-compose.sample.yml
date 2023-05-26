@@ -275,17 +275,5 @@ services:
     networks:
       - dnmp-net
 
-  node19.0:
-    build:
-      context: ./servers/node/node19.0
-      args:
-        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
-        TZ: ${TZ}
-    container_name: node19.0
-    environment:
-      - "TZ=${TZ}"
-    networks:
-      - dnmp-net
-
 networks:
   dnmp-net:
