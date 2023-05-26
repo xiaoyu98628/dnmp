@@ -150,6 +150,13 @@ RUN docker-php-source extract \
             && printf "\n" | pecl install swoole \
             && docker-php-ext-enable swoole; \
         fi \
+    && if [ -z "${EXTENSIONS##*,mcrypt,*}" ]; \
+        then \
+            echo "---------- Install mcrypt ----------" \
+            && apk add --no-cache libmcrypt-dev \
+            && printf "\n" | pecl install mcrypt \
+            && docker-php-ext-enable mcrypt; \
+        fi \
     && if [ -z "${EXTENSIONS##*,memcached,*}" ]; \
         then \
             echo "---------- Install memcached ----------" \
