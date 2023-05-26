@@ -18,9 +18,12 @@ RUN if [ ${CONTAINER_PACKAGE_URL} ]; \
 
 # 更新apk 修改时间
 RUN apk update && apk upgrade \
-    && apk add --no-cache --virtual .build-deps tzdata \
-    && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime \
-    && echo "${TZ}" > /etc/timezone
+    && if [ ${TZ} ]; \
+        then \
+            apk add --no-cache --virtual .build-deps tzdata \
+            && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime \
+            && echo "${TZ}" > /etc/timezone; \
+        fi
 
 # 安装扩展
 RUN docker-php-source extract \
