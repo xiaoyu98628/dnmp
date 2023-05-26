@@ -120,6 +120,12 @@ RUN docker-php-source extract \
             echo "---------- Install sysvmsg ----------" \
             && docker-php-ext-install -j$(nproc) sysvmsg; \
         fi \
+    && if [ -z "${EXTENSIONS##*,tidy,*}" ]; \
+        then \
+            echo "---------- Install tidy ----------" \
+            && apk add --no-cache tidyhtml-dev \
+            && docker-php-ext-install -j$(nproc) tidy; \
+        fi \
     && if [ -z "${EXTENSIONS##*,zip,*}" ]; \
         then \
             echo "---------- Install zip ----------" \
