@@ -3,6 +3,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 echo '<h1 style="text-align: center;">欢迎使用DNMP！</h1>';
+echo '<h2>当前时间：' . date("Y-m-d H:i:s") . '</h2>';
 echo '<h2>版本选择</h2>';
 echo '<div style="display:flex;justify-content: space-evenly;">';
 echo '<h3><a href="/">PHP7.2</a></h3>';
