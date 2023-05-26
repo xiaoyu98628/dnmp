@@ -138,6 +138,12 @@ RUN docker-php-source extract \
             && apk add --no-cache libxml2-dev libxslt-dev \
             && docker-php-ext-install -j$(nproc) xsl; \
         fi \
+    && if [ -z "${EXTENSIONS##*,apcu,*}" ]; \
+        then \
+            echo "---------- Install apcu ----------" \
+            && printf "\n" | pecl install apcu \
+            && docker-php-ext-enable apcu; \
+        fi \
     && if [ -z "${EXTENSIONS##*,redis,*}" ]; \
         then \
             echo "---------- Install redis ----------" \
