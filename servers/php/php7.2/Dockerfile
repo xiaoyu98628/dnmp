@@ -99,6 +99,12 @@ RUN docker-php-source extract \
             echo "---------- Install calendar ----------" \
             && docker-php-ext-install -j$(nproc) calendar; \
         fi \
+    && if [ -z "${EXTENSIONS##*,snmp,*}" ]; \
+        then \
+            echo "---------- Install snmp ----------" \
+            && apk add --no-cache net-snmp-dev \
+            && docker-php-ext-install -j$(nproc) snmp; \
+        fi \
     && if [ -z "${EXTENSIONS##*,soap,*}" ]; \
         then \
             echo "---------- Install soap ----------" \
