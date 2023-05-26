@@ -10,7 +10,10 @@ ARG TZ
 ENV PLUGINS=",${RABBITMQ_PLUGINS_3_11},"
 
 # 资源替换 阿里云镜像
-RUN sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories
+RUN if [ ${CONTAINER_PACKAGE_URL} ]; \
+    then \
+      sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories; \
+    fi
 
 # 更新apk 修改时间
 RUN apk update && apk upgrade \
