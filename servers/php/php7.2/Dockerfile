@@ -1,7 +1,7 @@
 # 指定基于 php:7.2-fpm-alpine 创建
 FROM php:7.2-fpm-alpine
 
-LABEL MAINTAINER="XiaoYu <1765841705@qq.com>"
+MAINTAINER XiaoYu <1765841705@qq.com>
 
 ARG CONTAINER_PACKAGE_URL
 ARG PHP_EXTENSIONS_72
@@ -260,6 +260,7 @@ RUN docker-php-source extract \
     && docker-php-source delete \
     && apk del .build-deps
 
-# https://github.com/docker-library/php/issues/240
-RUN apk add --no-cache --repository https://${CONTAINER_PACKAGE_URL}/alpine/edge/testing gnu-libiconv
+# iconv 扩展问题，alpine 自带的 gnu-libiconv 版本高，需要降低版本
+# fix: https://github.com/docker-library/php/issues/1121
+RUN apk add --no-cache --repository https://${CONTAINER_PACKAGE_URL}/alpine/v3.13/community gnu-libiconv=1.15-r3
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
