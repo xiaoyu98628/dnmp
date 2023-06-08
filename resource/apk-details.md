@@ -1,4 +1,7 @@
-# alpine 镜像内 apk 命令详解
+## 阿里云仓库地址 [https://mirrors.aliyun.com/alpine](https://mirrors.aliyun.com/alpine)
+## 官方仓库(需要科学上网) [https://pkgs.alpinelinux.org/packages](https://pkgs.alpinelinux.org/packages)
+
+# 一. alpine 镜像内 apk 命令详解
 
 ## 1. apk add 
 ### 安装PACKAGES并自动解决依赖关系
@@ -85,3 +88,15 @@ $ apk cache clean
 ## -v 显示详情
 $ apk -v cache clean
 ```
+
+# 二. 关于 apk add --no-cache --virtual .build-deps [包名] 命令详解
+```shell
+-t, --virtual NAME    Create virtual package NAME with given dependencies
+```
+这意味着当您安装软件包时，这些软件包不会添加到全局软件包中。这种变化可以很容易地恢复。所以，如果我需要gcc来编译程序，但是一旦程序被编译，我就不再需要gcc了。  
+我可以在虚拟包中安装gcc和其他必需的包，并且可以删除所有依赖项，并删除此虚拟包名称。以下是示例用法
+```shell
+apk add --virtual mypacks gcc vim
+apk del mypacks
+```
+使用第一个命令安装的所有18个软件包将被下一个命令删除
