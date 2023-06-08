@@ -279,7 +279,10 @@ PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装
 ### 6.5 `[output clipped, Log limit 1MiB reached]` 日志限制达到1MiB
 如果在 `docker-compose build "服务名"` 出现了这句话并且构建失败，命令改成 ` COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=0 docker-compose build "服务名"` 可以看到的错误信息，方便修改
 
-## 7. 正式环境中使用
+## 7. 关于 alpine 镜像内 apk 部分命令详解
+[**apk 部分命令详解**](resource/apk-details.md)
+
+## 8. 正式环境中使用
 1. 权限认证
 2. 日志文件  
 以上两点，服务中都存在，如果还是感觉哪里不妥，请提交issue或自行修改
