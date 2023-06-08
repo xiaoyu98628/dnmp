@@ -1,9 +1,5 @@
-### 阿里云仓库地址
-<a href="https://mirrors.aliyun.com/alpine" target="_blank"> https://mirrors.aliyun.com/alpine </a>
-
-### 官方仓库(需要科学上网) 
-<a href="https://pkgs.alpinelinux.org/packages" target="_blank"> https://pkgs.alpinelinux.org/packages </a>
-
+## 阿里云仓库地址 [https://mirrors.aliyun.com/alpine](https://mirrors.aliyun.com/alpine)
+## 官方仓库(需要科学上网) [https://pkgs.alpinelinux.org/packages](https://pkgs.alpinelinux.org/packages)
 
 # 一. alpine 镜像内 apk 命令详解
 
