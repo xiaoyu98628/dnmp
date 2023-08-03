@@ -10,13 +10,17 @@ ARG TZ
 
 ENV EXTENSIONS=",${PHP_EXTENSIONS_74},"
 
-# 资源替换 阿里云镜像
+# 引入 install-php-extensions 脚本 方便镜像内安装扩展
+ADD extensions/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions
+
+# 资源替换 更换镜像
 RUN if [ ${CONTAINER_PACKAGE_URL} ]; \
     then \
       sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories; \
     fi
 
-# 更新apk 修改时间
+# 更新 apk 修改时间
 RUN apk update && apk upgrade \
     && if [ ${TZ} ]; \
         then \
@@ -251,10 +255,12 @@ RUN docker-php-source extract \
             && printf "\n" | pecl install yaml \
             && docker-php-ext-enable yaml; \
         fi \
-    # 安装composer
+    # 安装 composer
+    && echo "---------- Install composer ----------" \
     && apk add --no-cache --virtual .build-deps curl \
     && curl -sS https://getcomposer.org/installer | php \
     && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
+    # 替换 composer 镜像
     && if [ ${COMPOSER_IMAGE_URL} ]; then composer config -g repo.packagist composer ${COMPOSER_IMAGE_URL}; fi \
     && docker-php-source delete \
     && apk del .build-deps
