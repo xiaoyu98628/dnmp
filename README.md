@@ -83,38 +83,49 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 
 ### 3.1 PHP
 #### 3.1.1 docker容器里安装PHP扩展常用命令
-* `docker-php-source`
-   > 此命令，实际上就是在PHP容器中创建一个`/usr/src/php`的目录，里面放了一些自带的文件而已。我们就把它当作一个从互联网中下载下来的PHP扩展源码的存放目录即可。事实上，所有PHP扩展源码扩展存放的路径： `/usr/src/php/ext` 里面。
-* `docker-php-ext-install`
-   > 这个命令，就是用来启动 PHP扩展 的。我们使用pecl安装PHP扩展的时候，默认是没有启动这个扩展的，如果想要使用这个扩展必须要在php.ini这个配置文件中去配置一下才能使用这个PHP扩展。而 `docker-php-ext-enable` 这个命令则是自动给我们来启动PHP扩展的，不需要你去php.ini这个配置文件中去配置。
-* `docker-php-ext-enable`
-   > 这个命令，是用来安装并启动PHP扩展的。命令格：`docker-php-ext-install "源码包目录名"`
-* `docker-php-ext-configure`
-   > 一般都是需要跟 docker-php-ext-install搭配使用的。它的作用就是，当你安装扩展的时候，需要自定义配置时，就可以使用它来帮你做到。
-* [**Docker容器里 PHP安装扩展**](resource/php-install-ext.md)  
-   >**注意：如果是在容器内安装扩展，容器删除，扩展会失效，建议直接在.env文件里对应的版本下添加对应的扩展，然后重新`docker-compose build php72`**
-   ```dotenv
-   # +--------------+
-   # PHP7.2
-   # +--------------+
-   #
-   # +--------------------------------------------------------------------------------------------+
-   # Default installed（默认安装的扩展）:
-   #
-   # Core,ctype,curl,date,dom,fileinfo,filter,ftp,hash,iconv,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,
-   # pdo_sqlite,Phar,posix,readline,Reflection,session,SimpleXML,sodium,SPL,sqlite3,standard,tokenizer,xml,
-   # xmlreader,xmlwriter,zlib
-   #
-   # Available PHP_EXTENSIONS（可选择安装的扩展）:
-   #
-   # pdo_mysql,pcnl,mysqli,exif,bcmath,opcache,gettext,gd,sockets,shmop,intl,bz2,soap,zip,xsl,sysvmsg,sysvsem,
-   # sysvshm,calendar,
-   # redis,swoole,memcached,xdebug,mongodb,amqp,protobuf,grpc,xlswriter,igbinary,psr,phalcon
-   #
-   # You can let it empty to avoid installing any extensions,
-   # +--------------------------------------------------------------------------------------------+
-   PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis
-   ```
+1. 方法一：
+   * `docker-php-source`
+        > 此命令，实际上就是在PHP容器中创建一个`/usr/src/php`的目录，里面放了一些自带的文件而已。我们就把它当作一个从互联网中下载下来的PHP扩展源码的存放目录即可。事实上，所有PHP扩展源码扩展存放的路径： `/usr/src/php/ext` 里面。
+   * `docker-php-ext-install`
+        > 这个命令，就是用来启动 PHP扩展 的。我们使用pecl安装PHP扩展的时候，默认是没有启动这个扩展的，如果想要使用这个扩展必须要在php.ini这个配置文件中去配置一下才能使用这个PHP扩展。而 `docker-php-ext-enable` 这个命令则是自动给我们来启动PHP扩展的，不需要你去php.ini这个配置文件中去配置。
+   * `docker-php-ext-enable`
+        > 这个命令，是用来安装并启动PHP扩展的。命令格：`docker-php-ext-install "源码包目录名"`
+   * `docker-php-ext-configure`
+        > 一般都是需要跟 docker-php-ext-install搭配使用的。它的作用就是，当你安装扩展的时候，需要自定义配置时，就可以使用它来帮你做到。
+   * [**Docker容器里 PHP安装扩展**](resource/php-install-ext.md)
+
+2. 方法二：
+    * 快速安装 PHP 扩展
+      ```shell
+       docker exec -it php71 sh
+       install-php-extensions redis
+       ```
+   * [**支持快速安装扩展列表**](resource/install-php-extensions.md)
+        > <a href="https://github.com/mlocati/docker-php-extension-installer" target="_blank">**此扩展来自 docker-php-extension-installer 参考示例文件**</a>
+>**注意：如果是在容器内安装扩展，容器删除，扩展会失效，建议直接在.env文件里对应的版本下添加对应的扩展，然后重新`docker-compose build php72`**
+```dotenv
+# +--------------+
+# PHP7.2
+# +--------------+
+#
+# +--------------------------------------------------------------------------------------------+
+# Default installed:
+#
+# Core,ctype,curl,date,dom,fileinfo,filter,ftp,hash,iconv,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,
+# pdo_sqlite,Phar,posix,readline,Reflection,session,SimpleXML,sodium,SPL,sqlite3,standard,tokenizer,xml,
+# xmlreader,xmlwriter,zlib
+#
+# Available PHP_EXTENSIONS:
+#
+# pdo_mysql,pcntl,mysqli,exif,bcmath,opcache,gettext,gd,sockets,shmop,intl,bz2,soap,zip,sysvmsg,sysvsem,
+# sysvshm,xsl,calendar,tidy,snmp,
+# redis,swoole,memcached,xdebug,mongodb,amqp,protobuf,grpc,xlswriter,igbinary,psr,phalcon,mcrypt,apcu,
+# yaml
+#
+# You can let it empty to avoid installing any extensions,
+# +--------------------------------------------------------------------------------------------+
+PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
+```
 
 #### 3.1.2 PHP容器中的composer镜像修改
 1. composer查看全局设置
