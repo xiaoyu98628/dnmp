@@ -10,7 +10,7 @@ ARG TZ
 
 ENV EXTENSIONS=",${PHP_EXTENSIONS_72},"
 
-# 引入 install-php-extensions 脚本 方便镜像内安装扩展
+# 引入 install-php-extensions 脚本 方便容器内安装扩展
 ADD extensions/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions
 
