@@ -1,8 +1,5 @@
 DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安装程序，可多版本
 
-参考：  
-<a href="https://gitee.com/yeszao/dnmp" target="_blank">**yeszao/dnmp(gitee)**</a>
-
 > 使用前最好阅读一遍下面的说明文件，以便快速上手，遇到问题也能及时排查
 
 ### 项目特点
@@ -297,13 +294,21 @@ PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装
 2. 日志文件  
 以上两点，服务中都存在，如果还是感觉哪里不妥，请提交issue或自行修改
 
+## 致谢
+该项目起初参考了很多**开源项目**的**解决方案，开源不易，感谢分享**
+* 改集成环境参考 **yeszao/dnmp** 仓库：<a href="https://gitee.com/yeszao/dnmp" target="_blank"> https://gitee.com/yeszao/dnmp </a>
+
 ## 开源共建
-1. 欢迎提交 [pull request](https://gitee.com/xiaoyucc521/dnmp/pulls)
-2. 欢迎提交 [issue](https://gitee.com/xiaoyucc521/dnmp/issues)，请写清楚遇到问题的原因、复显步骤。
+开源项目离不开大家的支持，如果您有好的想法，遇到一些 BUG 并修复了，欢迎小伙伴们提交 Pull Request 参与开源贡献
+1. **fork** 本项目到自己的 **repo**
+2. 把 **fork** 过去的项目也就是你仓库中的项目 **clone** 到你的本地
+3. 修改代码
+4. **commit** 后 **push** 到自己的库
+5. 发起**PR（ pull request）** 请求，提交到 **develop** 分支
+6. 等待作者合并
 
-感谢每一位贡献代码的朋友。
-
+感谢每一位使用代码的朋友。
 如果对您有帮助，您可以点右上角 💘Star💘 支持,提前感谢 😁
 
-## License
-MIT
+## 开源协议
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
