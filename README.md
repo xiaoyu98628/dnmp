@@ -289,11 +289,6 @@ PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装
 ## 7. 关于 alpine 镜像内 apk 部分命令详解
 [**apk 部分命令详解**](resource/apk-details.md)
 
-## 8. 正式环境中使用
-1. 权限认证
-2. 日志文件  
-以上两点，服务中都存在，如果还是感觉哪里不妥，请提交issue或自行修改
-
 ## 致谢
 该项目起初参考了很多**开源项目**的**解决方案，开源不易，感谢分享**
 * 该项目参考 **yeszao/dnmp** 仓库：<a href="https://gitee.com/yeszao/dnmp" target="_blank"> https://gitee.com/yeszao/dnmp </a>
