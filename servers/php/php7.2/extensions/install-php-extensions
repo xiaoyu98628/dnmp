@@ -21,7 +21,7 @@ if ! which docker-php-ext-configure >/dev/null || ! which docker-php-ext-enable 
 	exit 1
 fi
 
-IPE_VERSION=2.1.38
+IPE_VERSION=2.1.40
 
 StandWithUkraine() {
 	if test -t 1 && ! grep -Eq '^VERSION=.*jessie' /etc/os-release; then
@@ -3163,7 +3163,7 @@ installRemoteModule() {
 					installRemoteModule_version=3.12.4
 				else
 					# See https://github.com/protocolbuffers/protobuf/issues/10619
-					installRemoteModule_version=3.23.4
+					installRemoteModule_version=3.24.0
 				fi
 			fi
 			;;
@@ -3620,6 +3620,53 @@ installRemoteModule() {
 				fi
 			fi
 			;;
+		tideways)
+			case "$DISTRO" in
+				alpine)
+					case $(uname -m) in
+						aarch64 | arm64 | armv8)
+							installRemoteModule_architecture=alpine-arm64
+							;;
+						*)
+							installRemoteModule_architecture=alpine
+							;;
+					esac
+					;;
+				debian)
+					case $(uname -m) in
+						aarch64 | arm64 | armv8)
+							installRemoteModule_architecture=arm64
+							;;
+						*)
+							installRemoteModule_architecture=x86_64
+							;;
+					esac
+					;;
+			esac
+			installRemoteModule_url="$(curl -sSLf -o - https://tideways.com/profiler/downloads | grep -Eo "\"[^\"]+/tideways-php-([0-9]+\.[0-9]+\.[0-9]+)-$installRemoteModule_architecture.tar.gz\"" | cut -d'"' -f2)"
+			printf 'Downloading tideways from %s\n' "$installRemoteModule_url"
+			installRemoteModule_src="$(getPackageSource $installRemoteModule_url)"
+			if test -d "$installRemoteModule_src/dist"; then
+				installRemoteModule_src="$installRemoteModule_src/dist"
+			fi
+			installRemoteModule_src="$installRemoteModule_src/tideways-php"
+			case "$DISTRO" in
+				alpine)
+					installRemoteModule_src="$installRemoteModule_src-alpine"
+					;;
+			esac
+			installRemoteModule_src="$installRemoteModule_src-$PHP_MAJDOTMIN_VERSION"
+			if test $PHP_THREADSAFE -eq 1; then
+				installRemoteModule_src="$installRemoteModule_src-zts"
+			fi
+			installRemoteModule_src="$installRemoteModule_src.so"
+			if ! test -f "$installRemoteModule_src"; then
+				echo 'tideways does not support the current environment' >&2
+				exit 1
+			fi
+			mv "$installRemoteModule_src" $(getPHPExtensionsDir)/tideways.so
+			installRemoteModule_manuallyInstalled=1
+			;;
 		uopz)
 			if test -z "$installRemoteModule_version"; then
 				if test $PHP_MAJMIN_VERSION -le 506; then
@@ -3851,7 +3898,7 @@ moduleMayUsePecl() {
 		@composer | @fix_letsencrypt)
 			return 1
 			;;
-		blackfire | geos | ioncube_loader | snuffleupagus | sourceguardian | spx | tdlib)
+		blackfire | geos | ioncube_loader | snuffleupagus | sourceguardian | spx | tdlib | tideways)
 			return 1
 			;;
 	esac
