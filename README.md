@@ -174,7 +174,7 @@ location ~ [^/]\.php(/|$) {
     ...
 }
 ```
-最后 **重启 Nginx** 生效
+> 注意：只要修改了nginx配置文件，使之生效必须要 **重启 Nginx 容器** 或者 **在容器中执行 `nginx -s reload`**
 
 ### 3.3 Elasticsearch
 #### 3.3.1 Elasticsearch账号密码设置
