@@ -227,8 +227,40 @@ db.grantRolesToUser('root',[{role:"__system",db:"admin"}])
 
 ### 3.6 Redis
 #### 3.6.1 redis 密码问题
-当前容器是 `启用密码` 的，默认密码`123456`
+当前redis容器是 `启用密码` 的，默认密码`123456`
 如需修改密码或者禁用密码,请修改该 `servers/redis/redis6.2/docker.conf`  文件的第26行
+
+### 3.7 MySQL
+#### 3.7.1 mysql 密码问题
+当前mysql容器提供两个账户，`root账户`，默认在容器内部访问 `xiaoyu账户` 默认权限不足
+```dotenv
+# +--------------+
+# mysql8.0
+# +--------------+
+MYSQL_ROOT_PASSWORD_80=root
+MYSQL_ROOT_HOST_80=localhost
+MYSQL_USER_80=xiaoyu
+MYSQL_PASSWORD_80=xiaoyu
+```
+如需修改请在 `.env` 文件中找到相应配置，对应修改  
+- `MYSQL_ROOT_PASSWORD_80` 默认账户 `root` 对应的密码  
+- `MYSQL_ROOT_HOST_80` 默认账户 `root` 对应的访问权限  
+- `MYSQL_USER_80` 新建账户 `xiaoyu` 用户名
+- `MYSQL_PASSWORD_80` 新建账户 `xiaoyu` 对应的密码
+
+#### 3.7.2 权限问题
+如需修改权限，对照下面命令修改
+```sql
+-- privileges：用户的操作权限，如SELECT，INSERT，UPDATE等，如果要授予所的权限则使用ALL
+-- database_name：数据库名
+-- table_name：表名，如果要授予该用户对所有数据库和表的相应操作权限则可用*表示，如*.*
+GRANT privileges ON database_name.table_name TO 'username'@'host';
+
+-- 例子：
+GRANT SELECT,INSERT ON test.user TO 'xiaoyu'@'%';
+GRANT ALL ON *.* TO 'xiaoyu'@'%';
+GRANT ALL ON maindataplus.* TO 'xiaoyu'@'%';
+```
 
 ## 4. 关于挂载权限问题
 由于数据卷和日志卷分离的原因，部分容器启动需要对应的权限，然而宿主机上没有与之对应的权限，所以我们直接赋予`777`权限即可
