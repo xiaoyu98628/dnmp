@@ -243,8 +243,8 @@ MYSQL_USER_80=xiaoyu
 MYSQL_PASSWORD_80=xiaoyu
 ```
 如需修改请在 `.env` 文件中找到相应配置，对应修改  
-- `MYSQL_ROOT_PASSWORD_80` 默认账户 `root` 对应的密码  
-- `MYSQL_ROOT_HOST_80` 默认账户 `root` 对应的访问权限  
+- `MYSQL_ROOT_PASSWORD_80` 默认账户 `root` 对应的密码
+- `MYSQL_ROOT_HOST_80` 默认账户 `root` 对应的访问权限
 - `MYSQL_USER_80` 新建账户 `xiaoyu` 用户名
 - `MYSQL_PASSWORD_80` 新建账户 `xiaoyu` 对应的密码
 
