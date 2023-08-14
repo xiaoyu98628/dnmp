@@ -154,9 +154,11 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
    ```
 
 ### 3.2 Nginx
-#### 3.2.1 切换PHP版本
+#### 3.2.1 添加新的站点
+新增的 `.conf` 文件应放在 `servers/panel/vhost/nginx/nginx1.21` 文件夹下，建议和 `0localhost.conf` 格式一样
+#### 3.2.2 切换PHP版本
 比如切换为PHP7.2
-打开Nginx站点配置文件`./servers/panel/vhost/nginx`下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
+打开Nginx站点配置文件`./servers/panel/vhost/nginx/nginx1.21`下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
 ```shell script
 location ~ [^/]\.php(/|$) {
     ...
