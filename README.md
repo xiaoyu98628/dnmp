@@ -227,8 +227,14 @@ db.grantRolesToUser('root',[{role:"__system",db:"admin"}])
 
 ### 3.6 Redis
 #### 3.6.1 redis 密码问题
-当前redis容器是 `启用密码` 的，默认密码`123456`
-如需修改密码或者禁用密码,请修改该 `servers/redis/redis6.2/docker.conf`  文件的第26行
+当前redis容器是 `启用密码` 的，默认密码 `123456` 如需修改密码直接在 `.env` 文件中找到下面配置项，修改即可
+
+```dotenv
+# +--------------+
+# mysql6.2
+# +--------------+
+REDIS_PASSWORD_62=123456
+```
 
 ### 3.7 MySQL
 #### 3.7.1 mysql 密码问题

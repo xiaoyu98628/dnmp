@@ -36,7 +36,7 @@ services:
     restart: always
     environment:
       - "TZ=${TZ}"
-    entrypoint: ["redis-server", "/etc/redis/docker.conf"]
+    entrypoint: ["redis-server", "/etc/redis/docker.conf", "--requirepass", "${REDIS_PASSWORD_62}"]
     networks:
       - dnmp-net
 
