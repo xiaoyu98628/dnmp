@@ -225,6 +225,11 @@ db.grantRolesToUser('userName',[{role:"<role>",db:"<database>"}])
 db.grantRolesToUser('root',[{role:"__system",db:"admin"}])
 ```
 
+### 3.6 Redis
+#### 3.6.1 redis 密码问题
+当前容器是 `启用密码` 的，默认密码`123456`
+如需修改密码或者禁用密码,请修改该 `servers/redis/redis6.2/docker.conf`  文件的第26行
+
 ## 4. 关于挂载权限问题
 由于数据卷和日志卷分离的原因，部分容器启动需要对应的权限，然而宿主机上没有与之对应的权限，所以我们直接赋予`777`权限即可
 ### 4.1. mysql
