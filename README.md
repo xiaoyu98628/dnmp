@@ -51,12 +51,12 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
     - `docker-compose`
 
 2. `clone` 项目
-   ```gitignore
+   ```gitexclude
    git clone https://gitee.com/xiaoyucc521/dnmp.git
    ```
 
 3. 拷贝并命名配置文件，启动：
-   ```shell script
+   ```shell
    cd dnmp                                          # 进入项目目录
    cp sample.env .env                               # 复制并改名 .env 配置文件
    cp docker-compose.sample.yml docker-compose.yml  # 复制并改名 docker-compose.yml 配置文件
@@ -66,7 +66,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
    ```
 
 4. 启动之后查看PHP版本
-   ```shell script
+   ```
    http://localhost/         # PHP72
    http://localhost/73       # PHP73
    http://localhost/74       # PHP74
@@ -125,11 +125,11 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 
 #### 3.1.2 PHP容器中的composer镜像修改
 1. composer查看全局设置
-   ```shell script
+   ```shell
    composer config -gl
    ```
 2. 设置composer镜像为国内镜像
-   ```shell script
+   ```shell
    composer config -g repo.packagist composer https://packagist.phpcomposer.com
    # 或
    composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
@@ -141,11 +141,11 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 #### 3.1.4 宿主机中使用PHP命令行
 1. 参考[bashrc.sample](bashrc.sample)示例文件，将对应的php-cli函数拷贝到主机的 `~/.bashrc` 文件中。
 2. 让文件起效：
-   ```shell script
+   ```shell
    source ~/.bashrc
    ```
 3. 然后就可以在主机中执行PHP命令了：
-   ```shell script
+   ```shell
    [root@centos ~]# php72 -v
    PHP 7.2.34 (cli) (built: Dec 17 2020 10:32:53) ( NTS )
    Copyright (c) 1997-2018 The PHP Group
@@ -159,7 +159,7 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 #### 3.2.2 切换PHP版本
 比如切换为PHP7.2
 打开Nginx站点配置文件`./servers/panel/vhost/nginx/nginx1.21`下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
-```shell script
+```
 location ~ [^/]\.php(/|$) {
     ...
     include enable-php-74.conf;
@@ -167,7 +167,7 @@ location ~ [^/]\.php(/|$) {
 }
 ```
 改为：
-```shell script
+```
 location ~ [^/]\.php(/|$) {
     ...
     include enable-php-72.conf;
@@ -175,17 +175,42 @@ location ~ [^/]\.php(/|$) {
 }
 ```
 > 注意：只要修改了nginx配置文件，使之生效必须要 **重启 Nginx 容器** 或者 **在容器中执行 `nginx -s reload`**
+#### 3.2.3 站点根目录挂载
+为什么站点根目录在Nginx和PHP-FPM都这样挂载？
+```
+# php
+- "../www:/var/www/html"
+# nginx
+- "../www:/usr/share/nginx/html"
+```
+我们知道，Nginx配置都有这样一项：
+```apacheconf
+fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+```
+其中，**`$document_root`** 就是server块下 **`root`** 所指的路径：
+```
+server {
+    #...
+    root /var/www/html;
+    #...
+}
+```
+这里 **`$document_root`** 就是/var/www/html。 如果Nginx和PHP-FPM在同一主机，Nginx会通过9000端口（或套接字文件）把这个目录值和脚本URI传给PHP-FPM。
+PHP-FPM再通过9000端口（或套接字文件）接收Nginx发过来的目录值和脚本URI，发给PHP解析。PHP收到后，就到指定的目录下查找PHP文件并解析，完成后再通过9000端口（或套接字文件）返回给Nginx。
+**如果Nginx和PHP-FPM在同一个主机里面，PHP就总能找到Nginx指定的目录。**   
+但是，如果他们在不同的容器呢？  
+未做任何处理的情况，Nginx容器中的站点根目录，PHP-FPM容器肯定不存在。 所以，这里需要保证Nginx和PHP-FPM都挂载了宿主机的 `./www`。 （当然，你也可以指定别的目录，确保统一即可）
 
 ### 3.3 Elasticsearch
 #### 3.3.1 Elasticsearch账号密码设置
-```shell script
+```shell
  #自动生成密码
  ./bin/elasticsearch-setup-passwords auto
  #手动设置密码
  ./bin/elasticsearch-setup-passwords interactive
 ```
 执行后会自动生成密码
-```shell script
+```
  Changed password for user apm_system
  PASSWORD apm_system = {密码}
 
@@ -210,7 +235,7 @@ location ~ [^/]\.php(/|$) {
 
 ### 3.4 Kibana
 #### 3.4.1 Kibana连接Elasticsearch问题
-```shell script
+```
  elasticsearch.username: "kibana_system或kibana"
  elasticsearch.password: "上面Elasticsearch生成的密码"
 ```
@@ -268,7 +293,7 @@ GRANT ALL ON *.* TO 'xiaoyu'@'%';
 GRANT ALL ON maindataplus.* TO 'xiaoyu'@'%';
 ```
 
-## 4. 关于挂载权限问题
+## 4. 关于容器挂载路径权限问题
 由于数据卷和日志卷分离的原因，部分容器启动需要对应的权限，然而宿主机上没有与之对应的权限，所以我们直接赋予`777`权限即可
 ### 4.1. mysql
 需要给 `./logs/mysql` 文件夹赋予权限 `chmod -R 777 ./logs/mysql` 重启即可
@@ -285,7 +310,7 @@ GRANT ALL ON maindataplus.* TO 'xiaoyu'@'%';
 ## 5. 管理命令
 ### 5.1. 服务器启动和构建命令
 如需管理服务，请在命令后面加上服务器名称，例如：
-```shell script
+```shell
 docker-compose up                       # 创建并启动所有服务
 docker-compose up -d                    # 创建并以后台运行方式启动所有服务
 docker-compose up "服务名..."            # 创建并启动服务
