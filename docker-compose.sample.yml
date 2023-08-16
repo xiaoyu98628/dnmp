@@ -47,6 +47,7 @@ services:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_72: ${PHP_EXTENSIONS_72}
         COMPOSER_IMAGE_URL: ${COMPOSER_IMAGE_URL}
+        COMPOSER_DOWNLOAD_URL: ${COMPOSER_DOWNLOAD_URL}
         TZ: ${TZ}
     container_name: php72
     restart: always
@@ -68,6 +69,7 @@ services:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_73: ${PHP_EXTENSIONS_73}
         COMPOSER_IMAGE_URL: ${COMPOSER_IMAGE_URL}
+        COMPOSER_DOWNLOAD_URL: ${COMPOSER_DOWNLOAD_URL}
         TZ: ${TZ}
     container_name: php73
     restart: always
@@ -89,6 +91,7 @@ services:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_74: ${PHP_EXTENSIONS_74}
         COMPOSER_IMAGE_URL: ${COMPOSER_IMAGE_URL}
+        COMPOSER_DOWNLOAD_URL: ${COMPOSER_DOWNLOAD_URL}
         TZ: ${TZ}
     container_name: php74
     restart: always
@@ -110,6 +113,7 @@ services:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_80: ${PHP_EXTENSIONS_80}
         COMPOSER_IMAGE_URL: ${COMPOSER_IMAGE_URL}
+        COMPOSER_DOWNLOAD_URL: ${COMPOSER_DOWNLOAD_URL}
         TZ: ${TZ}
     container_name: php80
     restart: always
@@ -131,6 +135,7 @@ services:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_81: ${PHP_EXTENSIONS_81}
         COMPOSER_IMAGE_URL: ${COMPOSER_IMAGE_URL}
+        COMPOSER_DOWNLOAD_URL: ${COMPOSER_DOWNLOAD_URL}
         TZ: ${TZ}
     container_name: php81
     restart: always
@@ -152,6 +157,7 @@ services:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_82: ${PHP_EXTENSIONS_82}
         COMPOSER_IMAGE_URL: ${COMPOSER_IMAGE_URL}
+        COMPOSER_DOWNLOAD_URL: ${COMPOSER_DOWNLOAD_URL}
         TZ: ${TZ}
     container_name: php82
     restart: always

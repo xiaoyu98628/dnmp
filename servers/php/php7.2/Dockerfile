@@ -6,6 +6,7 @@ MAINTAINER XiaoYu <1765841705@qq.com>
 ARG CONTAINER_PACKAGE_URL
 ARG PHP_EXTENSIONS_72
 ARG COMPOSER_IMAGE_URL
+ARG COMPOSER_DOWNLOAD_URL
 ARG TZ
 
 ENV EXTENSIONS=",${PHP_EXTENSIONS_72},"
@@ -259,7 +260,7 @@ RUN docker-php-source extract \
     # 安装 composer
     && echo "---------- Install composer ----------" \
     && apk add --no-cache --virtual .build-deps curl \
-    && curl -sS https://getcomposer.org/installer | php \
+    && curl -sS ${COMPOSER_DOWNLOAD_URL} | php \
     && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
     # 替换 composer 镜像
     && if [ ${COMPOSER_IMAGE_URL} ]; then composer config -g repo.packagist composer ${COMPOSER_IMAGE_URL}; fi \
