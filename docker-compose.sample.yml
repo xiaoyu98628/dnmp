@@ -7,14 +7,14 @@ services:
   mysql8.0:
     image: mysql:8.0
     container_name: mysql80
+    restart: always
+    privileged: true
     ports:
       - "3306:3306"
     volumes:
       - "./data/mysql/mysql8.0:/var/lib/mysql"    # 数据库文件
       - "./servers/mysql/mysql8.0:/etc/mysql"     # 配置文件
       - "./logs/mysql/mysql8.0:/var/log/mysql"    # 日志文件
-    restart: always
-    privileged: true
     environment:
       - "TZ=${TZ}"
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD_80}"
@@ -27,13 +27,13 @@ services:
   redis6.2:
     image: redis:6.2-alpine
     container_name: redis62
+    restart: always
     ports:
       - "6379:6379"
     volumes:
       - "./servers/redis/redis6.2:/etc/redis"     # 配置文件
       - "./data/redis/redis6.2:/data"             # 数据文件
       - "./logs/redis/redis6.2:/var/log/redis"    # 日志文件
-    restart: always
     environment:
       - "TZ=${TZ}"
     entrypoint: ["redis-server", "/etc/redis/docker.conf", "--requirepass", "${REDIS_PASSWORD_62}"]
