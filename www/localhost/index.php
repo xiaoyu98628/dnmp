@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 
 echo '<h1 style="text-align: center;">欢迎使用DNMP！</h1>';
 echo '<h2>当前时间：' . date("Y-m-d H:i:s") . '</h2>';
-echo '<h2>版本选择</h2>';
+echo '<h2>版本选择：</h2>';
 echo '<div style="display:flex;justify-content: space-evenly;">';
 echo '<h3><a href="/">PHP7.2</a></h3>';
 echo '<h3><a href="/73/">PHP7.3</a></h3>';
@@ -13,17 +13,17 @@ echo '<h3><a href="/80/">PHP8.0</a></h3>';
 echo '<h3><a href="/81/">PHP8.1</a></h3>';
 echo '<h3><a href="/82/">PHP8.2</a></h3>';
 echo '</div>';
-echo '<h2>版本信息</h2>';
+echo '<h2>版本信息：</h2>';
 
 echo '<ul>';
 echo '<li>PHP版本：', PHP_VERSION, '</li>';
-echo '<li>Nginx版本：', $_SERVER['SERVER_SOFTWARE'], '</li>';
+echo '<li>服务器软件信息：', $_SERVER['SERVER_SOFTWARE'], '</li>';
 echo '<li>MySQL服务器版本：', getMysqlVersion(), '</li>';
 echo '<li>Redis服务器版本：', getRedisVersion(), '</li>';
 echo '<li>MongoDB服务器版本：', getMongoVersion(), '</li>';
 echo '</ul>';
 
-echo '<h2>已安装扩展</h2>';
+echo '<h2>已安装扩展：</h2>';
 printExtensions();
 
 
@@ -57,7 +57,7 @@ function getRedisVersion(): string
     if (extension_loaded('redis')) {
         try {
             $redis = new Redis();
-            $redis->connect('redis62', 6379);
+            $redis->connect('redis62');
             $redis->auth('123456');
             /** @var array|Redis $info */
             $info = $redis->info();
