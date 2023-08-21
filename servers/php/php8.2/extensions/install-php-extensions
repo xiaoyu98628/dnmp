@@ -21,7 +21,7 @@ if ! which docker-php-ext-configure >/dev/null || ! which docker-php-ext-enable 
 	exit 1
 fi
 
-IPE_VERSION=2.1.40
+IPE_VERSION=2.1.43
 
 StandWithUkraine() {
 	if test -t 1 && ! grep -Eq '^VERSION=.*jessie' /etc/os-release; then
@@ -2837,7 +2837,7 @@ installRemoteModule() {
 			fi
 			if test -z "$installRemoteModule_version"; then
 				# See https://github.com/protocolbuffers/protobuf/issues/10619
-				installRemoteModule_version=1.56.0
+				installRemoteModule_version=1.57.0
 			fi
 			if test -z "$installRemoteModule_version" || test "$installRemoteModule_version" = 1.35.0; then
 				case "$DISTRO_VERSION" in
@@ -3163,7 +3163,7 @@ installRemoteModule() {
 					installRemoteModule_version=3.12.4
 				else
 					# See https://github.com/protocolbuffers/protobuf/issues/10619
-					installRemoteModule_version=3.24.0
+					installRemoteModule_version=3.24.1
 				fi
 			fi
 			;;
@@ -3358,7 +3358,7 @@ installRemoteModule() {
 		spx)
 			if test -z "$installRemoteModule_path"; then
 				if test -z "$installRemoteModule_version"; then
-					installRemoteModule_version=v0.4.13
+					installRemoteModule_version=v0.4.14
 				fi
 				if test "${installRemoteModule_version%.*}" = "$installRemoteModule_version"; then
 					installRemoteModule_displayVersion="$installRemoteModule_version"
