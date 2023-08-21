@@ -52,7 +52,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 
 2. `clone` 项目
    ```gitexclude
-   git clone https://gitee.com/xiaoyucc521/dnmp.git
+   git clone https://github.com/xiaoyucc521/dnmp.git
    ```
 
 3. 拷贝并命名配置文件，启动：
@@ -362,7 +362,7 @@ PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装
 
 ## 致谢
 该项目起初参考了很多**开源项目**的**解决方案，开源不易，感谢分享**
-* 该项目参考 **yeszao/dnmp** 仓库：<a href="https://gitee.com/yeszao/dnmp" target="_blank"> https://gitee.com/yeszao/dnmp </a>
+* 该项目参考 **yeszao/dnmp** 仓库：<a href="https://github.com/yeszao/dnmp" target="_blank"> https://github.com/yeszao/dnmp </a>
 
 ## 开源共建
 开源项目离不开大家的支持，如果您有好的想法，遇到一些 BUG 并修复了，欢迎小伙伴们提交 Pull Request 参与开源贡献
