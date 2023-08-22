@@ -186,13 +186,6 @@ services:
       - "./servers/panel:/usr/panel"                # php unix连接文件
     environment:
       - "TZ=${TZ}"
-    depends_on: # 依赖ES先启动
-      - php72
-      - php73
-      - php74
-      - php80
-      - php81
-      - php82
     networks:
       - dnmp-net
 
