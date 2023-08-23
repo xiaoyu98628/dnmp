@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 echo '<h1 style="text-align: center;">欢迎使用DNMP！</h1>';
-echo '<h2>当前时间：' . date("Y-m-d H:i:s") . '</h2>';
+echo '<h2>当前时间：<span id="current-time">'  . date("Y-m-d H:i:s") .  '</span></h2>';
 echo '<h2>版本选择：</h2>';
 echo '<div style="display:flex;justify-content: space-evenly;">';
 echo '<h3><a href="/">PHP7.2</a></h3>';
@@ -26,6 +26,23 @@ echo '</ul>';
 echo '<h2>已安装扩展：</h2>';
 printExtensions();
 
+// 获取本地时间
+echo '
+<script src="./js/moment.min.js"></script>
+<script>
+// 获取元素
+let currentTimeEle = document.getElementById("current-time");
+
+// 定时器，动态更新时间
+setInterval(function(){
+    // 获取当前时间
+    let date = new Date();
+
+    // 设置元素的文本
+    currentTimeEle.innerHTML = moment(date).format("YYYY-MM-DD HH:mm:ss");
+}, 1000); // 每秒更新一次
+</script>
+';
 
 /**
  * 获取MySQL版本
