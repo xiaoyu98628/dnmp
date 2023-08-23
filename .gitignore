@@ -1,5 +1,15 @@
+# 编辑器文件
 /.idea
-.env
-docker-compose*
-!docker-compose.sample.yml
+
+# MacOS 系统特有文件
 **/.DS_Store
+
+# 环境变量文件
+.env
+
+# docker compose 文件
+docker-compose*
+compose*
+
+# 需要上传的文件
+!docker-compose.sample.yml
