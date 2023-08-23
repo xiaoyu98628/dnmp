@@ -158,18 +158,18 @@ RUN docker-php-source extract \
             && printf "\n" | pecl install apcu \
             && docker-php-ext-enable apcu; \
         fi \
-    && if [ -z "${EXTENSIONS##*,redis,*}" ]; \
-        then \
-            echo "---------- Install redis ----------" \
-            && printf "\n" | pecl install redis \
-            && docker-php-ext-enable redis; \
-        fi \
     && if [ -z "${EXTENSIONS##*,rdkafka,*}" ]; \
         then \
             echo "---------- Install rdkafka ----------" \
             && apk add --no-cache librdkafka-dev \
             && printf "\n" | pecl install rdkafka \
             && docker-php-ext-enable rdkafka; \
+        fi \
+    && if [ -z "${EXTENSIONS##*,redis,*}" ]; \
+        then \
+            echo "---------- Install redis ----------" \
+            && printf "\n" | pecl install redis \
+            && docker-php-ext-enable redis; \
         fi \
     && if [ -z "${EXTENSIONS##*,swoole,*}" ]; \
         then \
