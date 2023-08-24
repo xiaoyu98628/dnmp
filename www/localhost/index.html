@@ -1,15 +1,15 @@
 <h1 style="text-align: center;">欢迎使用DNMP！</h1>
 <h2>当前时间：<span id="current-time"></span></h2>
 
-<div style="display:flex;justify-content:space-between;">
-    <h2>版本选择：</h2>
-    <h3><a href="/">Home</a></h3>
-    <h3><a href="/72/">PHP7.2</a></h3>
-    <h3><a href="/73/">PHP7.3</a></h3>
-    <h3><a href="/74/">PHP7.4</a></h3>
-    <h3><a href="/80/">PHP8.0</a></h3>
-    <h3><a href="/81/">PHP8.1</a></h3>
-    <h3><a href="/82/">PHP8.2</a></h3>
+<div style="display: flex;justify-content: space-between;font-size: 24px;font-weight: bolder">
+    <div>版本选择：</div>
+    <div><a href="/">Home</a></div>
+    <div><a href="/72/">PHP7.2</a></div>
+    <div><a href="/73/">PHP7.3</a></div>
+    <div><a href="/74/">PHP7.4</a></div>
+    <div><a href="/80/">PHP8.0</a></div>
+    <div><a href="/81/">PHP8.1</a></div>
+    <div><a href="/82/">PHP8.2</a></div>
 </div>
 
 <script src="./js/moment.min.js"></script>
@@ -17,12 +17,17 @@
     // 获取元素
     let currentTimeEle = document.getElementById("current-time");
 
-    // 定时器，动态更新时间
-    setInterval(function(){
+    function getTime() {
         // 获取当前时间
         let date = new Date();
-
         // 设置元素的文本
-        currentTimeEle.innerHTML = moment(date).format("YYYY-MM-DD HH:mm:ss");
+        currentTimeEle.innerHTML =  moment(date).format("YYYY-MM-DD HH:mm:ss");
+    }
+    // 页面出来直接渲染
+    getTime();
+
+    // 定时器，动态更新时间
+    setInterval(function(){
+        getTime()
     }, 1000); // 每秒更新一次
 </script>
