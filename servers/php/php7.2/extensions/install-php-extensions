@@ -21,7 +21,7 @@ if ! which docker-php-ext-configure >/dev/null || ! which docker-php-ext-enable 
 	exit 1
 fi
 
-IPE_VERSION=2.1.43
+IPE_VERSION=2.1.45
 
 StandWithUkraine() {
 	if test -t 1 && ! grep -Eq '^VERSION=.*jessie' /etc/os-release; then
@@ -2555,6 +2555,8 @@ installRemoteModule() {
 					installRemoteModule_version=1.9.3
 				elif test $PHP_MAJMIN_VERSION -le 505; then
 					installRemoteModule_version=1.9.4
+				elif test $PHP_MAJMIN_VERSION -le 703; then
+					installRemoteModule_version=1.11.0
 				fi
 			fi
 			;;
@@ -2791,7 +2793,7 @@ installRemoteModule() {
 		geos)
 			if test -z "$installRemoteModule_path"; then
 				if test -z "$installRemoteModule_version"; then
-					installRemoteModule_version=71b5f9001512e16d3cf4657b517e8a051d6ef36f
+					installRemoteModule_version=0def35611f773c951432f1f06a155471a5cb7611
 				fi
 				installRemoteModule_src="$(getPackageSource https://git.osgeo.org/gitea/geos/php-geos/archive/$installRemoteModule_version.tar.gz)"
 				cd "$installRemoteModule_src"
