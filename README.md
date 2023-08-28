@@ -155,10 +155,10 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 
 ### 3.2 Nginx
 #### 3.2.1 添加新的站点
-新增的 `.conf` 文件应放在 `servers/panel/vhost/nginx/nginx1.21` 文件夹下，建议和 `0localhost.conf` 格式一样
+新增的 `.conf` 文件应放在 `servers/panel/vhost/nginx/nginx1.21` 文件夹下
 #### 3.2.2 切换PHP版本
-比如切换为PHP7.2
-打开Nginx站点配置文件`./servers/panel/vhost/nginx/nginx1.21`下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
+比如切换为PHP7.2，打开 `./servers/panel/vhost/nginx/nginx1.21` 下对应的Nginx站点配置文件，找到 `include enable-php-74.conf` 改成 `include enable-php-72.conf` 即可  
+例如：
 ```
 location ~ [^/]\.php(/|$) {
    ...
@@ -174,7 +174,7 @@ location ~ [^/]\.php(/|$) {
    ...
 }
 ```
-> 注意：只要修改了nginx配置文件，使之生效必须要 **重启 Nginx 容器** 或者 **在容器中执行 `nginx -s reload`**
+> 注意：修改了nginx配置文件，使之生效必须要 **重启 Nginx 容器** 或者 **在容器中执行 `nginx -s reload`**
 #### 3.2.3 站点根目录挂载
 为什么站点根目录在Nginx和PHP-FPM都需要挂载？
 ```
