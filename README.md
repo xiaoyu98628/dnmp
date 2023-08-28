@@ -51,7 +51,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
     - `docker-compose`
 
 2. `clone` 项目
-   ```gitexclude
+   ```shell
    git clone https://github.com/xiaoyucc521/dnmp.git
    ```
 
@@ -98,7 +98,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
        ```
    * [**支持快速安装扩展列表**](resource/install-php-extensions.md)
         > <a href="https://github.com/mlocati/docker-php-extension-installer" target="_blank">**此扩展来自 docker-php-extension-installer 参考示例文件**</a>
->**注意：如果是在容器内安装扩展，容器删除，扩展会失效，建议直接在.env文件里对应的版本下添加对应的扩展，然后重新`docker-compose build php72`**
+>**注意：以上两种方式是在容器内安装扩展，容器删除，扩展也会随之删除，建议在镜像层安装扩展，在.env文件里添加对应的扩展，然后重新 `docker-compose build php72` 构建镜像即可**
 ```dotenv
 # +--------------+
 # PHP7.2
@@ -115,8 +115,8 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 #
 # pdo_mysql,pcntl,mysqli,exif,bcmath,opcache,gettext,gd,sockets,shmop,intl,bz2,soap,zip,sysvmsg,sysvsem,
 # sysvshm,xsl,calendar,tidy,snmp,
-# redis,swoole,memcached,xdebug,mongodb,amqp,protobuf,grpc,xlswriter,igbinary,psr,phalcon,mcrypt,apcu,
-# yaml
+# amqp,apcu,rdkafka,redis,swoole,memcached,xdebug,mongodb,protobuf,grpc,xlswriter,igbinary,psr,phalcon,
+# mcrypt,yaml
 #
 # You can let it empty to avoid installing any extensions,
 # +--------------------------------------------------------------------------------------------+
@@ -161,17 +161,17 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 打开Nginx站点配置文件`./servers/panel/vhost/nginx/nginx1.21`下对应的配置文件`include enable-php-74.conf`改成`include enable-php-72.conf` 即可，如下：
 ```
 location ~ [^/]\.php(/|$) {
-    ...
-    include enable-php-74.conf;
-    ...
+   ...
+   include enable-php-74.conf;
+   ...
 }
 ```
 改为：
 ```
 location ~ [^/]\.php(/|$) {
-    ...
-    include enable-php-72.conf;
-    ...
+   ...
+   include enable-php-72.conf;
+   ...
 }
 ```
 > 注意：只要修改了nginx配置文件，使之生效必须要 **重启 Nginx 容器** 或者 **在容器中执行 `nginx -s reload`**
@@ -190,9 +190,9 @@ fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
 其中，`$document_root` 就是server块下 `root` 所指的路径：
 ```
 server {
-    #...
-    root /var/www/html;
-    #...
+   #...
+   root /var/www/html;
+   #...
 }
 ```
 这里 `$document_root` 就是/var/www/html。 如果Nginx和PHP-FPM在同一主机，Nginx会通过9000端口（或套接字文件）把这个目录值和脚本URI传给PHP-FPM。
@@ -241,40 +241,40 @@ PHP收到后，就到指定的目录下查找PHP文件并解析，完成后再�
 ### 3.3 Elasticsearch
 #### 3.3.1 Elasticsearch账号密码设置
 ```shell
- #自动生成密码
- ./bin/elasticsearch-setup-passwords auto
- #手动设置密码
- ./bin/elasticsearch-setup-passwords interactive
+# 自动生成密码
+./bin/elasticsearch-setup-passwords auto
+# 手动设置密码
+./bin/elasticsearch-setup-passwords interactive
 ```
 执行后会自动生成密码
 ```
- Changed password for user apm_system
- PASSWORD apm_system = {密码}
+Changed password for user apm_system
+PASSWORD apm_system = {密码}
 
- Changed password for user kibana_system
- PASSWORD kibana_system = {密码}
+Changed password for user kibana_system
+PASSWORD kibana_system = {密码}
 
- Changed password for user kibana
- PASSWORD kibana = {密码}
+Changed password for user kibana
+PASSWORD kibana = {密码}
 
- Changed password for user logstash_system
- PASSWORD logstash_system = {密码}
+Changed password for user logstash_system
+PASSWORD logstash_system = {密码}
 
- Changed password for user beats_system
- PASSWORD beats_system = {密码}
+Changed password for user beats_system
+PASSWORD beats_system = {密码}
 
- Changed password for user remote_monitoring_user
- PASSWORD remote_monitoring_user = {密码}
+Changed password for user remote_monitoring_user
+PASSWORD remote_monitoring_user = {密码}
 
- Changed password for user elastic
- PASSWORD elastic = {密码}
+Changed password for user elastic
+PASSWORD elastic = {密码}
 ```
 
 ### 3.4 Kibana
 #### 3.4.1 Kibana连接Elasticsearch问题
 ```
- elasticsearch.username: "kibana_system或kibana"
- elasticsearch.password: "上面Elasticsearch生成的密码"
+elasticsearch.username: "kibana_system或kibana"
+elasticsearch.password: "上面Elasticsearch生成的密码"
 ```
 
 ### 3.5 Mongo
@@ -399,6 +399,7 @@ PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装
 ## 致谢
 该项目起初参考了很多**开源项目**的**解决方案，开源不易，感谢分享**
 * 该项目参考 **yeszao/dnmp** 仓库：<a href="https://github.com/yeszao/dnmp" target="_blank"> https://github.com/yeszao/dnmp </a>
+* 该项目使用了 docker-php-extension-installer 快速安装PHP扩展脚本：<a href="https://github.com/mlocati/docker-php-extension-installer" target="_blank"> https://github.com/mlocati/docker-php-extension-installer </a>
 
 ## 开源共建
 开源项目离不开大家的支持，如果您有好的想法，遇到一些 BUG 并修复了，欢迎小伙伴们提交 Pull Request 参与开源贡献
