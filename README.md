@@ -201,6 +201,42 @@ PHP收到后，就到指定的目录下查找PHP文件并解析，完成后再�
 **如果Nginx和PHP-FPM在同一个主机里面，PHP就总能找到Nginx指定的目录。**   
 但是，如果他们在不同的容器呢？  
 未做任何处理的情况，Nginx容器中的站点根目录，PHP-FPM容器肯定不存在。 所以，这里需要保证Nginx和PHP-FPM都挂载了宿主机的 `./www`。 （当然，你也可以指定别的目录）
+#### 3.2.4 配置https
+1. `ssl` 证书存放位置
+   ```
+   ./servers/panel/ssl/nginx/nginx1.21/站点名称/证书
+   ```
+2. `nginx.conf` 配置文件修改
+   ```
+   server {
+      listen       80;
+      listen  [::]:80;
+      server_name  xxx; # 您的域名
+   
+      # 跳转  实现 http 强转 https
+      rewrite ^(.*)$ https://${server_name}$1 permanent;
+      
+      ...
+   }
+   
+   server {
+      listen       443 ssl;
+      listen  [::]:443 ssl;
+      server_name  xxx; # 您的域名和上面的域名一致
+   
+      ssl_certificate /usr/panel/ssl/nginx/nginx1.21/站点名称/xxx; # 公钥
+      ssl_certificate_key /usr/panel/ssl/nginx/nginx1.21/站点名称/xxx; # 私钥
+      
+      ...
+   }
+   ```
+3. 修改完成重启（重载）即可
+   ```shell
+   # 方式一：重启 docker compose restart 服务ID
+   docker compose restart nginx1.21
+   # 方式二：重载 docker exec 容器ID nginx -s reload
+   docker exec nginx1.21 nginx -s reload
+   ```
 
 ### 3.3 Elasticsearch
 #### 3.3.1 Elasticsearch账号密码设置
