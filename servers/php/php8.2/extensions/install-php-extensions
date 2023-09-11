@@ -21,7 +21,7 @@ if ! which docker-php-ext-configure >/dev/null || ! which docker-php-ext-enable 
 	exit 1
 fi
 
-IPE_VERSION=2.1.45
+IPE_VERSION=2.1.51
 
 StandWithUkraine() {
 	if test -t 1 && ! grep -Eq '^VERSION=.*jessie' /etc/os-release; then
@@ -722,7 +722,6 @@ buildRequiredPackageLists() {
 				fi
 				;;
 			ddtrace@debian)
-				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent curl"
 				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libcurl4-openssl-dev"
 				if test $DISTRO_MAJMIN_VERSION -ge 1200; then
 					# Debian bookworm is the minimum version that comes with cargo 1.64.0+
@@ -744,6 +743,14 @@ buildRequiredPackageLists() {
 					buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent ^libmpdec[0-9]*$"
 					buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libmpdec-dev"
 				fi
+				;;
+			ecma_intl@alpine)
+				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent icu-libs $buildRequiredPackageLists_icuPersistent"
+				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile icu-dev libidn-dev"
+				;;
+			ecma_intl@debian)
+				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent ^libicu[0-9]+$"
+				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libicu-dev"
 				;;
 			enchant@alpine)
 				if test $DISTRO_MAJMIN_VERSION -ge 312; then
@@ -1967,16 +1974,24 @@ isMicrosoftSqlServerODBCInstalled() {
 }
 
 # Install the Microsoft SQL Server ODBC Driver
+# see https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server
 installMicrosoftSqlServerODBC() {
 	printf 'Installing the Microsoft SQL Server ODBC Driver\n'
 	case "$DISTRO" in
 		alpine)
-			# https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server#alpine17
 			rm -rf /tmp/src/msodbcsql.apk
 			if test $PHP_MAJMIN_VERSION -le 703; then
 				curl -sSLf -o /tmp/src/msodbcsql.apk https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.9.1.1-1_amd64.apk
 			else
-				curl -sSLf -o /tmp/src/msodbcsql.apk https://download.microsoft.com/download/b/9/f/b9f3cce4-3925-46d4-9f46-da08869c6486/msodbcsql18_18.0.1.1-1_amd64.apk
+				case $(uname -m) in
+					aarch64 | arm64 | armv8)
+						installMicrosoftSqlServerODBC_arch=arm64
+						;;
+					*)
+						installMicrosoftSqlServerODBC_arch=amd64
+						;;
+				esac
+				curl -sSLf -o /tmp/src/msodbcsql.apk https://download.microsoft.com/download/3/5/5/355d7943-a338-41a7-858d-53b259ea33f5/msodbcsql18_18.3.1.1-1_$installMicrosoftSqlServerODBC_arch.apk
 			fi
 			printf '\n' | apk add --allow-untrusted /tmp/src/msodbcsql.apk
 			rm -rf /tmp/src/msodbcsql.apk
@@ -1985,8 +2000,6 @@ installMicrosoftSqlServerODBC() {
 			if test $DISTRO_VERSION_NUMBER -eq 12; then
 				DISTRO_VERSION_NUMBER=11
 			fi
-
-			# https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server#debian17
 			printf -- '- installing the Microsoft APT key\n'
 			if test $DISTRO_VERSION_NUMBER -eq 11; then
 				curl -sSLf -o /etc/apt/trusted.gpg.d/microsoft.asc https://packages.microsoft.com/keys/microsoft.asc
@@ -2010,7 +2023,6 @@ installMicrosoftSqlServerODBC() {
 			else
 				DEBIAN_FRONTEND=noninteractive ACCEPT_EULA=Y apt-get install -qqy --no-install-recommends $IPE_APTGET_INSTALLOPTIONS '^msodbcsql[0-9]+$'
 			fi
-
 			if test $DISTRO_VERSION_NUMBER -eq 11; then
 				setDistro
 			fi
@@ -2668,12 +2680,18 @@ installRemoteModule() {
 							if test $DISTRO_MAJMIN_VERSION -lt 317; then
 								# Alpine 3.17 is the minimum version that comes with cargo 1.64.0+
 								installRemoteModule_version=0.87.2
+							elif test $DISTRO_MAJMIN_VERSION -lt 318; then
+								# Alpine 3.18 is the minimum version that comes with cargo 1.71.0+
+								installRemoteModule_version=0.89.0
 							fi
 							;;
 						debian)
 							if test $DISTRO_MAJMIN_VERSION -lt 1200; then
 								# Debian bookworm is the minimum version that comes with cargo 1.64.0+
 								installRemoteModule_version=0.87.2
+							elif test $DISTRO_MAJMIN_VERSION -le 1300; then
+								# Newer ddtrace versions require cargo 1.71.0+, but bookworm comes with cargo 1.65.0
+								installRemoteModule_version=0.89.0
 							fi
 							;;
 					esac
@@ -2701,6 +2719,11 @@ installRemoteModule() {
 				if test $PHP_MAJMIN_VERSION -le 702; then
 					installRemoteModule_version=1.3.0
 				fi
+			fi
+			;;
+		ecma_intl)
+			if test -z "$installRemoteModule_version"; then
+				installRemoteModule_version=alpha
 			fi
 			;;
 		event)
@@ -2836,10 +2859,6 @@ installRemoteModule() {
 							;;
 					esac
 				fi
-			fi
-			if test -z "$installRemoteModule_version"; then
-				# See https://github.com/protocolbuffers/protobuf/issues/10619
-				installRemoteModule_version=1.57.0
 			fi
 			if test -z "$installRemoteModule_version" || test "$installRemoteModule_version" = 1.35.0; then
 				case "$DISTRO_VERSION" in
@@ -3163,9 +3182,6 @@ installRemoteModule() {
 			if test -z "$installRemoteModule_version"; then
 				if test $PHP_MAJMIN_VERSION -le 506; then
 					installRemoteModule_version=3.12.4
-				else
-					# See https://github.com/protocolbuffers/protobuf/issues/10619
-					installRemoteModule_version=3.24.1
 				fi
 			fi
 			;;

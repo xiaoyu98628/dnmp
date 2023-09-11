@@ -11,7 +11,7 @@ ARG TZ
 
 ENV EXTENSIONS=",${PHP_EXTENSIONS_82},"
 
-# 引入 install-php-extensions 脚本 方便容器内安装扩展 version = 2.1.45
+# 引入 install-php-extensions 脚本 方便容器内安装扩展 version = 2.1.51
 ADD extensions/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions
 
