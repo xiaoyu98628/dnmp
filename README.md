@@ -23,10 +23,13 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 ```markdown
 |-- data                         数据库数据目录
 |     |--- mysql                      mysql 数据目录（多版本）
+|     |     |--- mysql8.0                  mysql8.0 数据目录
 |--- logs                        日志目录
-|     |--- mysql                      mysql 数据目录（多版本）
+|     |--- mysql                      mysql 日志目录（多版本）
+|     |     |--- mysql8.0                  mysql8.0 日志目录
 |--- plugins                     插件目录
 |     |--- elasticsearch              elasticsearch 插件目录（多版本）
+|     |     |--- elasticsearch8.4          elasticsearch8.4 插件目录
 |--- resource                    资源目录(存放图片和.md的说明文件)
 |--- servers                     服务构建文件和配置文件目录
 |     |--- elasticsearch              elasticsearch 配置文件目录（多版本）
@@ -35,9 +38,14 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 |     |--- mongo                      mongo 配置文件目录（多版本）
 |     |--- nginx                      nginx 配置文件目录（多版本）
 |     |--- php                        php 配置文件目录（多版本）
+|     |     |--- php7.2                    php7.2 配置文件目录
+|     |     |--- php7.3                    php7.3 配置文件目录
 |     |--- redis                      redis 配置文件目录（多版本）
 |     |--- rabbitmq                   rabbitmq 配置文件目录（多版本）
 |     |--- panel                      服务面板
+|     |     |--- vhost                     站点配置文件目录
+|     |     |--- ssl                       https 证书目录
+|     |     |--- sock                      套接字文件目录
 |--- www                         项目文件目录
 |--- bashrc.sample               .bashrc 配置示例文件(宿主机使用容器内命令)
 |--- sample.env                  环境配置示例文件
