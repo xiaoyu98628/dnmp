@@ -276,6 +276,10 @@ services:
       - "./servers/kibana/kibana8.4/kibana.yml:/usr/share/kibana/config/kibana.yml:ro" # 配置文件
     environment:
       - "TZ=${TZ}"
+      - "ELASTICSEARCH_HOSTS=${KIBANA_ELASTICSEARCH_HOSTS_84}"
+      - "ELASTICSEARCH_USERNAME=${KIBANA_ELASTICSEARCH_USERNAME_84}"
+      - "ELASTICSEARCH_PASSWORD=${KIBANA_ELASTICSEARCH_PASSWORD_84}"
+      - "I18N_LOCALE=zh-CN"
     depends_on: # 依赖ES先启动
       - elasticsearch8.4
     networks:

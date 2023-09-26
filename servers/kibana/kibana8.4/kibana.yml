@@ -5,9 +5,9 @@
 # Default Kibana configuration for docker target
 server.host: "0.0.0.0"
 server.shutdownTimeout: "5s"
-elasticsearch.hosts: [ "http://elasticsearch8.4:9200" ]
 monitoring.ui.container.elasticsearch.enabled: true
-elasticsearch.username: 'kibana_system'
-elasticsearch.password: 'yd2WYm89Cr9zhaO6BdQc'
+# elasticsearch.hosts: [ "http://elasticsearch8.4:9200" ]
+# elasticsearch.username: 'kibana_system'
+# elasticsearch.password: 'yd2WYm89Cr9zhaO6BdQc'
 # 设置kibana中文显示
 i18n.locale: zh-CN
