@@ -49,7 +49,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 |--- www                         项目文件目录
 |--- bashrc.sample               .bashrc 配置示例文件(宿主机使用容器内命令)
 |--- sample.env                  环境配置示例文件
-|--- docker-compose.sample.yml   Docker 服务配置示例文件
+|--- compose.sample.yml   Docker 服务配置示例文件
 ```
 
 ## 2. 快速使用
@@ -67,10 +67,10 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
    ```shell
    cd dnmp                                          # 进入项目目录
    cp sample.env .env                               # 复制并改名 .env 配置文件
-   cp docker-compose.sample.yml docker-compose.yml  # 复制并改名 docker-compose.yml 配置文件
+   cp compose.sample.yml compose.yml  # 复制并改名 compose.yml 配置文件
    
-   # 执行 docker-compose up 之前，建议看一下docker-compose.yml 文件，以便快速上手。
-   docker-compose up                                # 启动服务
+   # 执行 docker compose up 之前，建议看一下compose.yml 文件，以便快速上手。
+   docker compose up                                # 启动服务
    ```
 
 4. 启动之后查看PHP版本
@@ -106,7 +106,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
        ```
    * [**支持快速安装扩展列表**](resource/install-php-extensions.md)
         > <a href="https://github.com/mlocati/docker-php-extension-installer" target="_blank">**此扩展来自 docker-php-extension-installer 参考示例文件**</a>
->**注意：以上两种方式是在容器内安装扩展，容器删除，扩展也会随之删除，建议在镜像层安装扩展，在.env文件里添加对应的扩展，然后重新 `docker-compose build php72` 构建镜像即可**
+>**注意：以上两种方式是在容器内安装扩展，容器删除，扩展也会随之删除，建议在镜像层安装扩展，在.env文件里添加对应的扩展，然后重新 `docker compose build php72` 构建镜像即可**
 ```dotenv
 # +--------------+
 # PHP7.2
@@ -356,24 +356,24 @@ GRANT ALL ON maindataplus.* TO 'xiaoyu'@'%';
 ### 5.1. 服务器启动和构建命令
 如需管理服务，请在命令后面加上服务器名称，例如：
 ```shell
-docker-compose up                       # 创建并启动所有服务
-docker-compose up -d                    # 创建并以后台运行方式启动所有服务
-docker-compose up "服务名..."            # 创建并启动服务
-docker-compose up -d "服务名..."         # 创建并以后台运行的方式启动服务
+docker compose up                       # 创建并启动所有服务
+docker compose up -d                    # 创建并以后台运行方式启动所有服务
+docker compose up "服务名..."            # 创建并启动服务
+docker compose up -d "服务名..."         # 创建并以后台运行的方式启动服务
 
-docker-compose start "服务名..."         # 启动服务
-docker-compose stop "服务名..."          # 停止服务
-docker-compose restart "服务名..."       # 重启服务
+docker compose start "服务名..."         # 启动服务
+docker compose stop "服务名..."          # 停止服务
+docker compose restart "服务名..."       # 重启服务
 
-docker-compose build "服务名..."         # 构建或者重新构建服务
+docker compose build "服务名..."         # 构建或者重新构建服务
 
-docker-compose rm "服务名..."            # 删除并停止
+docker compose rm "服务名..."            # 删除并停止
 
-docker-compose down                     # 停止并删除容器，网络，图像和挂载卷
+docker compose down                     # 停止并删除容器，网络，图像和挂载卷
 ```
 
 ## 6. 其他问题
-### 6.1 `docker-compose.sample.yml` 文件中 `volumes` 的 rw、ro详解
+### 6.1 `compose.sample.yml` 文件中 `volumes` 的 rw、ro详解
 众所周知，如果启动容器不使用挂载宿主机的文件或文件夹，容器中的配置文件只能进入容器才能修改，输出的日志文件也是在容器里面，查看不方便，也不利于日志收集，所以一般都是使用参数来挂载文件或文件夹。  
 而其中的**rw**、**ro**和**不指定**模式，是比较重要的一个环节，关系到宿主机与容器的文件、文件夹变化关系，下面来一一详解
 1. **不指定**  
@@ -393,13 +393,13 @@ docker-compose down                     # 停止并删除容器，网络，图�
 PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装的扩展都会失败，<a href="https://www.editcode.net/thread-404502-1-1.html" target="_blank">**原因**</a>
 
 ### 6.4 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'
-1. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置并且有且仅有`MYSQL_ROOT_PASSWORD`这个参数，你将不会出现这个问题
-2. 如果在`docker-compose.yml`文件中或者`docker run -e`中，设置了`MYSQL_ROOT_PASSWORD`、`MYSQL_ROOT_HOST`、`MYSQL_USER`、`MYSQL_PASSWORD`，并且你的连接不是使用`root`用户连接的将会出现这个问题  
+1. 如果在`compose.yml`文件中或者`docker run -e`中，设置并且有且仅有`MYSQL_ROOT_PASSWORD`这个参数，你将不会出现这个问题
+2. 如果在`compose.yml`文件中或者`docker run -e`中，设置了`MYSQL_ROOT_PASSWORD`、`MYSQL_ROOT_HOST`、`MYSQL_USER`、`MYSQL_PASSWORD`，并且你的连接不是使用`root`用户连接的将会出现这个问题  
    (1)：问题：权限问题(默认只有`information_schema`这个库的权限)  
    (2)：解决办法：[**MySQL数据库远程连接创建用户权限等**](./resource/MySQL-user-Permissions.md)
 
 ### 6.5 `[output clipped, Log limit 1MiB reached]` 日志限制达到1MiB
-如果在 `docker-compose build "服务名"` 出现了这句话并且构建失败，命令改成 ` COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=0 docker-compose build "服务名"` 可以看到的错误信息，方便修改
+如果在 `docker compose build "服务名"` 出现了这句话并且构建失败，命令改成 ` COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=0 docker compose build "服务名"` 可以看到的错误信息，方便修改
 
 ## 7. 关于 alpine 镜像内 apk 部分命令详解
 [**apk 部分命令详解**](resource/apk-details.md)
