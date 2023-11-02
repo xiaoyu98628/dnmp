@@ -8,8 +8,7 @@
 .env
 
 # docker compose 文件
-docker-compose*
 compose*
 
 # 需要上传的文件
-!docker-compose.sample.yml
+!compose.sample.yml
