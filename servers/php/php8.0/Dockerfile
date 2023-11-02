@@ -1,7 +1,7 @@
 # 指定基于 php:8.0-fpm-alpine 创建
 FROM php:8.0-fpm-alpine
 
-MAINTAINER XiaoYu <1765841705@qq.com>
+LABEL org.opencontainers.image.authors="XiaoYu <1765841705@qq.com>"
 
 ARG CONTAINER_PACKAGE_URL
 ARG PHP_EXTENSIONS_80
