@@ -1,9 +1,5 @@
-version: '3.8'
-
-# 使用前最好阅读一遍（README.md）说明文件，以便快速上手，遇到问题也能及时排查
-
 services:
-
+  # 使用前最好阅读一遍（README.md）说明文件，以便快速上手，遇到问题也能及时排查
   mysql8.0:
     image: mysql:8.0
     container_name: mysql80

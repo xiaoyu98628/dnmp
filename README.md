@@ -56,7 +56,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 1. 本地安装
     - `git`
     - `Docker`
-    - `docker-compose`
+    - `docker-compose 2.0.0+`
 
 2. `clone` 项目
    ```shell
