@@ -10,7 +10,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 5. **PHP源代码、MySQL数据、配置文件、日志文件**都可在主机中直接修改查看
 6. 默认支持`pdo_mysql`、`redis`、`zip`、`gd`、`curl`、`xlswriter`等常用热门扩展，根据环境灵活配置
 7. 可一键配置常用服务（后续会增加）
-    - 多PHP版本：PHP7.2、PHP7.3、PHP7.4、PHP8.0、PHP8.1、PHP8.2
+    - 多PHP版本：PHP7.2、PHP7.3、PHP7.4、PHP8.0、PHP8.1、PHP8.2、PHP8.3
     - Web服务：Nginx
     - 数据库：MySQL、Redis、Elasticsearch、Mongo、
     - 消息队列：RabbitMQ
@@ -81,6 +81,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
    http://localhost/80       # PHP80
    http://localhost/81       # PHP81
    http://localhost/82       # PHP82
+   http://localhost/83       # PHP83
    ```
 
 ## 3. 关于容器
@@ -165,7 +166,7 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 #### 3.2.1 添加新的站点
 新增的 `.conf` 文件应放在 `servers/panel/vhost/nginx/nginx1.21` 文件夹下
 #### 3.2.2 切换PHP版本
-比如切换为PHP7.2，打开 `./servers/panel/vhost/nginx/nginx1.21` 下对应的Nginx站点配置文件，找到 `include enable-php-74.conf` 改成 `include enable-php-72.conf` 即可  
+比如切换为PHP8.3，打开 `./servers/panel/vhost/nginx/nginx1.21` 下对应的Nginx站点配置文件，找到 `include enable-php-74.conf` 改成 `include enable-php-83.conf` 即可  
 例如：
 ```
 location ~ [^/]\.php(/|$) {
@@ -178,7 +179,7 @@ location ~ [^/]\.php(/|$) {
 ```
 location ~ [^/]\.php(/|$) {
    ...
-   include enable-php-72.conf;
+   include enable-php-83.conf;
    ...
 }
 ```
