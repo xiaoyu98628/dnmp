@@ -174,6 +174,29 @@ services:
     networks:
       - dnmp-net
 
+  php83:
+    build:
+      context: ./servers/php/php8.3
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        PHP_EXTENSIONS_83: ${PHP_EXTENSIONS_83}
+        COMPOSER_IMAGE_URL: ${COMPOSER_IMAGE_URL}
+        COMPOSER_DOWNLOAD_URL: ${COMPOSER_DOWNLOAD_URL}
+        TZ: ${TZ}
+    container_name: php83
+    restart: always
+    ports:
+      - "9006:9000"
+    volumes:
+      - "./servers/php/php8.3/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
+      - "./servers/php/php8.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
+      - "./servers/php/php8.3/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./logs/php/php8.3:/var/log/php"                                    # 日志文件
+      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
+    networks:
+      - dnmp-net
+
   nginx1.21:
     image: nginx:1.21-alpine
     container_name: nginx1.21
