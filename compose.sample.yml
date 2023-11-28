@@ -53,9 +53,9 @@ services:
       - "./servers/php/php7.2/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
       - "./servers/php/php7.2/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
       - "./servers/php/php7.2/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./servers/panel:/usr/panel"                                        # nginx使用unix sock连接文件
       - "./logs/php/php7.2:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix sock连接文件
     networks:
       - dnmp-net
 
@@ -76,9 +76,9 @@ services:
       - "./servers/php/php7.3/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
       - "./servers/php/php7.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
       - "./servers/php/php7.3/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./servers/panel:/usr/panel"                                        # nginx使用unix sock连接文件
       - "./logs/php/php7.3:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix sock连接文件
     networks:
       - dnmp-net
 
@@ -99,9 +99,9 @@ services:
       - "./servers/php/php7.4/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
       - "./servers/php/php7.4/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
       - "./servers/php/php7.4/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
       - "./logs/php/php7.4:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
     networks:
       - dnmp-net
 
@@ -122,9 +122,9 @@ services:
       - "./servers/php/php8.0/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
       - "./servers/php/php8.0/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
       - "./servers/php/php8.0/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
       - "./logs/php/php8.0:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
     networks:
       - dnmp-net
 
@@ -145,9 +145,9 @@ services:
       - "./servers/php/php8.1/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
       - "./servers/php/php8.1/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
       - "./servers/php/php8.1/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
       - "./logs/php/php8.1:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
     networks:
       - dnmp-net
 
@@ -168,9 +168,9 @@ services:
       - "./servers/php/php8.2/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
       - "./servers/php/php8.2/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
       - "./servers/php/php8.2/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
       - "./logs/php/php8.2:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
     networks:
       - dnmp-net
 
@@ -191,9 +191,9 @@ services:
       - "./servers/php/php8.3/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
       - "./servers/php/php8.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
       - "./servers/php/php8.3/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
+      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
       - "./logs/php/php8.3:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
     networks:
       - dnmp-net
 
@@ -206,9 +206,9 @@ services:
       - "443:443"
     volumes:
       - "./servers/nginx/nginx1.21:/etc/nginx"      # 配置文件
+      - "./servers/panel:/usr/panel"                # php unix连接文件
       - "./logs/nginx/nginx1.21:/var/log/nginx"     # 日志文件
       - "./www:/usr/share/nginx/html"               # 文件路径
-      - "./servers/panel:/usr/panel"                # php unix连接文件
     environment:
       - "TZ=${TZ}"
     networks:
