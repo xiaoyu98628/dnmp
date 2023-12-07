@@ -162,6 +162,19 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
    [root@centos ~]#
    ```
 
+#### 3.1.5 容器中PHP慢日志没有记录问题
+在Linux系统中，PHP-FPM使用 SYS_PTRACE 跟踪worker进程，但是docker容器默认又不启用这个功能，所以就导致了这个问题。  
+**解决**：
+1. 如果用命令行，在命令上加上： `--cap-add=SYS_PTRACE`  
+2. 如果用docker-compose.yml文件，在服务中加上：
+```yaml
+php72:
+  # ...
+  cap_add:
+     - SYS_PTRACE
+  # ...
+```
+
 ### 3.2 Nginx
 #### 3.2.1 添加新的站点
 新增的 `.conf` 文件应放在 `servers/panel/vhost/nginx/nginx1.21` 文件夹下

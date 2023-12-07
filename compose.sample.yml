@@ -56,6 +56,8 @@ services:
       - "./servers/panel:/usr/panel"                                        # nginx使用unix sock连接文件
       - "./logs/php/php7.2:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
+    cap_add:
+      - SYS_PTRACE
     networks:
       - dnmp-net
 
@@ -79,6 +81,8 @@ services:
       - "./servers/panel:/usr/panel"                                        # nginx使用unix sock连接文件
       - "./logs/php/php7.3:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
+    cap_add:
+      - SYS_PTRACE
     networks:
       - dnmp-net
 
@@ -102,6 +106,8 @@ services:
       - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
       - "./logs/php/php7.4:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
+    cap_add:
+      - SYS_PTRACE
     networks:
       - dnmp-net
 
@@ -125,6 +131,8 @@ services:
       - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
       - "./logs/php/php8.0:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
+    cap_add:
+      - SYS_PTRACE
     networks:
       - dnmp-net
 
@@ -148,6 +156,8 @@ services:
       - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
       - "./logs/php/php8.1:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
+    cap_add:
+      - SYS_PTRACE
     networks:
       - dnmp-net
 
@@ -171,6 +181,8 @@ services:
       - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
       - "./logs/php/php8.2:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
+    cap_add:
+      - SYS_PTRACE
     networks:
       - dnmp-net
 
@@ -194,6 +206,8 @@ services:
       - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
       - "./logs/php/php8.3:/var/log/php"                                    # 日志文件
       - "./www:/var/www/html"                                               # 文件路径
+    cap_add:
+      - SYS_PTRACE
     networks:
       - dnmp-net
 
