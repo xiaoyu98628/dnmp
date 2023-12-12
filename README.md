@@ -167,13 +167,13 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 **解决**：
 1. 如果用命令行，在命令上加上： `--cap-add=SYS_PTRACE`  
 2. 如果用docker-compose.yml文件，在服务中加上：
-```yaml
-php72:
-  # ...
-  cap_add:
-     - SYS_PTRACE
-  # ...
-```
+   ```yaml
+   php72:
+     # ...
+     cap_add:
+        - SYS_PTRACE
+     # ...
+   ```
 
 ### 3.2 Nginx
 #### 3.2.1 添加新的站点
