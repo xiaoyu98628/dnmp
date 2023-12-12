@@ -397,16 +397,16 @@ docker compose down                     # 停止并删除容器，网络，图�
    (1)文件：容器内不能修改，会提示readonly  
    (2)文件夹：容器内不能修改，新增，删除文件夹中的文件，会提示readonly
 3. **rw**  
-   (1)文件：不管是宿主机还是容器内修改，都会相互同步，但容器内不允许删除，会提示Devivce or resource busy；宿主机删除文件，容器内的不会被同步  
+   (1)文件：不管是宿主机还是容器内修改，都会相互同步，但容器内不允许删除，会提示Device or resource busy；宿主机删除文件，容器内的不会被同步  
    (2)文件夹：不管是宿主机还是容器内修改，新增，删除都会相互同步
 
 ### 6.2 容器内时间问题
 容器时间在.env文件中配置`TZ`变量，所有支持的时区请查看 <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">**时区列表·维基百科**</a> 或者 <a href="https://www.php.net/manual/zh/timezones.php" target="_blank">**PHP所支持的时区列表·PHP官网**</a>。
 
 ### 6.3 windows下使用PHP
-PHP镜像构建失败的建议将PHP的版本改成apline3.12，否则pecl安装的扩展都会失败，<a href="https://www.editcode.net/thread-404502-1-1.html" target="_blank">**原因**</a>
+PHP镜像构建失败的建议将PHP的版本改成alpine3.12，否则pecl安装的扩展都会失败，<a href="https://www.editcode.net/thread-404502-1-1.html" target="_blank">**原因**</a>
 
-### 6.4 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'
+### 6.4 `SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'`
 1. 如果在`compose.yml`文件中或者`docker run -e`中，设置并且有且仅有`MYSQL_ROOT_PASSWORD`这个参数，你将不会出现这个问题
 2. 如果在`compose.yml`文件中或者`docker run -e`中，设置了`MYSQL_ROOT_PASSWORD`、`MYSQL_ROOT_HOST`、`MYSQL_USER`、`MYSQL_PASSWORD`，并且你的连接不是使用`root`用户连接的将会出现这个问题  
    (1)：问题：权限问题(默认只有`information_schema`这个库的权限)  
