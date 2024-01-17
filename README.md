@@ -177,14 +177,14 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 
 ### 3.2 Nginx
 #### 3.2.1 添加新的站点
-新增的 `.conf` 文件应放在 `servers/panel/vhost/nginx/nginx1.21` 文件夹下
+新增的 `.conf` 文件应放在 `servers/panel/vhost/nginx/nginx版本` 文件夹下
 #### 3.2.2 切换PHP版本
-比如切换为PHP8.3，打开 `./servers/panel/vhost/nginx/nginx1.21` 下对应的Nginx站点配置文件，找到 `include enable-php-74.conf` 改成 `include enable-php-83.conf` 即可  
+比如切换为PHP8.3，打开 `./servers/panel/vhost/nginx/nginx版本` 下对应的Nginx站点配置文件，找到 `include enable-php-80.conf` 改成 `include enable-php-83.conf` 即可  
 例如：
 ```
 location ~ [^/]\.php(/|$) {
    ...
-   include enable-php-74.conf;
+   include enable-php-80.conf;
    ...
 }
 ```
@@ -221,12 +221,12 @@ server {
 PHP-FPM再通过9000端口（或套接字文件）接收Nginx发过来的目录值和脚本URI，发给PHP解析。
 PHP收到后，就到指定的目录下查找PHP文件并解析，完成后再通过9000端口（或套接字文件）返回给Nginx。
 **如果Nginx和PHP-FPM在同一个主机里面，PHP就总能找到Nginx指定的目录。**   
-但是，如果他们在不同的容器呢？  
+**但是，如果他们在不同的容器呢？**   
 未做任何处理的情况，Nginx容器中的站点根目录，PHP-FPM容器肯定不存在。 所以，这里需要保证Nginx和PHP-FPM都挂载了宿主机的 `./www`。 （当然，你也可以指定别的目录）
 #### 3.2.4 配置https
 1. `ssl` 证书存放位置
    ```
-   ./servers/panel/ssl/nginx/nginx1.21/站点名称/证书
+   ./servers/panel/ssl/nginx/nginx版本/站点名称/证书
    ```
 2. `nginx.conf` 配置文件修改
    ```
@@ -246,8 +246,8 @@ PHP收到后，就到指定的目录下查找PHP文件并解析，完成后再�
       listen  [::]:443 ssl;
       server_name  xxx; # 您的域名和上面的域名一致
    
-      ssl_certificate /usr/panel/ssl/nginx/nginx1.21/站点名称/xxx; # 公钥
-      ssl_certificate_key /usr/panel/ssl/nginx/nginx1.21/站点名称/xxx; # 私钥
+      ssl_certificate /usr/panel/ssl/nginx/nginx版本/站点名称/xxx; # 公钥
+      ssl_certificate_key /usr/panel/ssl/nginx/nginx版本/站点名称/xxx; # 私钥
       
       ...
    }
