@@ -44,7 +44,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
    ```
 4. 启动之后查看PHP版本
    ```
-   http[s]://[你的域名]/         # PHP72
+   http[s]://[你的域名]/72       # PHP72
    http[s]://[你的域名]/73       # PHP73
    http[s]://[你的域名]/74       # PHP74
    http[s]://[你的域名]/80       # PHP80
