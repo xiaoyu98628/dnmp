@@ -54,7 +54,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
    ```
 # 目录
 - [1 目录结构](#1-目录结构)
-- [2 关于容器](#2-关于容器)
+- [2 容器](#2-容器)
   - [2.1 PHP](#21-php)
     - [2.1.1 docker容器里安装PHP扩展常用命令](#211-docker容器里安装php扩展常用命令)
     - [2.1.2 PHP容器中的composer镜像修改](#212-php容器中的composer镜像修改)
@@ -77,7 +77,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
   - [2.7 MySQL](#27-mysql)
     - [2.7.1 mysql 密码问题](#271-mysql-密码问题)
     - [2.7.2 权限问题](#272-权限问题)
-- [3 关于容器挂载路径权限问题](#3-关于容器挂载路径权限问题)
+- [3 容器挂载路径权限问题](#3-容器挂载路径权限问题)
   - [3.1. mysql](#31-mysql)
   - [3.2 Elasticsearch](#32-elasticsearch)
   - [3.3 Mongo](#33-mongo)
@@ -90,7 +90,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
   - [5.3 windows下使用PHP](#53-windows下使用php)
   - [5.4 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'](#54-sqlstatehy000-1044-access-denied-for-user-你的用户名-to-database-mysql)
   - [5.5 [output clipped, Log limit 1MiB reached] 日志限制达到1MiB](#55-output-clipped-log-limit-1mib-reached-日志限制达到1mib)
-- [6. 关于 alpine 镜像内 apk 部分命令详解](#6-关于-alpine-镜像内-apk-部分命令详解)
+- [6. alpine 镜像内 apk 部分命令详解](#6-alpine-镜像内-apk-部分命令详解)
 ## 1 目录结构
 ```markdown
 |-- data                         数据库数据目录
@@ -123,7 +123,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 |--- sample.env                  环境配置示例文件
 |--- compose.sample.yml   Docker 服务配置示例文件
 ```
-## 2 关于容器
+## 2 容器
 ### 2.1 PHP
 #### 2.1.1 docker容器里安装PHP扩展常用命令
 1. 方法一：
@@ -375,7 +375,7 @@ GRANT SELECT,INSERT ON test.user TO 'xiaoyu'@'%';
 GRANT ALL ON *.* TO 'xiaoyu'@'%';
 GRANT ALL ON maindataplus.* TO 'xiaoyu'@'%';
 ```
-## 3 关于容器挂载路径权限问题
+## 3 容器挂载路径权限问题
 由于数据卷和日志卷分离的原因，部分容器启动需要对应的权限，然而宿主机上没有与之对应的权限，所以我们直接赋予`777`权限即可
 ### 3.1. mysql
 需要给 `./logs/mysql` 文件夹赋予权限 `chmod -R 777 ./logs/mysql` 重启即可
@@ -428,7 +428,7 @@ PHP镜像构建失败的建议将PHP的版本改成alpine3.12，否则pecl安装
    (2)：解决办法：[**MySQL数据库远程连接创建用户权限等**](./resource/MySQL-user-Permissions.md)
 ### 5.5 `[output clipped, Log limit 1MiB reached]` 日志限制达到1MiB
 如果在 `docker compose build "服务名"` 出现了这句话并且构建失败，命令改成 ` COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=0 docker compose build "服务名"` 可以看到的错误信息，方便修改
-## 6 关于 alpine 镜像内 apk 部分命令详解
+## 6 alpine 镜像内 apk 部分命令详解
 [**apk 部分命令详解**](resource/apk-details.md)
 ## 致谢
 该项目起初参考了很多**开源项目**的**解决方案，开源不易，感谢分享**
