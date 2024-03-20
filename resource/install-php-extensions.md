@@ -16,7 +16,7 @@
 | ast |  |  | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | bcmath | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | bitset | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
-| blackfire | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |  |
+| blackfire | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | bz2 | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | calendar | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | cassandra[*](#special-requirements-for-cassandra) |  |  |  |  | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
@@ -33,6 +33,7 @@
 | excimer |  |  |  | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | exif | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | ffi |  |  |  |  |  |  | &check; | &check; | &check; | &check; | &check; |
+| ftp |  |  |  |  |  |  |  |  |  | &check; | &check; |
 | gd | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | gearman | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |  |  |  |
 | geoip | &check; | &check; | &check; | &check; | &check; | &check; | &check; |  |  |  |  |
@@ -103,6 +104,7 @@
 | recode | &check; | &check; | &check; | &check; | &check; | &check; |  |  |  |  |  |
 | redis | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | relay |  |  |  |  |  |  | &check; | &check; | &check; | &check; | &check; |
+| saxon[*](#special-requirements-for-saxon) |  |  | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | seasclick | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | seaslog | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | shmop | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
@@ -116,7 +118,7 @@
 | sodium[*](#special-requirements-for-sodium) |  | &check; | &check; | &check; |  |  |  |  |  |  |  |
 | solr | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | sourceguardian | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |  |
-| spx |  | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |  |
+| spx | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | sqlsrv[*](#special-requirements-for-sqlsrv) |  |  | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | ssh2 | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | stomp | &check; | &check; | &check; | &check; | &check; | &check; | &check; |  |  | &check; | &check; |
@@ -127,7 +129,7 @@
 | sysvsem | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | sysvshm | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | tensor |  |  |  |  | &check; | &check; | &check; | &check; | &check; | &check; |  |
-| tideways | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |  |
+| tideways | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | tidy | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | timezonedb | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
 | uopz | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; | &check; |
@@ -219,7 +221,7 @@ Here's the list of all the supported environment variables:
 | | `IPE_KEEP_SYSPKG_CACHE=1` | By default the script will clear the apt/apk/pear cache in order to save disk space. You can disable it by setting this environment variable |
 | lzf | `IPE_LZF_BETTERCOMPRESSION=1` | By default `install-php-extensions` compiles the `lzf` extension to prefer speed over size; you can use this environment variable to compile it preferring size over speed |
 | event | `IPE_EVENT_NAMESPACE=`... | By default the `event` classes are defined in the root namespace. You can use this environment variable to specify a custom namespace |
-| gd | `IPE_GD_WITHOUTAVIF=1` | Since PHP 8.1, gd supports the AVIF format. Enabling it requires compiling libaom/libdav1d/libyuv/libavif on Debian and Alpine 3.14-, which is time-consuming. You can disable AVIF support by setting this environment variable on Debian and Alpine 3.14- |
+| gd | `IPE_GD_WITHOUTAVIF=1` | Since PHP 8.1, gd supports the AVIF format. Enabling it requires compiling libaom/libdav1d/libyuv/libavif on Debian 11- and Alpine 3.14-, which is time-consuming. You can disable AVIF support by setting this environment variable on Debian 11- and Alpine 3.14- |
 | oci8 & pdo_oci | `IPE_INSTANTCLIENT_BASIC=1` | The oci8 and pdo_oci PHP extensions require [Oracle Instant Client](https://www.oracle.com/database/technologies/instant-client.html). In order to save disk space, we install the Basic Lite version: if you want to install the Basic (non-lite) version simply set this environment variable |
 | http, intl, mongodb | `IPE_ICU_EN_ONLY=1` | Some extensions require the ICU library, use this flag to install a smaller, but English-only, ICU library on Alpine 3.16 and later |
 | pspell | `IPE_ASPELL_LANGUAGES='...'` | Configure the languages to be made available (for example: `IPE_ASPELL_LANGUAGES='en fr'`). If omitted, we'll assume `en` |
@@ -249,6 +251,7 @@ Some extensions have special requirements:
 | <a name="special-requirements-for-parle"></a>parle | Not available in `jessie` docker images |
 | <a name="special-requirements-for-pdo_sqlsrv"></a>pdo_sqlsrv | Not available in ARM architectures |
 | <a name="special-requirements-for-pthreads"></a>pthreads | Requires images with PHP compiled with thread-safety enabled (`zts`) |
+| <a name="special-requirements-for-saxon"></a>saxon | Not available in `alpine` docker images |
 | <a name="special-requirements-for-simdjson"></a>simdjson | &bull; Not available in `jessie` docker images<br />&bull; Not available in `stretch` docker images |
 | <a name="special-requirements-for-sodium"></a>sodium | Not available in `jessie` docker images |
 | <a name="special-requirements-for-sqlsrv"></a>sqlsrv | &bull; Not available in `7.1-alpine3.9` docker images<br />&bull; Not available in `7.1-alpine3.10` docker images<br />&bull; Not available in ARM architectures |
