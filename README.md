@@ -60,12 +60,16 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
     - [2.7.1 mysql 密码问题](#271-mysql-密码问题)
     - [2.7.2 权限问题](#272-权限问题)
 - [3 容器挂载路径权限问题](#3-容器挂载路径权限问题)
-  - [3.1. mysql](#31-mysql)
+  - [3.1 mysql](#31-mysql)
   - [3.2 Elasticsearch](#32-elasticsearch)
   - [3.3 Mongo](#33-mongo)
   - [3.4 RabbitMQ](#34-rabbitmq)
 - [4 管理命令](#4-管理命令)
-  - [4.1. 服务器启动和构建命令](#41-服务器启动和构建命令)
+  - [4.1 服务器启动和构建命令](#41-服务器启动和构建命令)
+  - [4.2 镜像（容器）的导入与导出](#42-镜像容器的导入与导出)
+    - [4.2.1 save 导出镜像（export 导出容器）](#421-save-导出镜像export-导出容器)
+    - [4.2.2 load 导入镜像（import 导入容器）](#422-load-导入镜像import-导入容器)
+    - [4.2.3 save, load, export, import 区别与联系](#423-save-load-export-import-区别与联系)
 - [5 其他问题](#5-其他问题)
   - [5.1 compose.sample.yml 文件中 volumes 的 rw、ro详解](#51-composesampleyml-文件中-volumes-的-rwro详解)
   - [5.2 容器内时间问题](#52-容器内时间问题)
@@ -358,7 +362,7 @@ GRANT ALL ON maindataplus.* TO 'xiaoyu'@'%';
 ```
 ## 3 容器挂载路径权限问题
 由于数据卷和日志卷分离的原因，部分容器启动需要对应的权限，然而宿主机上没有与之对应的权限，所以我们直接赋予`777`权限即可
-### 3.1. mysql
+### 3.1 mysql
 需要给 `./logs/mysql` 文件夹赋予权限 `chmod -R 777 ./logs/mysql` 重启即可
 ### 3.2 Elasticsearch
 需要给 `./data/elasticsearch`、 `./logs/elasticsearch` 文件夹赋予权限 `chmod -R 777 ./data/elasticsearch ./logs/elasticsearch` 重启即可
@@ -366,8 +370,8 @@ GRANT ALL ON maindataplus.* TO 'xiaoyu'@'%';
 需要给 `./data/mongo`、 `./logs/mongo` 文件夹赋予权限 `chmod -R 777 ./data/mongo ./logs/mongo` 重启即可
 ### 3.4 RabbitMQ
 需要给 `./data/rabbitmq`、 `./logs/rabbitmq` 文件夹赋予权限 `chmod -R 777 ./data/rabbitmq ./logs/rabbitmq` 重启即可
-## 4. 管理命令
-### 4.1. 服务器启动和构建命令
+## 4 管理命令
+### 4.1 服务器启动和构建命令
 如需管理服务，请在命令后面加上服务器名称，例如：
 ```shell
 docker compose up                       # 创建并启动所有服务
@@ -385,6 +389,45 @@ docker compose rm "服务名..."            # 删除并停止
 
 docker compose down                     # 停止并删除容器，网络，图像和挂载卷
 ```
+### 4.2 镜像（容器）的导入与导出
+Docker 镜像（容器）的导入导出，用于迁移，备份，升级等场景。涉及的命令有 `save`, `load`, `export`, `import`
+#### 4.2.1 save 导出镜像（export 导出容器）
+```shell
+# docker save [可选项] 镜像名称1 [镜像名称2...]
+# 可选项:
+#   -o, --output string   Write to a file, instead of STDOUT
+
+docker save -o dnmp-php72.tar dnmp-php72
+
+# docker export [可选项] 容器
+# 可选项：
+#   -o, --output string   Write to a file, instead of STDOUT
+docker export -o php72.tar php72
+```
+> 注意：dnmp-php72 是本地已经存在的镜像。完成后会在本地生成一个 dnmp-php72.tar 的压缩包文件
+#### 4.2.2 load 导入镜像（import 导入容器）
+```shell
+# docker load [可选项]
+# 可选项:
+#   -i, --input string   Read from tar archive file, instead of STDIN
+#   -q, --quiet          Suppress the load output
+
+docker load -i dnmp-php72.tar
+
+# docker import [可选项] file|URL|- [REPOSITORY[:TAG]]
+# 可选项:
+#   -c, --change list       Apply Dockerfile instruction to the created image
+#   -m, --message string    Set commit message for imported image
+#       --platform string   Set platform if server is multi-platform capable
+docker import php72.tar php72:v1
+```
+> 注意：导入之前记得删除本地和导入重名的镜像
+#### 4.2.3 `save`, `load`, `export`, `import` 区别与联系
+- docker save 保存的是镜像（image），docker export 保存的是容器（container）
+- docker load 用来导入镜像包，必须是一个分层文件系统，必须是 docker save 的包，
+- docker import 用来导入容器包，但两者都会恢复为镜像
+- docker load 不能对导入的镜像重命名，而 docker import 可以为镜像指定新名称
+- docker export 的包会比 docker save 的包小，原因是 docker save 导出的是一个分层的文件系统，docker export 导出的是一个 linux系统的文件目录
 ## 5 其他问题
 ### 5.1 `compose.sample.yml` 文件中 `volumes` 的 rw、ro详解
 众所周知，如果启动容器不使用挂载宿主机的文件或文件夹，容器中的配置文件只能进入容器才能修改，输出的日志文件也是在容器里面，查看不方便，也不利于日志收集，所以一般都是使用参数来挂载文件或文件夹。  
