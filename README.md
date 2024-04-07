@@ -475,3 +475,6 @@ docker import php72.tar php72:v1
 如果对您有帮助，您可以点右上角 💘Star💘 支持,提前感谢 😁
 ## 开源协议
 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
+
+
+[![Star History Chart](https://api.star-history.com/svg?repos=xiaoyu98628/dnmp&type=Date)](https://star-history.com/#xiaoyu98628/dnmp&Date)
