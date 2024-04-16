@@ -17,9 +17,14 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
    ```
 3. 拷贝并命名配置文件，启动：
    ```shell
-   cd dnmp                                          # 进入项目目录
-   cp sample.env .env                               # 复制并改名 .env 配置文件
-   cp compose.sample.yml compose.yml  # 复制并改名 compose.yml 配置文件
+   # 进入项目目录
+   cd dnmp
+   # 复制并改名 .env 配置文件
+   cp sample.env .env
+   # 复制并改名 compose.yml 配置文件
+   cp compose.sample.yml compose.yml
+   # 复制并改名 vhost文件
+   cp servers/panel/vhost/nginx/nginx1.21/localhost.conf.sample servers/panel/vhost/nginx/nginx1.21/您的域名.conf
    
    # 执行 docker compose up 之前，建议看一下compose.yml 文件，以便快速上手。
    docker compose up                                # 启动服务
