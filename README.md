@@ -455,7 +455,7 @@ docker import php72.tar php72:v1
 ## 致谢
 该项目起初参考了很多**开源项目**的**解决方案，开源不易，感谢分享**
 * 该项目参考 **yeszao/dnmp** 仓库：<a href="https://github.com/yeszao/dnmp" target="_blank"> https://github.com/yeszao/dnmp </a>
-* 该项目使用了 docker-php-extension-installer 快速安装PHP扩展脚本：<a href="https://github.com/mlocati/docker-php-extension-installer" target="_blank"> https://github.com/mlocati/docker-php-extension-installer </a>
+* 该项目使用了 **docker-php-extension-installer** 快速安装PHP扩展脚本：<a href="https://github.com/mlocati/docker-php-extension-installer" target="_blank"> https://github.com/mlocati/docker-php-extension-installer </a>
 ## 开源共建
 开源项目离不开大家的支持，如果您有好的想法，遇到一些 BUG 并修复了，欢迎小伙伴们提交 Pull Request 参与开源贡献
 1. **fork** 本项目到自己的 **repo**
