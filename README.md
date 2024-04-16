@@ -263,8 +263,15 @@ PHP收到后，就到指定的目录下查找PHP文件并解析，完成后再�
       listen  [::]:443 ssl;
       server_name  xxx; # 您的域名和上面的域名一致
    
+      #ssl证书地址
       ssl_certificate /usr/panel/ssl/nginx/nginx版本/站点名称/xxx; # 公钥
       ssl_certificate_key /usr/panel/ssl/nginx/nginx版本/站点名称/xxx; # 私钥
+
+      #ssl验证相关配置
+      ssl_session_timeout  5m;    #缓存有效期
+      ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;    #加密算法
+      ssl_protocols TLSv1 TLSv1.1 TLSv1.2;    #安全链接可选的加密协议
+      ssl_prefer_server_ciphers on;   #使用服务器端的首选算法
       
       ...
    }
