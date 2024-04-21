@@ -163,11 +163,14 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
    ```shell
    composer config -gl
    ```
-2. 设置composer镜像为国内镜像
+2. 设置composer镜像为国内镜像,全局模式
    ```shell
+   # phpcomposer镜像源
    composer config -g repo.packagist composer https://packagist.phpcomposer.com
-   # 或
+   # 阿里云composer镜像源
    composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
+   # 腾讯云composer镜像源
+   composer config -g repo.packagist composer https://mirrors.cloud.tencent.com/composer
    ```
 3. 恢复composer默认镜像
    ```shell
