@@ -19,10 +19,21 @@ collation-server=utf8mb4_general_ci
 
 # binlog日志位置
 log_bin=/var/log/mysql/binlog
+# binlog日志文件的保留天数，超过该天数的日志文件将被自动删除
+expire_logs_days=30
 
-# 慢查询日志
+# 启用慢查询日志 on或者1
 slow_query_log=1
-slow_query_log_file=/var/log/mysql/slow
+# 慢查询日志文件的路径和名称
+slow_query_log_file=/var/log/mysql/slow_query.log
+# 慢查询的阈值，单位为秒
+long_query_time=3
+# 记录未使用索引的查询 on或者1，记录在慢日志中，启用这个参数会导致性能稍微下降，因为MySQL需要检查每个查询是否使用了索引
+# log_queries_not_using_indexes=1
+# 限制未使用索引的查询的记录频率 表示5分钟内，如果同一条查询没有使用索引发出日志记录的次数被限制为1次
+# log_throttle_queries_not_using_indexes=5
+# 记录慢速管理语句 on或者1，记录在慢日志中
+# log_slow_admin_statements=1
 
 # 错误日志
 log-error=/var/log/mysql/error
