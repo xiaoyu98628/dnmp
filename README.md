@@ -169,6 +169,10 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
    # 或
    composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
    ```
+3. 恢复composer默认镜像
+   ```shell
+   composer config -g --unset repos.packagist
+   ```
 #### 2.1.3 phpstorm 配置 xdebug
 [**phpstorm 配置 xdebug**](resource/phpstorm-xdebug.md)
 #### 2.1.4 宿主机中使用PHP命令行
