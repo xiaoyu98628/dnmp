@@ -14,13 +14,21 @@ default_authentication_plugin=mysql_native_password
 default-storage-engine=INNODB
 # 服务端使用的字符集默认为utf8mb4
 character-set-server=utf8mb4
-# 设置collation(排序规则),下面这个是服务器级别的设置方法,还有数据库,表级别的。。。。
+# 设置collation(排序规则),下面这个是服务器级别的设置方法,还有数据库,表级别的。
 collation-server=utf8mb4_general_ci
 
 # binlog日志位置
 log_bin=/var/log/mysql/binlog
 # binlog日志文件的保留天数，超过该天数的日志文件将被自动删除
 expire_logs_days=30
+# binlog日志格式类型：STATEMENT、ROW或MIXED，mysql默认采用statement，建议使用mixed
+binlog_format= MIXED
+# binlog每个日志文件大小
+max_binlog_size=100m
+# binlog缓存大小
+binlog_cache_size=4m
+# 最大binlog缓存大小
+max_binlog_cache_size=512m
 
 # 启用慢查询日志 on或者1
 slow_query_log=1
