@@ -15,7 +15,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
    # 或者
    git clone https://gitee.com/xiaoyucc521/dnmp.git
    ```
-3. 拷贝并命名配置文件，启动：
+3. 拷贝并命名配置文件，启动 **(注意：[需要设置部分挂载目录的权限](#3-容器挂载路径权限问题))**
    ```shell
    # 进入项目目录
    cd dnmp
