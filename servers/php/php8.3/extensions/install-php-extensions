@@ -21,7 +21,7 @@ if ! which docker-php-ext-configure >/dev/null || ! which docker-php-ext-enable 
 	exit 1
 fi
 
-IPE_VERSION=2.2.5
+IPE_VERSION=2.2.18
 
 StandWithUkraine() {
 	if test -t 1 && ! grep -Eq '^VERSION=.*jessie' /etc/os-release; then
@@ -679,7 +679,7 @@ buildRequiredPackageLists() {
 				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile $PHPIZE_DEPS"
 			fi
 			if test -z "$(apk info 2>/dev/null | grep -E ^libssl)"; then
-				buildRequiredPackageLists_libssl='^libssl[0-9]+(\.[0-9]+)*$'
+				buildRequiredPackageLists_libssl="$(apk search | grep -E '^libssl[0-9]' | head -1 | cut -d- -f1)"
 			elif test -z "$(apk info 2>/dev/null | grep -E '^libressl.*-libtls')" && test -z "$(apk info 2>/dev/null | grep -E '^libressl.*-libssl')" && test -z "$(apk info 2>/dev/null | grep -E '^libretls-')"; then
 				buildRequiredPackageLists_libssl=$(apk search -q libressl*-libtls)
 			else
@@ -952,7 +952,7 @@ buildRequiredPackageLists() {
 					buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile ^libidn1[0-9+]-dev$"
 				else
 					buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent ^libicu[0-9]+$ ^libidn2-[0-9+]$"
-					buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libicu-dev ^libidn2-[0-9+]-dev$"
+					buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libicu-dev ^libidn2-[0-9+]-dev$ ^libgcrypt[0-9]+-dev$"
 				fi
 				;;
 			imagick@alpine)
@@ -1314,6 +1314,9 @@ buildRequiredPackageLists() {
 				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libcurl3-gnutls"
 				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libcurl4-gnutls-dev libxml2-dev"
 				;;
+			sourceguardian@alpine)
+				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent eudev-libs"
+				;;
 			spx@alpine)
 				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile zlib-dev"
 				;;
@@ -1351,6 +1354,9 @@ buildRequiredPackageLists() {
 				if test $PHP_MAJMIN_VERSION -ge 702; then
 					buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent c-ares"
 					buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile c-ares-dev"
+					if test $PHP_MAJMIN_VERSION -ge 801; then
+						buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile sqlite-dev"
+					fi
 				fi
 				;;
 			swoole@debian)
@@ -1359,9 +1365,13 @@ buildRequiredPackageLists() {
 				if test $PHP_MAJMIN_VERSION -ge 702; then
 					buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libc-ares2"
 					buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libc-ares-dev"
-				fi
-				if test $PHP_MAJMIN_VERSION -ge 800; then
-					buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile zlib1g-dev"
+					if test $PHP_MAJMIN_VERSION -ge 800; then
+						buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libbrotli1"
+						buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile zlib1g-dev libbrotli-dev"
+						if test $PHP_MAJMIN_VERSION -ge 801; then
+							buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libsqlite3-dev"
+						fi
+					fi
 				fi
 				;;
 			sybase_ct@alpine)
@@ -1454,6 +1464,14 @@ buildRequiredPackageLists() {
 				;;
 			wddx@debian)
 				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libxml2-dev"
+				;;
+			wikidiff2@alpine)
+				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libstdc++"
+				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile git"
+				;;
+			wikidiff2@debian)
+				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libthai0"
+				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile git libthai-dev"
 				;;
 			xdebug@alpine)
 				if test $PHP_MAJMIN_VERSION -ge 800; then
@@ -2056,7 +2074,7 @@ installMicrosoftSqlServerODBC() {
 		alpine)
 			rm -rf /tmp/src/msodbcsql.apk
 			if test $PHP_MAJMIN_VERSION -le 703; then
-				curl -sSLf -o /tmp/src/msodbcsql.apk https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.10.5.1-1_amd64.apk
+				curl -sSLf -o /tmp/src/msodbcsql.apk https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.10.6.1-1_amd64.apk
 			else
 				case $(uname -m) in
 					aarch64 | arm64 | armv8)
@@ -2066,7 +2084,7 @@ installMicrosoftSqlServerODBC() {
 						installMicrosoftSqlServerODBC_arch=amd64
 						;;
 				esac
-				curl -sSLf -o /tmp/src/msodbcsql.apk https://download.microsoft.com/download/3/5/5/355d7943-a338-41a7-858d-53b259ea33f5/msodbcsql18_18.3.2.1-1_$installMicrosoftSqlServerODBC_arch.apk
+				curl -sSLf -o /tmp/src/msodbcsql.apk https://download.microsoft.com/download/3/5/5/355d7943-a338-41a7-858d-53b259ea33f5/msodbcsql18_18.3.3.1-1_$installMicrosoftSqlServerODBC_arch.apk
 			fi
 			printf '\n' | apk add --allow-untrusted /tmp/src/msodbcsql.apk
 			rm -rf /tmp/src/msodbcsql.apk
@@ -2229,6 +2247,59 @@ installLibMPDec() {
 	cd - >/dev/null
 }
 
+# Check if libdatrie is installed
+#
+# Return:
+#   0 (true)
+#   1 (false)
+isLibDatrieInstalled() {
+	if ! test -f /usr/local/lib/libdatrie.so && ! test -f /usr/lib/libdatrie.so && ! test -f /usr/lib/x86_64*/libdatrie.so; then
+		return 1
+	fi
+	if ! test -f /usr/local/include/datrie/trie.h && ! test -f /usr/include/datrie/trie.h; then
+		return 1
+	fi
+	return 0
+}
+
+# Install libdatrie
+installLibDatrie() {
+	printf 'Installing libdatrie\n'
+	installLibDatrie_src="$(getPackageSource https://github.com/tlwg/libdatrie/releases/download/v0.2.13/libdatrie-0.2.13.tar.xz)"
+	cd -- "$installLibDatrie_src"
+	./configure
+	make -j$(getProcessorCount)
+	make install
+	cd - >/dev/null
+}
+
+# Check if libdatrie is installed
+#
+# Return:
+#   0 (true)
+#   1 (false)
+isLibThaiInstalled() {
+	return 1
+	if ! test -f /usr/local/lib/libthai.so && ! test -f /usr/lib/libthai.so && ! test -f /usr/lib/x86_64*/libthai.so; then
+		return 1
+	fi
+	if ! test -f /usr/local/include/thai/thailib.h && ! test -f /usr/include/thai/thailib.h; then
+		return 1
+	fi
+	return 0
+}
+
+# Install libdatrie
+installLibThai() {
+	printf 'Installing libthai\n'
+	installLibThai_src="$(getPackageSource https://github.com/tlwg/libthai/releases/download/v0.1.29/libthai-0.1.29.tar.xz)"
+	cd -- "$installLibThai_src"
+	./configure
+	make -j$(getProcessorCount)
+	make install
+	cd - >/dev/null
+}
+
 # Install Composer
 installComposer() {
 	installComposer_version="$(getWantedPHPModuleVersion @composer)"
@@ -2362,6 +2433,43 @@ installCargo() {
 	if test -z "${IPE_UNINSTALL_CARGO:-}"; then
 		IPE_UNINSTALL_CARGO=y
 	fi
+}
+
+installNewRelic() {
+	printf '# Installing newrelic\n'
+	installNewRelic_search='\bnewrelic-php[0-9.]*-[0-9]+(\.[0-9]+)*-linux'
+	case "$DISTRO" in
+		alpine)
+			installNewRelic_search="$installNewRelic_search-musl"
+			;;
+	esac
+	installNewRelic_file="$(curl -sSLf -o- https://download.newrelic.com/php_agent/release/ | sed -E 's/<[^>]*>//g' | grep -Eo "$installNewRelic_search.tar.gz" | sort | head -1)"
+	installNewRelic_url="https://download.newrelic.com/php_agent/release/$installNewRelic_file"
+	installNewRelic_src="$(getPackageSource "$installNewRelic_url")"
+	cd -- "$installNewRelic_src"
+	NR_INSTALL_USE_CP_NOT_LN=1 NR_INSTALL_SILENT=1 ./newrelic-install install
+	case "${IPE_NEWRELIC_DAEMON:-}" in
+		1 | y* | Y*)
+			NR_INSTALL_USE_CP_NOT_LN=1 NR_INSTALL_SILENT=1 ./newrelic-install install_daemon
+			;;
+	esac
+	case "${IPE_NEWRELIC_KEEPLOG:-}" in
+		1 | y* | Y*) ;;
+		*)
+			rm -f /tmp/nrinstall-*.tar
+			;;
+	esac
+	cd - >/dev/null
+	cat <<EOT
+NewRelic has been installed from $installNewRelic_url
+You may need to:
+- change the owner/permissions of /var/log/newrelic
+  (for example: chown -R www-data:www-data /var/log/newrelic)
+- set the value of the newrelic.license configuration key in
+  $PHP_INI_DIR/conf.d/newrelic.ini
+  (if you didn't set the NR_INSTALL_KEY environment variable)
+
+EOT
 }
 
 # Install a bundled PHP module given its handle
@@ -2606,13 +2714,18 @@ EOF
 			esac
 			;;
 	esac
-	php -r 'return;' >/dev/null 2>/dev/null || true
-	installBundledModule_errAfter="$(php -r 'return;' 2>&1 || true)"
-	if test "$installBundledModule_errAfter" != "$installBundledModule_errBefore"; then
-		printf 'PHP has problems after installing the "%s" extension:\n%s\n' "$1" "$installBundledModule_errAfter" >&2
-		rm "$PHP_INI_DIR/conf.d/docker-php-ext-$1.ini" || true
-		return 1
-	fi
+	case "${IPE_SKIP_CHECK:-}" in
+		1 | y* | Y*) ;;
+		*)
+			php -r 'return;' >/dev/null 2>/dev/null || true
+			installBundledModule_errAfter="$(php -r 'return;' 2>&1 || true)"
+			if test "$installBundledModule_errAfter" != "$installBundledModule_errBefore"; then
+				printf 'PHP has problems after installing the "%s" extension:\n%s\n' "$1" "$installBundledModule_errAfter" >&2
+				rm "$PHP_INI_DIR/conf.d/docker-php-ext-$1.ini" || true
+				return 1
+			fi
+			;;
+	esac
 }
 
 # Fetch a tar.gz file, extract it and returns the path of the extracted folder.
@@ -3206,6 +3319,10 @@ installRemoteModule() {
 				fi
 			fi
 			;;
+		newrelic)
+			installNewRelic
+			installRemoteModule_manuallyInstalled=2
+			;;
 		oauth)
 			if test -z "$installRemoteModule_version"; then
 				if test $PHP_MAJMIN_VERSION -le 506; then
@@ -3325,11 +3442,6 @@ installRemoteModule() {
 				addConfigureOption enable-swoole-json yes
 				# enable curl support?
 				addConfigureOption enable-swoole-curl yes
-			fi
-			;;
-		opentelemetry)
-			if test -z "$installRemoteModule_version"; then
-				installRemoteModule_version=beta
 			fi
 			;;
 		parallel)
@@ -3712,6 +3824,21 @@ installRemoteModule() {
 				elif test $PHP_BITS -eq 32; then
 					# See https://github.com/swoole/swoole-src/issues/5198#issuecomment-1820162178
 					installRemoteModule_version="$(resolvePHPModuleVersion "$installRemoteModule_module" '^5.0')"
+				else
+					case "$DISTRO" in
+						alpine)
+							if test $DISTRO_MAJMIN_VERSION -le 312; then
+								installRemoteModule_version=5.1.2
+							fi
+							;;
+					esac
+				fi
+				if test -z "$installRemoteModule_version"; then
+					if test $PHP_MAJMIN_VERSION -le 800; then
+						installRemoteModule_version=5.1.3
+					else
+						installRemoteModule_version="$(resolvePeclStabilityVersion "$installRemoteModule_module" stable)"
+					fi
 				fi
 			else
 				installRemoteModule_version="$(resolvePeclStabilityVersion "$installRemoteModule_module" "$installRemoteModule_version")"
@@ -3724,19 +3851,85 @@ installRemoteModule() {
 			installRemoteModule_openssl=yes
 			case "$DISTRO_VERSION" in
 				alpine@3.7 | alpine@3.8)
-					if test -n "$installRemoteModule_version" && test $(compareVersions "$installRemoteModule_version" 4.6.0) -lt 0; then
+					if test $(compareVersions "$installRemoteModule_version" 4.6.0) -lt 0; then
 						# see https://github.com/swoole/swoole-src/issues/3934
 						installRemoteModule_openssl=no
 					fi
 					;;
 			esac
-			if test $PHP_MAJMIN_VERSION -eq 803; then
-				# see https://github.com/swoole/docker-swoole/issues/45
+			if test $PHP_MAJMIN_VERSION -ge 800; then
+				# see https://github.com/swoole/swoole-src/issues/5365
 				installRemoteModule_curl=no
 			else
 				installRemoteModule_curl=yes
 			fi
-			if test -z "$installRemoteModule_version" || test $(compareVersions "$installRemoteModule_version" 5.0.1) -ge 0; then
+			if test $PHP_THREADSAFE -eq 1; then
+				installRemoteModule_zts=yes
+			else
+				installRemoteModule_zts=no
+			fi
+			installRemoteModule_sqlite=yes
+			case "$DISTRO" in
+				alpine)
+					if test $DISTRO_MAJMIN_VERSION -lt 317; then
+						# we need sqlite3 >= 3.7.7
+						installRemoteModule_sqlite=no
+					fi
+					;;
+				debian)
+					if test $DISTRO_MAJMIN_VERSION -lt 1200; then
+						# we need sqlite3 >= 3.7.7
+						installRemoteModule_sqlite=no
+					fi
+					;;
+			esac
+			if test $(compareVersions "$installRemoteModule_version" 6.0.0) -ge 0; then
+				# enable sockets supports?
+				addConfigureOption enable-sockets $installRemoteModule_sockets
+				# enable openssl support?
+				addConfigureOption enable-openssl $installRemoteModule_openssl
+				# enable mysqlnd support?
+				addConfigureOption enable-mysqlnd yes
+				# enable curl support?
+				addConfigureOption enable-swoole-curl $installRemoteModule_curl
+				# enable cares support?
+				addConfigureOption enable-cares yes
+				# enable brotli support?
+				addConfigureOption enable-brotli yes
+				# enable PostgreSQL database support?
+				addConfigureOption enable-swoole-pgsql yes
+				# enable ODBC database support?
+				addConfigureOption with-swoole-odbc no
+				# enable Oracle database support?
+				addConfigureOption with-swoole-oracle no
+				# enable Sqlite database support?
+				addConfigureOption enable-swoole-sqlite $installRemoteModule_sqlite
+				# enable swoole thread support (need php zts support)?
+				addConfigureOption enable-swoole-thread $installRemoteModule_zts
+				# enable iouring for file async support?
+				addConfigureOption enable-iouring yes
+			elif test $(compareVersions "$installRemoteModule_version" 5.1.0) -ge 0; then
+				# enable sockets supports?
+				addConfigureOption enable-sockets $installRemoteModule_sockets
+				# enable openssl support?
+				addConfigureOption enable-openssl $installRemoteModule_openssl
+				# enable mysqlnd support?
+				addConfigureOption enable-mysqlnd yes
+				# enable curl support?
+				addConfigureOption enable-swoole-curl $installRemoteModule_curl
+				# enable cares support?
+				addConfigureOption enable-cares yes
+				# enable brotli support?
+				addConfigureOption enable-brotli yes
+				# enable PostgreSQL database support?
+				addConfigureOption enable-swoole-pgsql yes
+				# enable ODBC database support?
+				addConfigureOption with-swoole-odbc no
+				# enable Oracle database support?
+				addConfigureOption with-swoole-oracle no
+				# enable Sqlite database support?
+				addConfigureOption enable-swoole-sqlite $installRemoteModule_sqlite
+			elif test $(compareVersions "$installRemoteModule_version" 5.0.1) -ge 0; then
 				# enable sockets supports?
 				addConfigureOption enable-sockets $installRemoteModule_sockets
 				# enable openssl support?
@@ -3929,7 +4122,7 @@ installRemoteModule() {
 							installRemoteModule_architecture=alpine-arm64
 							;;
 						*)
-							installRemoteModule_architecture=alpine
+							installRemoteModule_architecture=alpine-x86_64
 							;;
 					esac
 					;;
@@ -3945,6 +4138,10 @@ installRemoteModule() {
 					;;
 			esac
 			installRemoteModule_url="$(curl -sSLf -o - https://tideways.com/profiler/downloads | grep -Eo "\"[^\"]+/tideways-php-([0-9]+\.[0-9]+\.[0-9]+)-$installRemoteModule_architecture.tar.gz\"" | cut -d'"' -f2)"
+			if test -z "$installRemoteModule_url"; then
+				echo 'Failed to find the tideways tarball to be downloaded'
+				exit 1
+			fi
 			printf 'Downloading tideways from %s\n' "$installRemoteModule_url"
 			installRemoteModule_src="$(getPackageSource $installRemoteModule_url)"
 			if test -d "$installRemoteModule_src/dist"; then
@@ -4010,6 +4207,33 @@ installRemoteModule() {
 					installRemoteModule_version=beta
 				fi
 			fi
+			;;
+		wikidiff2)
+			case "$DISTRO" in
+				alpine)
+					if ! isLibDatrieInstalled; then
+						installLibDatrie
+					fi
+					if ! isLibThaiInstalled; then
+						installLibThai
+					fi
+					;;
+			esac
+			if test -z "$installRemoteModule_version"; then
+				if test $PHP_MAJMIN_VERSION -le 702; then
+					installRemoteModule_version=1.13.0
+				else
+					installRemoteModule_version="$(git -c versionsort.suffix=- ls-remote --tags --refs --quiet --exit-code --sort=version:refname https://github.com/wikimedia/mediawiki-php-wikidiff2.git 'refs/tags/*.*.*' | tail -1 | cut -d/ -f3)"
+				fi
+			fi
+			installRemoteModule_src="$(getPackageSource "https://codeload.github.com/wikimedia/mediawiki-php-wikidiff2/tar.gz/refs/tags/$installRemoteModule_version")"
+			cd -- "$installRemoteModule_src"
+			phpize
+			./configure
+			make -j$(getProcessorCount)
+			make install
+			cd - >/dev/null
+			installRemoteModule_manuallyInstalled=1
 			;;
 		xdebug)
 			if test -z "$installRemoteModule_version"; then
@@ -4191,8 +4415,15 @@ installRemoteModule() {
 		installPeclPackage "$installRemoteModule_module" "$installRemoteModule_version" "$installRemoteModule_cppflags" "$installRemoteModule_path"
 	fi
 	postProcessModule "$installRemoteModule_module"
-	checkModuleWorking "$installRemoteModule_module" "$installRemoteModule_ini_basename" "$installRemoteModule_ini_extra"
-	enablePhpExtension "$installRemoteModule_module" "$installRemoteModule_ini_basename" "$installRemoteModule_ini_extra"
+	if test $installRemoteModule_manuallyInstalled -lt 2; then
+		case "${IPE_SKIP_CHECK:-}" in
+			1 | y* | Y*) ;;
+			*)
+				checkModuleWorking "$installRemoteModule_module" "$installRemoteModule_ini_basename" "$installRemoteModule_ini_extra"
+				;;
+		esac
+		enablePhpExtension "$installRemoteModule_module" "$installRemoteModule_ini_basename" "$installRemoteModule_ini_extra"
+	fi
 }
 
 # Check if a module/helper may be installed using the pecl archive
@@ -4458,7 +4689,7 @@ fixLetsEncrypt() {
 					invokeAptGetUpdate
 				fi
 				printf -- '- installing newer ca-certificates package\n'
-				DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends $IPE_APTGET_INSTALLOPTIONS ca-certificates
+				DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends ${IPE_APTGET_INSTALLOPTIONS:-} ca-certificates
 			fi
 			;;
 		*)
