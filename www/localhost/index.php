@@ -55,10 +55,8 @@ function getMysqlVersion(): string
 {
     if (extension_loaded('PDO_MYSQL')) {
         try {
-            $dbh = new PDO('mysql:host=mysql80;dbname=mysql', 'xiaoyu', 'xiaoyu');
-            $sth = $dbh->query('SELECT VERSION() as version');
-            $info = $sth->fetch();
-            return $info['version'];
+            $connect = new PDO('mysql:host=mysql80;dbname=mysql', 'xiaoyu', 'xiaoyu');
+            return $connect->query('SELECT VERSION()')->fetch(PDO::FETCH_COLUMN);
         } catch (PDOException $e) {
             return $e->getMessage();
         }
@@ -79,7 +77,6 @@ function getRedisVersion(): string
             $redis = new Redis();
             $redis->connect('redis62');
             $redis->auth('123456');
-            /** @var array|Redis $info */
             $info = $redis->info();
             return $info['redis_version'];
         } catch (Exception $e) {
