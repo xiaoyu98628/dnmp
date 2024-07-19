@@ -36,7 +36,7 @@ GRANT privileges ON database_name.table_name TO 'username'@'host';
 ```sql
 GRANT SELECT,INSERT ON test.user TO 'pig'@'%';
 GRANT ALL ON *.* TO 'pig'@'%';
-GRANT ALL ON maindataplus.* TO 'pig'@'%';
+GRANT ALL ON test.* TO 'pig'@'%';
 ```
 ## 4. 注意:
 用以上命令授权的用户不能给其它用户授权，如果想让该用户可以授权，用以下命令:

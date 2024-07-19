@@ -377,7 +377,7 @@ GRANT privileges ON database_name.table_name TO 'username'@'host';
 -- 例子：
 GRANT SELECT,INSERT ON test.user TO 'xiaoyu'@'%';
 GRANT ALL ON *.* TO 'xiaoyu'@'%';
-GRANT ALL ON maindataplus.* TO 'xiaoyu'@'%';
+GRANT ALL ON test.* TO 'xiaoyu'@'%';
 ```
 ## 3 容器挂载路径权限问题
 由于数据卷和日志卷分离的原因，部分容器启动需要对应的权限，然而宿主机上没有与之对应的权限，所以我们直接赋予`777`权限即可
@@ -466,7 +466,7 @@ docker import php72.tar php72:v1
 1. 如果在`compose.yml`文件中或者`docker run -e`中，设置并且有且仅有`MYSQL_ROOT_PASSWORD`这个参数，你将不会出现这个问题
 2. 如果在`compose.yml`文件中或者`docker run -e`中，设置了`MYSQL_ROOT_PASSWORD`、`MYSQL_ROOT_HOST`、`MYSQL_USER`、`MYSQL_PASSWORD`，并且你的连接不是使用`root`用户连接的将会出现这个问题  
    (1)：问题：权限问题(默认只有`information_schema`这个库的权限)  
-   (2)：解决办法：[**MySQL数据库远程连接创建用户权限等**](./resource/MySQL-user-Permissions.md)
+   (2)：解决办法：[**MySQL数据库远程连接创建用户权限等**](./resource/mysql-user-permissions)
 ### 5.4 `[output clipped, Log limit 1MiB reached]` 日志限制达到1MiB
 如果在 `docker compose build "服务名"` 出现了这句话并且构建失败，命令改成 ` COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=0 docker compose build "服务名"` 可以看到的错误信息，方便修改
 ## 6 alpine 镜像内 apk 部分命令详解
