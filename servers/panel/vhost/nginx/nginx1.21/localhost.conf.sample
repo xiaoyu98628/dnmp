@@ -18,6 +18,11 @@ server {
     #    }
     #}
 
+    location / {
+        root   /usr/share/nginx/html/php/works/localhost;
+        index  index.html;
+    }
+
     # 这里配置的代理转发，方便看PHP版本,不需要可以删除
     # +----------------- start -----------------+
     location /72/ {
