@@ -69,7 +69,7 @@ server {
     #    proxy_pass   http://127.0.0.1;
     #}
 
-    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    # Pass the PHP script to the FastCGI server
     #
     #location ~ [^/]\.php(/|$) {
     #    # 注意这里和php-fpm的挂载目录一致
