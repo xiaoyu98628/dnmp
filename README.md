@@ -230,9 +230,9 @@ location ~ [^/]\.php(/|$) {
 为什么站点根目录在Nginx和PHP-FPM都需要挂载？
 ```
 # php 挂载目录
-- "../www:/var/www/html"
+- "./www:/var/www/html"
 # nginx 挂载目录
-- "../www:/usr/share/nginx/html"
+- "./www:/usr/share/nginx/html"
 ```
 我们知道，Nginx配置都有这样一项：
 ```
@@ -246,10 +246,11 @@ server {
    ...
 }
 ```
-这里 `$document_root` 就是/var/www/html。 如果Nginx和PHP-FPM在同一主机，Nginx会通过9000端口（或套接字文件）把这个目录值和脚本URI传给PHP-FPM。
-PHP-FPM再通过9000端口（或套接字文件）接收Nginx发过来的目录值和脚本URI，发给PHP解析。
-PHP收到后，就到指定的目录下查找PHP文件并解析，完成后再通过9000端口（或套接字文件）返回给Nginx。
-**如果Nginx和PHP-FPM在同一个主机里面，PHP就总能找到Nginx指定的目录。**   
+这里 `$document_root` 就是/var/www/html。  
+如果Nginx和PHP-FPM在同一主机，Nginx会通过9000端口（或套接字文件）把这个目录值和脚本URI传给PHP-FPM。  
+PHP-FPM再通过9000端口（或套接字文件）接收Nginx发过来的目录值和脚本URI，发给PHP解析。  
+PHP收到后，就到指定的目录下查找PHP文件并解析，完成后再通过9000端口（或套接字文件）返回给Nginx。  
+**如果Nginx和PHP-FPM在同一个主机里面，PHP就总能找到Nginx指定的目录。**     
 **但是，如果他们在不同的容器呢？**   
 未做任何处理的情况，Nginx容器中的站点根目录，PHP-FPM容器肯定不存在。 所以，这里需要保证Nginx和PHP-FPM都挂载了宿主机的 `./www`。 （当然，你也可以指定别的目录）
 #### 2.2.4 配置https
