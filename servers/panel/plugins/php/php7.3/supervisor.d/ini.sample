@@ -27,3 +27,7 @@ numprocs=1
 ;这个是进程名，如果我们下面的numprocs参数为1的话，就不用管这个参数了，它默认值%(program_name)s也就是上面的那个program冒号后面的名字，
 ;但是如果numprocs为多个的话，那就不能这么干了。想想也知道，不可能每个进程都用同一个进程名吧。
 process_name=%(program_name)s_%(process_num)02d
+;当设置为 true 时，Supervisor 在停止进程时会将信号发送到进程组的所有进程。这意味着，如果你有一个主进程和它的子进程，停止主进程时，Supervisor 会同时停止所有与主进程关联的子进程。
+stopasgroup=true
+;当设置为 true 时，Supervisor 在杀死进程时会将信号发送到进程组的所有进程。这确保了进程组内的所有进程都会被终止，而不仅仅是主进程。
+killasgroup=true

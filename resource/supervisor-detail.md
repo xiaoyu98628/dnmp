@@ -49,27 +49,31 @@ files = relative/directory/*.ini    ;可以指定一个或多个以.ini结束的
 ### 项目配置文件说明
 > 给需要管理的子进程（程序）编写一个配置文件，放在`./servers/panel/plugins/php/php7.2/supervisor.d/`目录下，以`.ini`作为扩展名（每个进程的配置文件都可以单独分拆也可以把相关项目的脚本放一起）。
 ```ini
-#项目名
+;项目名
 [program:blog]
-#脚本目录
+;脚本目录
 directory=/opt/bin
-#脚本执行命令
+;脚本执行命令
 command=/usr/bin/python /opt/bin/test.py
-#supervisor启动的时候是否随着同时启动，默认True
+;supervisor启动的时候是否随着同时启动，默认True
 autostart=true
-#当程序exit的时候，这个program不会自动重启,默认unexpected，设置子进程挂掉后自动重启的情况，有三个选项，false,unexpected和true。如果为false的时候，无论什么情况下，都不会被重新启动，如果为unexpected，只有当进程的退出码不在下面的exitcodes里面定义的
+;当程序exit的时候，这个program不会自动重启,默认unexpected，设置子进程挂掉后自动重启的情况，有三个选项，false,unexpected和true。如果为false的时候，无论什么情况下，都不会被重新启动，如果为unexpected，只有当进程的退出码不在下面的exitcodes里面定义的
 autorestart=false
-#这个选项是子进程启动多少秒之后，此时状态如果是running，则我们认为启动成功了。默认值为1
+;这个选项是子进程启动多少秒之后，此时状态如果是running，则我们认为启动成功了。默认值为1
 startsecs=1
-#脚本运行的用户身份
+;脚本运行的用户身份
 user = test
-#日志输出
+;日志输出
 stderr_logfile=/tmp/blog_stderr.log
 stdout_logfile=/tmp/blog_stdout.log
-#把stderr重定向到stdout，默认 false
+;把stderr重定向到stdout，默认 false
 redirect_stderr = true
-#stdout日志文件大小，默认 50MB
+;stdout日志文件大小，默认 50MB
 stdout_logfile_maxbytes = 20M
-#stdout日志文件备份数
+;stdout日志文件备份数
 stdout_logfile_backups = 20
+;当设置为 true 时，Supervisor 在停止进程时会将信号发送到进程组的所有进程。这意味着，如果你有一个主进程和它的子进程，停止主进程时，Supervisor 会同时停止所有与主进程关联的子进程。
+stopasgroup=true
+;当设置为 true 时，Supervisor 在杀死进程时会将信号发送到进程组的所有进程。这确保了进程组内的所有进程都会被终止，而不仅仅是主进程。
+killasgroup=true
 ```
