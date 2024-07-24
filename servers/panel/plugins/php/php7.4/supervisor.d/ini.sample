@@ -4,6 +4,8 @@
 command=
 ;表示command命令的执行目录
 directory=
+;supervisor 启动的时候是否随着同时启动，默认 True
+autostart=true
 ;自动重启
 autorestart=true
 ;启动后程序需要保持运行的总秒数，以认为启动成功(将进程从STARTING状态移动到running状态)。设置为0表示程序不需要在任何特定的时间内保持运行
