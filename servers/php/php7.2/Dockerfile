@@ -264,6 +264,7 @@ RUN docker-php-source extract \
             && printf "\n" | pecl install yaml \
             && docker-php-ext-enable yaml; \
         fi \
+    && docker-php-source delete \
     # 安装 composer
     && echo "---------- Install composer ----------" \
     && apk add --no-cache --virtual .build-deps curl \
@@ -271,10 +272,13 @@ RUN docker-php-source extract \
     && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
     # 替换 composer 镜像
     && if [ ${COMPOSER_IMAGE_URL} ]; then composer config -g repo.packagist composer ${COMPOSER_IMAGE_URL}; fi \
-    && docker-php-source delete \
+    && echo "---------- Install supervisor ----------" \
+    && apk add --no-cache supervisor \
     && apk del .build-deps
 
 # iconv 扩展问题，alpine 自带的 gnu-libiconv 版本高，需要降低版本
 # fix: https://github.com/docker-library/php/issues/1121
 RUN apk add --no-cache --repository https://${CONTAINER_PACKAGE_URL}/alpine/v3.13/community gnu-libiconv=1.15-r3
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+
+CMD ["supervisord", "-c", "/etc/supervisord.conf", "-n"]

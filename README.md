@@ -43,11 +43,12 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 - [1 目录结构](#1-目录结构)
 - [2 容器](#2-容器)
   - [2.1 PHP](#21-php)
-    - [2.1.1 docker容器里安装PHP扩展常用命令](#211-docker容器里安装php扩展常用命令)
-    - [2.1.2 PHP容器中的composer镜像修改](#212-php容器中的composer镜像修改)
-    - [2.1.3 phpstorm 配置 xdebug](#213-phpstorm-配置-xdebug)
+    - [2.1.1 安装PHP扩展常用命令](#211-安装php扩展常用命令)
+    - [2.1.2 composer的使用](#212-composer的使用)
+    - [2.1.3 配置xdebug](#213-配置xdebug)
     - [2.1.4 宿主机中使用PHP命令行](#214-宿主机中使用php命令行)
-    - [2.1.5 容器中PHP慢日志没有记录问题](#215-容器中php慢日志没有记录问题)
+    - [2.1.5 PHP慢日志没有记录问题](#215-php慢日志没有记录问题)
+    - [2.1.6 supervisor的使用](#216-supervisor的使用)
   - [2.2 Nginx](#22-nginx)
     - [2.2.1 添加新的站点](#221-添加新的站点)
     - [2.2.2 切换PHP版本](#222-切换php版本)
@@ -80,6 +81,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
   - [5.2 容器内时间问题](#52-容器内时间问题)
   - [5.3 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'](#53-sqlstatehy000-1044-access-denied-for-user-你的用户名-to-database-mysql)
   - [5.4 [output clipped, Log limit 1MiB reached] 日志限制达到1MiB](#54-output-clipped-log-limit-1mib-reached-日志限制达到1mib)
+  - [5.5 supervisor 常见问题](#55-supervisor-常见问题)
 - [6. alpine 镜像内 apk 部分命令详解](#6-alpine-镜像内-apk-部分命令详解)
 ## 1 目录结构
 ```markdown
@@ -115,7 +117,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 ```
 ## 2 容器
 ### 2.1 PHP
-#### 2.1.1 docker容器里安装PHP扩展常用命令
+#### 2.1.1 安装PHP扩展常用命令
 1. 方法一：
    * `docker-php-source`
         > 此命令，实际上就是在PHP容器中创建一个`/usr/src/php`的目录，里面放了一些自带的文件而已。我们就把它当作一个从互联网中下载下来的PHP扩展源码的存放目录即可。事实上，所有PHP扩展源码扩展存放的路径： `/usr/src/php/ext` 里面。
@@ -158,7 +160,7 @@ DNMP（Docker + Nginx + MySQL + PHP）是一款全功能的LNMP环境一键安�
 # +--------------------------------------------------------------------------------------------+
 PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 ```
-#### 2.1.2 PHP容器中的composer镜像修改
+#### 2.1.2 composer的使用
 1. composer查看全局设置
    ```shell
    composer config -gl
@@ -176,7 +178,7 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
    ```shell
    composer config -g --unset repos.packagist
    ```
-#### 2.1.3 phpstorm 配置 xdebug
+#### 2.1.3 配置xdebug
 [**phpstorm 配置 xdebug**](resource/phpstorm-xdebug.md)
 #### 2.1.4 宿主机中使用PHP命令行
 1. 参考[bashrc.sample](bashrc.sample)示例文件，将对应的php-cli函数拷贝到主机的 `~/.bashrc` 文件中。
@@ -192,7 +194,7 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
    Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
    [root@centos ~]#
    ```
-#### 2.1.5 容器中PHP慢日志没有记录问题
+#### 2.1.5 PHP慢日志没有记录问题
 在Linux系统中，PHP-FPM使用 SYS_PTRACE 跟踪worker进程，但是docker容器默认又不启用这个功能，所以就导致了这个问题。  
 **解决**：
 1. 如果用命令行，在命令上加上： `--cap-add=SYS_PTRACE`  
@@ -204,9 +206,25 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
         - SYS_PTRACE
      # ...
    ```
+#### 2.1.6 supervisor的使用
+1. supervisor的主配置文件路径：`./servers/php/php版本/supervisor/supervisord.conf`
+    > **注意**：supervisor的配置文件默认是不全的，不过在大部分默认的情况下，上面说的基本功能已经满足。
+2. 子进程配置文件路径：`./servers/panel/plugins/php/php7.2/supervisor.d/项目配置文件`
+    > **注意**：默认子进程配置文件为ini格式，可复制ini.sample文件修改。
+3. 常用命令
+    ```shell
+    supervisorctl status              //查看所有进程的状态
+    supervisorctl update              //配置文件修改后使用该命令加载新的配置
+    supervisorctl reload              //重新启动配置中的所有程序
+    supervisorctl stop 项目名          //停止项目
+    supervisorctl start 项目名         //启动项目
+    supervisorctl restart 项目名       //重启项目
+    ```
+   > 把`项目名`换成`all`可以管理配置中的所有进程，直接输入`supervisorctl`进入`supervisorctl`的shell交互界面，此时上面的命令不带`supervisorctl`可直接使用 
+4. [部分配置文件说明](resource/supervisor-detail.md)
 ### 2.2 Nginx
 #### 2.2.1 添加新的站点
-新增的 `.conf` 文件应放在 `servers/panel/vhost/nginx/nginx版本` 文件夹下
+新增的 `.conf` 文件应放在 `./servers/panel/vhost/nginx/nginx版本` 文件夹下
 #### 2.2.2 切换PHP版本
 比如切换为PHP8.3，打开 `./servers/panel/vhost/nginx/nginx版本` 下对应的Nginx站点配置文件，找到 `include enable-php-80.conf` 改成 `include enable-php-83.conf` 即可  
 例如：
@@ -470,6 +488,16 @@ docker import php72.tar php72:v1
    (2)：解决办法：[**MySQL数据库远程连接创建用户权限等**](./resource/mysql-user-permissions)
 ### 5.4 `[output clipped, Log limit 1MiB reached]` 日志限制达到1MiB
 如果在 `docker compose build "服务名"` 出现了这句话并且构建失败，命令改成 ` COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=0 docker compose build "服务名"` 可以看到的错误信息，方便修改
+### 5.5 supervisor 常见问题
+1. `unix:///var/run/supervisor/supervisor.sock no such file`
+    问题描述：安装好supervisor没有开启服务直接使用supervisorctl报的错
+    解决办法：`supervisord -c /etc/supervisord.conf`
+2. command中指定的进程已经起来，但supervisor还不断重启
+    问题描述：command中启动方式为后台启动，导致识别不到pid，然后不断重启，假如使用的是elasticsearch，command指定的是$path/bin/elasticsearch -d
+    解决办法：supervisor无法检测后台启动进程的pid，而supervisor本身就是后台启动守护进程，因此不用担心这个
+3. 启动了多个supervisord服务，导致无法正常关闭服务
+    问题描述：在运行`supervisord -c /etc/supervisord.conf`之前，运行过`supervisord -c /etc/supervisor.d/xx.conf`导致有些进程被多个superviord管理，无法正常关闭进程。
+    解决办法：使用`ps -fe | grep supervisord`查看所有启动过的supervisord服务，kill相关的进程
 ## 6 alpine 镜像内 apk 部分命令详解
 [**apk 部分命令详解**](resource/apk-details.md)
 ## 致谢

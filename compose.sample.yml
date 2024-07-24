@@ -50,12 +50,13 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - "./servers/php/php7.2/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
-      - "./servers/php/php7.2/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
-      - "./servers/php/php7.2/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix sock连接文件
-      - "./logs/php/php7.2:/var/log/php"                                    # 日志文件
-      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/php/php7.2/php.ini:/usr/local/etc/php/php.ini:ro"                  # php.ini
+      - "./servers/php/php7.2/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"            # php-fpm.conf
+      - "./servers/php/php7.2/php-fpm.d:/usr/local/etc/php-fpm.d"                     # php-fpm.d
+      - "./servers/php/php7.2/supervisor/supervisord.conf:/etc/supervisord.conf:ro"   # supervisor配置文件
+      - "./servers/panel:/usr/panel"                                                  # nginx使用unix sock连接文件
+      - "./logs/php/php7.2:/var/log/php"                                              # 日志文件
+      - "./www:/var/www/html"                                                         # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -75,12 +76,13 @@ services:
     ports:
       - "9001:9000"
     volumes:
-      - "./servers/php/php7.3/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
-      - "./servers/php/php7.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
-      - "./servers/php/php7.3/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix sock连接文件
-      - "./logs/php/php7.3:/var/log/php"                                    # 日志文件
-      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/php/php7.3/php.ini:/usr/local/etc/php/php.ini:ro"                  # php.ini
+      - "./servers/php/php7.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"            # php-fpm.conf
+      - "./servers/php/php7.3/php-fpm.d:/usr/local/etc/php-fpm.d"                     # php-fpm.d
+      - "./servers/php/php7.3/supervisor/supervisord.conf:/etc/supervisord.conf:ro"   # supervisor配置文件
+      - "./servers/panel:/usr/panel"                                                  # nginx使用unix sock连接文件
+      - "./logs/php/php7.3:/var/log/php"                                              # 日志文件
+      - "./www:/var/www/html"                                                         # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -100,12 +102,13 @@ services:
     ports:
       - "9002:9000"
     volumes:
-      - "./servers/php/php7.4/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
-      - "./servers/php/php7.4/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
-      - "./servers/php/php7.4/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
-      - "./logs/php/php7.4:/var/log/php"                                    # 日志文件
-      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/php/php7.4/php.ini:/usr/local/etc/php/php.ini:ro"                  # php.ini
+      - "./servers/php/php7.4/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"            # php-fpm.conf
+      - "./servers/php/php7.4/php-fpm.d:/usr/local/etc/php-fpm.d"                     # php-fpm.d
+      - "./servers/php/php7.4/supervisor/supervisord.conf:/etc/supervisord.conf:ro"   # supervisor配置文件
+      - "./servers/panel:/usr/panel"                                                  # nginx使用unix连接文件
+      - "./logs/php/php7.4:/var/log/php"                                              # 日志文件
+      - "./www:/var/www/html"                                                         # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -125,12 +128,13 @@ services:
     ports:
       - "9003:9000"
     volumes:
-      - "./servers/php/php8.0/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
-      - "./servers/php/php8.0/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
-      - "./servers/php/php8.0/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
-      - "./logs/php/php8.0:/var/log/php"                                    # 日志文件
-      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/php/php8.0/php.ini:/usr/local/etc/php/php.ini:ro"                  # php.ini
+      - "./servers/php/php8.0/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"            # php-fpm.conf
+      - "./servers/php/php8.0/php-fpm.d:/usr/local/etc/php-fpm.d"                     # php-fpm.d
+      - "./servers/php/php8.0/supervisor/supervisord.conf:/etc/supervisord.conf:ro"   # supervisor配置文件
+      - "./servers/panel:/usr/panel"                                                  # nginx使用unix连接文件
+      - "./logs/php/php8.0:/var/log/php"                                              # 日志文件
+      - "./www:/var/www/html"                                                         # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -150,12 +154,13 @@ services:
     ports:
       - "9004:9000"
     volumes:
-      - "./servers/php/php8.1/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
-      - "./servers/php/php8.1/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
-      - "./servers/php/php8.1/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
-      - "./logs/php/php8.1:/var/log/php"                                    # 日志文件
-      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/php/php8.1/php.ini:/usr/local/etc/php/php.ini:ro"                  # php.ini
+      - "./servers/php/php8.1/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"            # php-fpm.conf
+      - "./servers/php/php8.1/php-fpm.d:/usr/local/etc/php-fpm.d"                     # php-fpm.d
+      - "./servers/php/php8.1/supervisor/supervisord.conf:/etc/supervisord.conf:ro"   # supervisor配置文件
+      - "./servers/panel:/usr/panel"                                                  # nginx使用unix连接文件
+      - "./logs/php/php8.1:/var/log/php"                                              # 日志文件
+      - "./www:/var/www/html"                                                         # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -175,12 +180,13 @@ services:
     ports:
       - "9005:9000"
     volumes:
-      - "./servers/php/php8.2/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
-      - "./servers/php/php8.2/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
-      - "./servers/php/php8.2/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
-      - "./logs/php/php8.2:/var/log/php"                                    # 日志文件
-      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/php/php8.2/php.ini:/usr/local/etc/php/php.ini:ro"                  # php.ini
+      - "./servers/php/php8.2/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"            # php-fpm.conf
+      - "./servers/php/php8.2/php-fpm.d:/usr/local/etc/php-fpm.d"                     # php-fpm.d
+      - "./servers/php/php8.2/supervisor/supervisord.conf:/etc/supervisord.conf:ro"   # supervisor配置文件
+      - "./servers/panel:/usr/panel"                                                  # nginx使用unix连接文件
+      - "./logs/php/php8.2:/var/log/php"                                              # 日志文件
+      - "./www:/var/www/html"                                                         # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -200,12 +206,13 @@ services:
     ports:
       - "9006:9000"
     volumes:
-      - "./servers/php/php8.3/php.ini:/usr/local/etc/php/php.ini:ro"        # php.ini
-      - "./servers/php/php8.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"  # php-fpm.conf
-      - "./servers/php/php8.3/php-fpm.d:/usr/local/etc/php-fpm.d"           # php-fpm.d
-      - "./servers/panel:/usr/panel"                                        # nginx使用unix连接文件
-      - "./logs/php/php8.3:/var/log/php"                                    # 日志文件
-      - "./www:/var/www/html"                                               # 文件路径
+      - "./servers/php/php8.3/php.ini:/usr/local/etc/php/php.ini:ro"                  # php.ini
+      - "./servers/php/php8.3/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"            # php-fpm.conf
+      - "./servers/php/php8.3/php-fpm.d:/usr/local/etc/php-fpm.d"                     # php-fpm.d
+      - "./servers/php/php8.3/supervisor/supervisord.conf:/etc/supervisord.conf:ro"   # supervisor配置文件
+      - "./servers/panel:/usr/panel"                                                  # nginx使用unix连接文件
+      - "./logs/php/php8.3:/var/log/php"                                              # 日志文件
+      - "./www:/var/www/html"                                                         # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:

@@ -263,6 +263,7 @@ RUN docker-php-source extract \
             && printf "\n" | pecl install yaml \
             && docker-php-ext-enable yaml; \
         fi \
+    && docker-php-source delete \
     # 安装 composer
     && echo "---------- Install composer ----------" \
     && apk add --no-cache --virtual .build-deps curl \
@@ -270,5 +271,8 @@ RUN docker-php-source extract \
     && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
     # 替换 composer 镜像
     && if [ ${COMPOSER_IMAGE_URL} ]; then composer config -g repo.packagist composer ${COMPOSER_IMAGE_URL}; fi \
-    && docker-php-source delete \
+    && echo "---------- Install supervisor ----------" \
+    && apk add --no-cache supervisor \
     && apk del .build-deps
+
+CMD ["supervisord", "-c", "/etc/supervisord.conf", "-n"]
