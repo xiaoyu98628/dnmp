@@ -1,4 +1,4 @@
-docker compose 部署LNMP环境又名DNMP 包括但不限于 Nginx，Mysql，PHP，Redis 是一款多版本的，使用supervisor管理PHP进程，可一键安装的程序
+docker compose 快速部署LNMP环境又名DNMP 包括但不限于 Nginx，Mysql，PHP，Redis 是一款多版本的，使用supervisor管理PHP进程，可一键安装的程序
 
 > 使用前最好阅读一遍下面的说明文件，以便快速上手，遇到问题也能及时排查
 
