@@ -56,7 +56,7 @@ function getMysqlVersion(): string
     if (extension_loaded('PDO_MYSQL')) {
         try {
             $connect = new PDO('mysql:host=mysql80;dbname=mysql', 'xiaoyu', 'xiaoyu');
-            return $connect->query('SELECT VERSION()')->fetch(PDO::FETCH_COLUMN);
+            return $connect->getAttribute(PDO::ATTR_SERVER_VERSION);
         } catch (PDOException $e) {
             return $e->getMessage();
         }
