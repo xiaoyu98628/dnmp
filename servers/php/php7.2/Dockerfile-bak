@@ -1,4 +1,4 @@
-# 构建阶段
+# 指定基于 php:7.2-fpm-alpine 创建
 FROM php:7.2-fpm-alpine
 
 LABEL org.opencontainers.image.authors="XiaoYu <1765841705@qq.com>"
