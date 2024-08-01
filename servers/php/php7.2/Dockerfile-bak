@@ -23,13 +23,13 @@ RUN apk update && apk upgrade \
     && if [ -n "${TZ}" ]; then cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone; fi \
     # 安装依赖和 PHP 扩展
     && if [ -n "${PHP_EXTENSIONS_72}" ]; then install-php-extensions $(echo ${PHP_EXTENSIONS_72} | tr ',' ' '); fi \
-    # 安装 Composer \
+    # 安装 Composer
     && echo "---------- Install composer ----------" \
     && curl -sS ${COMPOSER_DOWNLOAD_URL} | php \
     && chmod +x composer.phar mv composer.phar /usr/local/bin/composer \
     # 替换 Composer 镜像
     && if [ -n "${COMPOSER_IMAGE_URL}" ]; then composer config -g repo.packagist composer ${COMPOSER_IMAGE_URL}; fi \
-    # 安装 supervisor \
+    # 安装 supervisor
     && echo "---------- Install supervisor ----------" \
     && apk add --no-cache supervisor \
     && apk del .build-deps
