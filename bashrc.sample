@@ -1,18 +1,20 @@
 # 存放位置 ~/.bashrc
 # ------------------------ start ------------------------
-env=$HOME/".env"
-if [ -d ${env} ]; then
-	for file in `ls ${env}`
-	do
-		if [ -f ${env}"/"${file} ]
-; then
-			 . ${env}"/"${file}
-		fi
-	done
+environment=$HOME/.environment
+if [ -d ${environment} ];
+then
+    for file in `ls ${environment}`
+    do
+        if [ -f ${environment}/${file} ];
+        then
+            . ${environment}/${file}
+        fi
+    done
 fi
+
 # ------------------------ end ------------------------
 
-# 存放位置 ~/.env/php.sh
+# 存放位置 ~/.environment/php.sh
 # ------------------------ start ------------------------
 php72()
 {
