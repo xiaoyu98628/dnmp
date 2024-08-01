@@ -181,7 +181,7 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 #### 2.1.3 配置xdebug
 [**phpstorm 配置 xdebug**](resource/phpstorm-xdebug.md)
 #### 2.1.4 宿主机中使用PHP命令行
-1. 参考[bashrc.sample](bashrc.sample)示例文件，将对应的php-cli函数拷贝到主机的 `~/.bashrc` 文件中。
+1. 参考[bashrc.sample](sample.bashrc)示例文件，将对应的php-cli函数拷贝到主机的 `~/.bashrc` 文件中。
 2. 让文件起效：
    ```shell
    source ~/.bashrc
