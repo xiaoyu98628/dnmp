@@ -26,7 +26,7 @@ RUN apk update && apk upgrade \
     # 安装 Composer
     && echo "---------- Install composer ----------" \
     && curl -sS ${COMPOSER_DOWNLOAD_URL} | php \
-    && chmod +x composer.phar mv composer.phar /usr/local/bin/composer \
+    && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
     # 替换 Composer 镜像
     && if [ -n "${COMPOSER_IMAGE_URL}" ]; then composer config -g repo.packagist composer ${COMPOSER_IMAGE_URL}; fi \
     # 安装 supervisor
