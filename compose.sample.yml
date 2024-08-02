@@ -27,9 +27,9 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - "./servers/redis/redis6.2/config:/etc/redis"     # 配置文件
-      - "./data/redis/redis6.2:/data"             # 数据文件
-      - "./logs/redis/redis6.2:/var/log/redis"    # 日志文件
+      - "./servers/redis/redis6.2/config:/etc/redis"  # 配置文件
+      - "./data/redis/redis6.2:/data"                 # 数据文件
+      - "./logs/redis/redis6.2:/var/log/redis"        # 日志文件
     environment:
       - "TZ=${TZ}"
     entrypoint: ["redis-server", "/etc/redis/docker.conf", "--requirepass", "${REDIS_PASSWORD_62}"]
