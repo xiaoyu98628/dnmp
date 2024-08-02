@@ -226,10 +226,10 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - "./servers/nginx/nginx1.21:/etc/nginx"      # 配置文件
-      - "./servers/panel:/usr/panel"                # php unix连接文件
-      - "./logs/nginx/nginx1.21:/var/log/nginx"     # 日志文件
-      - "./www:/usr/share/nginx/html"               # 文件路径
+      - "./servers/nginx/nginx1.21/config:/etc/nginx"   # 配置文件
+      - "./logs/nginx/nginx1.21:/var/log/nginx"         # 日志文件
+      - "./servers/panel:/usr/panel"                    # php unix连接文件
+      - "./www:/usr/share/nginx/html"                   # 文件路径
     environment:
       - "TZ=${TZ}"
     networks:
