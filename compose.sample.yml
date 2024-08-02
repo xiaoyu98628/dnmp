@@ -8,9 +8,9 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "./servers/mysql/mysql8.0:/etc/mysql"     # 配置文件
-      - "./data/mysql/mysql8.0:/var/lib/mysql"    # 数据库文件
-      - "./logs/mysql/mysql8.0:/var/log/mysql"    # 日志文件
+      - "./servers/mysql/mysql8.0/config:/etc/mysql"  # 配置文件
+      - "./data/mysql/mysql8.0:/var/lib/mysql"        # 数据库文件
+      - "./logs/mysql/mysql8.0:/var/log/mysql"        # 日志文件
     environment:
       - "TZ=${TZ}"
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD_80}"
