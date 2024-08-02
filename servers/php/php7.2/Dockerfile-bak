@@ -10,7 +10,7 @@ ARG COMPOSER_DOWNLOAD_URL
 ARG TZ
 
 # 引入 install-php-extensions 脚本
-ADD extensions/install-php-extensions /usr/local/bin/
+ADD config/extensions/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions
 
 # 资源替换 更换镜像
