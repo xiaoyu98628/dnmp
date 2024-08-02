@@ -207,7 +207,7 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
      # ...
    ```
 #### 2.1.6 supervisor的使用
-1. supervisor的主配置文件路径：`./servers/php/php版本/supervisor/supervisord.conf`
+1. supervisor的主配置文件路径：`./servers/php/php版本/config/supervisor/supervisord.conf`
     > **注意**：supervisor的配置文件默认是不全的，不过在大部分默认的情况下，上面说的基本功能已经满足。
 2. 子进程配置文件路径：`./servers/panel/plugins/php/php7.2/supervisor.d/项目配置文件`
     > **注意**：默认子进程配置文件为ini格式，可复制ini.sample文件修改。
