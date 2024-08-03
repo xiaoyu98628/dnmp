@@ -242,9 +242,9 @@ services:
     ports:
       - "27017:27017"
     volumes:
+      - "./servers/mongo/mongo6.0/mongo.conf:/etc/mongo.conf:ro"    # 配置文件
       - "./data/mongo/mongo6.0:/var/lib/mongodb:rw"                 # 数据库文件
       - "./logs/mongo/mongo6.0:/var/log/mongodb:rw"                 # 日志文件
-      - "./servers/mongo/mongo6.0/mongo.conf:/etc/mongo.conf:ro"    # 配置文件
     environment:
       - "TZ=${TZ}"
       - "MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME_60}"
@@ -301,10 +301,10 @@ services:
       - "9200:9200"
       - "9300:9300"
     volumes:
+      - "./servers/elasticsearch/elasticsearch8.4/config:/usr/share/elasticsearch/config" # 配置文件
       - "./data/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/data"             # 数据文件
       - "./logs/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/logs"             # 日志文件
       - "./panel/plugins/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/plugins" # 插件文件
-      - "./servers/elasticsearch/elasticsearch8.4/config:/usr/share/elasticsearch/config" # 配置文件
     environment:
       - "TZ=${TZ}"
       - "discovery.type=single-node"      # 单节点设置
