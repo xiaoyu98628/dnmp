@@ -24,7 +24,7 @@ docker compose 快速部署LNMP环境又名DNMP 包括但不限于 Nginx，Mysql
    # 复制并改名 compose.yml 配置文件
    cp compose.sample.yml compose.yml
    # 复制并改名 vhost文件
-   cp servers/panel/vhost/nginx/nginx1.21/localhost.conf.sample servers/panel/vhost/nginx/nginx1.21/您的域名.conf
+   cp panel/vhost/nginx/nginx1.21/localhost.conf.sample panel/vhost/nginx/nginx1.21/您的域名.conf
    
    # 执行 docker compose up 之前，建议看一下compose.yml 文件，以便快速上手。
    docker compose up                                # 启动服务
@@ -91,6 +91,15 @@ docker compose 快速部署LNMP环境又名DNMP 包括但不限于 Nginx，Mysql
 |--- logs                        日志目录
 |     |--- mysql                      mysql 日志目录（多版本）
 |     |     |--- mysql8.0                  mysql8.0 日志目录
+|--- panel                       服务面板
+|     |--- plugins                    插件目录
+|     |     |--- php                       PHP 插件目录（多版本）
+|     |     |     |--- php7.2                   PHP7.2 插件目录
+|     |     |--- elasticsearch             elasticsearch 插件目录（多版本）
+|     |     |     |--- elasticsearch8.4         elasticsearch8.4 插件目录
+|     |--- vhost                      站点配置文件目录
+|     |--- ssl                        https 证书目录
+|     |--- sock                       套接字文件目录
 |--- plugins                     插件目录
 |     |--- elasticsearch              elasticsearch 插件目录（多版本）
 |     |     |--- elasticsearch8.4          elasticsearch8.4 插件目录
@@ -106,12 +115,8 @@ docker compose 快速部署LNMP环境又名DNMP 包括但不限于 Nginx，Mysql
 |     |     |--- php7.3                    php7.3 配置文件目录
 |     |--- redis                      redis 配置文件目录（多版本）
 |     |--- rabbitmq                   rabbitmq 配置文件目录（多版本）
-|     |--- panel                      服务面板
-|     |     |--- vhost                     站点配置文件目录
-|     |     |--- ssl                       https 证书目录
-|     |     |--- sock                      套接字文件目录
 |--- www                         项目文件目录
-|--- bashrc.sample               .bashrc 配置示例文件(宿主机使用容器内命令)
+|--- sample.bashrc               .bashrc 配置示例文件(宿主机使用容器内命令)
 |--- sample.env                  环境配置示例文件
 |--- compose.sample.yml   Docker 服务配置示例文件
 ```
@@ -181,7 +186,7 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 #### 2.1.3 配置xdebug
 [**phpstorm 配置 xdebug**](resource/phpstorm-xdebug.md)
 #### 2.1.4 宿主机中使用PHP命令行
-1. 参考[bashrc.sample](sample.bashrc)示例文件，将对应的php-cli函数拷贝到主机的 `~/.bashrc` 文件中。
+1. 参考[sample.bashrc](sample.bashrc)示例文件，将对应的php-cli函数拷贝到主机的 `~/.bashrc` 文件中。
 2. 让文件起效：
    ```shell
    source ~/.bashrc
@@ -209,7 +214,7 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 #### 2.1.6 supervisor的使用
 1. supervisor的主配置文件路径：`./servers/php/php版本/config/supervisor/supervisord.conf`
     > **注意**：supervisor的配置文件默认是不全的，不过在大部分默认的情况下，上面说的基本功能已经满足。
-2. 子进程配置文件路径：`./servers/panel/plugins/php/php7.2/supervisor.d/项目配置文件`
+2. 子进程配置文件路径：`./panel/plugins/php/php7.2/supervisor.d/项目配置文件`
     > **注意**：默认子进程配置文件为ini格式，可复制ini.sample文件修改。
 3. 常用命令
     ```shell
@@ -224,9 +229,9 @@ PHP_EXTENSIONS_72=pdo_mysql,mysqli,gd,redis,zip,bcmath,xlswriter
 4. [部分配置文件说明](resource/supervisor-detail.md)
 ### 2.2 Nginx
 #### 2.2.1 添加新的站点
-新增的 `.conf` 文件应放在 `./servers/panel/vhost/nginx/nginx版本` 文件夹下
+新增的 `.conf` 文件应放在 `./panel/vhost/nginx/nginx版本` 文件夹下
 #### 2.2.2 切换PHP版本
-比如切换为PHP8.3，打开 `./servers/panel/vhost/nginx/nginx版本` 下对应的Nginx站点配置文件，找到 `include enable-php-80.conf` 改成 `include enable-php-83.conf` 即可  
+比如切换为PHP8.3，打开 `./panel/vhost/nginx/nginx版本` 下对应的Nginx站点配置文件，找到 `include enable-php-80.conf` 改成 `include enable-php-83.conf` 即可  
 例如：
 ```
 location ~ [^/]\.php(/|$) {
@@ -274,7 +279,7 @@ PHP收到后，就到指定的目录下查找PHP文件并解析，完成后再�
 #### 2.2.4 配置https
 1. `ssl` 证书存放位置
    ```
-   ./servers/panel/ssl/nginx/nginx版本/站点名称/证书
+   ./panel/ssl/nginx/nginx版本/站点名称/证书
    ```
 2. `nginx.conf` 配置文件修改
    ```
