@@ -19,7 +19,7 @@ server {
     #}
 
     location / {
-        root   /usr/share/nginx/html/php/works/localhost;
+        root   /usr/share/nginx/html/localhost;
         index  index.html;
     }
 
