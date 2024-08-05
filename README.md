@@ -501,7 +501,7 @@ docker import php72.tar php72:v1
     问题描述：command中启动方式为后台启动，导致识别不到pid，然后不断重启，假如使用的是elasticsearch，command指定的是$path/bin/elasticsearch -d
     解决办法：supervisor无法检测后台启动进程的pid，而supervisor本身就是后台启动守护进程，因此不用担心这个
 3. 启动了多个supervisord服务，导致无法正常关闭服务
-    问题描述：在运行`supervisord -c /etc/supervisord.conf`之前，运行过`supervisord -c /etc/supervisor.d/xx.conf`导致有些进程被多个superviord管理，无法正常关闭进程。
+    问题描述：在运行`supervisord -c /etc/supervisord.conf`之前，运行过`supervisord -c /etc/supervisor.d/xx.conf`导致有些进程被多个supervisord管理，无法正常关闭进程。
     解决办法：使用`ps -fe | grep supervisord`查看所有启动过的supervisord服务，kill相关的进程
 ## 6 alpine 镜像内 apk 部分命令详解
 [**apk 部分命令详解**](resource/apk-details.md)
