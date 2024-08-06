@@ -11,21 +11,34 @@ export DNS="$DNS"
 export SSL_BASE_DIR="/usr/panel/ssl/nginx/nginx1.21"
 export RELOAD_CMD="nginx -s reload"
 
-# 检查和设置默认邮件
 if [ -z "$MAIL" ]; then
   echo "[$(date)] Empty env var MAIL, set MAIL=\"youmail@example.com\""
   MAIL="youmail@example.com"
 fi
 
-# 检查域名变量
 if [ -z "$DOMAINS" ]; then
   echo "[$(date)] Empty env var SSL_DOMAINS"
 fi
 
-# 创建SSL证书目录
 mkdir -p ${SSL_BASE_DIR}/
 
-# 函数：启动acme.sh并处理证书
+function CreateDefault() {
+  local domain=$1
+  local ssl_dir="${SSL_BASE_DIR}/${domain}"
+  mkdir -p ${ssl_dir}
+
+  if [ -s "${ssl_dir}/${domain}_fullchain.pem" ]; then
+    echo "[$(date)] default cert exists in :${ssl_dir}"
+  else
+    echo "[$(date)] create default cert to :${ssl_dir}"
+    openssl req -x509 -newkey rsa:4096 -nodes -days 365 \
+      -subj "/C=CA/ST=QC/O=Company Inc/CN=${domain}" \
+      -out ${ssl_dir}/${domain}_fullchain.pem \
+      -keyout ${ssl_dir}/${domain}_key.pem
+    chmod +w ${ssl_dir}/*
+  fi
+}
+
 function StartAcmesh() {
   echo "[$(date)] sleep 2 second to start Acme.sh..."
   sleep 2
@@ -77,6 +90,13 @@ function StartAcmesh() {
 }
 
 if [[ -n "$DOMAINS" ]]; then
+  echo "[$(date)] 生成默认证书, 配置文件中使用，否则nginx启动会失败"
+  IFS=' '
+  read -ra list <<<"$DOMAINS"
+  for domain in "${list[@]}"; do
+    CreateDefault "$domain"
+  done
+
   export -f StartAcmesh
   nohup bash -c StartAcmesh "${SSL_BASE_DIR}" "${RELOAD_CMD}" &
 fi
