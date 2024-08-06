@@ -11,7 +11,7 @@ export DNS="$DNS"
 export SSL_BASE_DIR="/usr/panel/ssl/nginx/nginx1.21"
 export RELOAD_CMD="nginx -s reload"
 
-# 检查和设置默认邮件
+# 存放和设置默认邮件
 if [ -z "$MAIL" ]; then
   echo "[$(date)] Empty env var MAIL, set MAIL=\"youmail@example.com\""
   MAIL="youmail@example.com"
@@ -22,11 +22,17 @@ if [ -z "$DOMAINS" ]; then
   echo "[$(date)] Empty env var SSL_DOMAINS"
 fi
 
+# 存放和设置默认证书的文件夹
+if [ -z "$SSL_BASE_DIR" ]; then
+  echo "[$(date)] Empty env var SSL_BASE_DIR, set SSL_BASE_DIR=\"/usr/panel/ssl/nginx/nginx1.21\""
+  SSL_BASE_DIR="/usr/panel/ssl/nginx/nginx1.21"
+fi
+
 # 创建SSL证书目录
 mkdir -p ${SSL_BASE_DIR}/
 
 # 函数：启动acme.sh并处理证书
-function StartAcmesh() {
+function StartAcmeSh() {
   echo "[$(date)] sleep 2 second to start Acme.sh..."
   sleep 2
   echo "[$(date)] Start Acme.sh..."
@@ -42,7 +48,7 @@ function StartAcmesh() {
     mkdir -p ${ssl_dir}
 
     # 判断当前证书是否存在，存在则跳出当前循环
-    if [ -s "${ssl_dir}/${domain}_fullchain.pem"]; then
+    if [ -s "${ssl_dir}/${domain}.fullchain.pem"]; then
       echo "[$(date)] Certificate already exists for $domain, skipping issuance"
       continue
     fi
@@ -66,9 +72,9 @@ function StartAcmesh() {
 
     echo "[$(date)] 3、acme.sh install-cert .."
     /root/.acme.sh/acme.sh --install-cert $ACME_DOMAIN_OPTION \
-      --fullchain-file ${ssl_dir}/${domain}_fullchain.pem \
-      --cert-file ${ssl_dir}/${domain}_cert.pem \
-      --key-file ${ssl_dir}/${domain}_key.pem \
+      --fullchain-file ${ssl_dir}/${domain}.fullchain.pem \
+      --cert-file ${ssl_dir}/${domain}.cert.pem \
+      --key-file ${ssl_dir}/${domain}.key \
       --reloadcmd "${RELOAD_CMD}"
   done
 
@@ -77,8 +83,8 @@ function StartAcmesh() {
 }
 
 if [[ -n "$DOMAINS" ]]; then
-  export -f StartAcmesh
-  nohup bash -c StartAcmesh "${SSL_BASE_DIR}" "${RELOAD_CMD}" &
+  export -f StartAcmeSh
+  nohup bash -c StartAcmeSh "${SSL_BASE_DIR}" "${RELOAD_CMD}" &
 fi
 
 echo "[$(date)] Start nginx"
