@@ -1,21 +1,13 @@
 #!/usr/bin/env bash
 
 # 域名 使用 ; 隔开
-export DOMAINS=$(echo "$SSL_DOMAINS" | tr -s ';')
+export DOMAINS=$(echo "$SSL_DOMAINS" | tr -s ';' ' ')
 # 服务厂商
 export SSL_SERVER="$SSL_SERVER"
-# 邮箱
-export MAIL="$MAIL"
-export DNS="$DNS"
+export DNS="$SSL_DNS"
 # 生成证书的文件夹
 export SSL_BASE_DIR="$SSL_BASE_DIR"
 export RELOAD_CMD="$RELOAD_CMD"
-
-# 存放和设置默认邮件
-if [ -z "$MAIL" ]; then
-  echo "[$(date)] Empty env var MAIL, set MAIL=\"youmail@example.com\""
-  MAIL="youmail@example.com"
-fi
 
 # 检查域名变量
 if [ -z "$DOMAINS" ]; then
@@ -42,7 +34,6 @@ function StartAcmeSh() {
   sleep 2
   echo "[$(date)] Start Acme.sh..."
   echo "[$(date)] SSL_BASE_DIR :${SSL_BASE_DIR}"
-  echo "[$(date)] MAIL :${MAIL}"
   echo "[$(date)] RELOAD_CMD :${RELOAD_CMD}"
 
   IFS=' '
@@ -68,9 +59,6 @@ function StartAcmeSh() {
     if [[ -n "$SSL_SERVER" ]]; then
       /root/.acme.sh/acme.sh --set-default-ca --server $SSL_SERVER
     fi
-
-    echo "[$(date)] 1、acme.sh register .."
-    /root/.acme.sh/acme.sh --register-account -m $MAIL
 
     echo "[$(date)] 2、acme.sh issue .."
     /root/.acme.sh/acme.sh --issue --nginx $ACME_DOMAIN_OPTION --renew-hook "${RELOAD_CMD}"

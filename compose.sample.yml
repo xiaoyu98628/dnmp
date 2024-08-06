@@ -219,7 +219,12 @@ services:
       - dnmp-net
 
   nginx1.21:
-    image: nginx:1.21-alpine
+    build:
+      context: ./servers/nginx/nginx1.21
+      args:
+        TZ: ${TZ}
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        NGINX_REGISTER_ACME_MAIL_1_21: ${NGINX_REGISTER_ACME_MAIL_1_21}
     container_name: nginx1.21
     restart: always
     ports:
@@ -231,7 +236,11 @@ services:
       - "./panel:/usr/panel"                            # php unix连接文件
       - "./www:/usr/share/nginx/html"                   # 文件路径
     environment:
-      - "TZ=${TZ}"
+      - "SSL_DOMAINS=${NGINX_SSL_DOMAINS_1_21}"
+      - "SSL_SERVER=${NGINX_SSL_SERVER_1_21}"
+      - "SSL_DNS=${NGINX_SSL_DNS_1_21}"
+      - "SSL_BASE_DIR=${NGINX_SSL_BASE_DIR_1_21}"
+      - "RELOAD_CMD=${NGINX_RELOAD_CMD_1_21}"
     networks:
       - dnmp-net
 
