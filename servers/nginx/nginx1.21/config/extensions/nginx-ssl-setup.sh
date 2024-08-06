@@ -8,8 +8,8 @@ export SSL_SERVER="$SSL_SERVER"
 export MAIL="$MAIL"
 export DNS="$DNS"
 # 生成证书的文件夹
-export SSL_BASE_DIR="/usr/panel/ssl/nginx/nginx1.21"
-export RELOAD_CMD="nginx -s reload"
+export SSL_BASE_DIR="$SSL_BASE_DIR"
+export RELOAD_CMD="$RELOAD_CMD"
 
 # 存放和设置默认邮件
 if [ -z "$MAIL" ]; then
@@ -26,6 +26,11 @@ fi
 if [ -z "$SSL_BASE_DIR" ]; then
   echo "[$(date)] Empty env var SSL_BASE_DIR, set SSL_BASE_DIR=\"/usr/panel/ssl/nginx/nginx1.21\""
   SSL_BASE_DIR="/usr/panel/ssl/nginx/nginx1.21"
+fi
+
+if [ -z "$RELOAD_CMD" ]; then
+  echo "[$(date)] Empty env var RELOAD_CMD, set RELOAD_CMD=\"nginx -s reload\""
+  RELOAD_CMD="nginx -s reload"
 fi
 
 # 创建SSL证书目录
