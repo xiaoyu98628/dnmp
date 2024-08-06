@@ -69,12 +69,6 @@ function StartAcmeSh() {
     local ssl_dir="${SSL_BASE_DIR}/${domain}"
     mkdir -p ${ssl_dir}
 
-    # 判断当前证书是否存在，存在则跳出当前循环
-    if [ -s "${ssl_dir}/${domain}.fullchain.pem"]; then
-      echo "[$(date)] Certificate already exists for $domain, skipping issuance"
-      continue
-    fi
-
     ACME_DOMAIN_OPTION="-d ${domain}"
     if [[ -n "$DNS" ]]; then
       ACME_DOMAIN_OPTION+=" --dns $DNS"
