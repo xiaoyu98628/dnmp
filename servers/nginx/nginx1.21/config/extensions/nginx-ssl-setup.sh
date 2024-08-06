@@ -1,18 +1,23 @@
 #!/usr/bin/env bash
 
-export DOMAINS=$(echo "$SslDomains" | tr -s ';')
-export SslServer="$SslServer"
-export mail="$mail"
-export SSL_BASE_DIR="/etc/nginx/ssl"
+# 域名 使用 ; 隔开
+export DOMAINS=$(echo "$SSL_DOMAINS" | tr -s ';')
+# 服务厂商
+export SSL_SERVER="$SSL_SERVER"
+# 邮箱
+export MAIL="$MAIL"
+export DNS="$DNS"
+# 生成证书的文件夹
+export SSL_BASE_DIR="/usr/panel/ssl/nginx/nginx1.21"
 export RELOAD_CMD="nginx -s reload"
 
-if [ -z "$mail" ]; then
-  echo "[$(date)] Empty env var mail, set mail=\"youmail@example.com\""
-  mail="youmail@example.com"
+if [ -z "$MAIL" ]; then
+  echo "[$(date)] Empty env var MAIL, set MAIL=\"youmail@example.com\""
+  MAIL="youmail@example.com"
 fi
 
 if [ -z "$DOMAINS" ]; then
-  echo "[$(date)] Empty env var SslDomains"
+  echo "[$(date)] Empty env var SSL_DOMAINS"
 fi
 
 mkdir -p ${SSL_BASE_DIR}/
@@ -39,7 +44,7 @@ function StartAcmesh() {
   sleep 2
   echo "[$(date)] Start Acme.sh..."
   echo "[$(date)] SSL_BASE_DIR :${SSL_BASE_DIR}"
-  echo "[$(date)] mail :${mail}"
+  echo "[$(date)] MAIL :${MAIL}"
   echo "[$(date)] RELOAD_CMD :${RELOAD_CMD}"
 
   IFS=' '
@@ -49,19 +54,25 @@ function StartAcmesh() {
     local ssl_dir="${SSL_BASE_DIR}/${domain}"
     mkdir -p ${ssl_dir}
 
+    # 判断当前证书是否存在，存在则跳出当前循环
+    if [ -s "${ssl_dir}/${domain}_fullchain.pem"]; then
+      echo "[$(date)] Certificate already exists for $domain, skipping issuance"
+      continue
+    fi
+
     ACME_DOMAIN_OPTION="-d ${domain}"
-    if [[ -n "$dns" ]]; then
-      ACME_DOMAIN_OPTION+=" --dns $dns"
+    if [[ -n "$DNS" ]]; then
+      ACME_DOMAIN_OPTION+=" --dns $DNS"
     fi
 
     echo "[$(date)] Issue the cert: $domain with options $ACME_DOMAIN_OPTION"
 
-    if [[ -n "$SslServer" ]]; then
-      /root/.acme.sh/acme.sh --set-default-ca --server $SslServer
+    if [[ -n "$SSL_SERVER" ]]; then
+      /root/.acme.sh/acme.sh --set-default-ca --server $SSL_SERVER
     fi
 
     echo "[$(date)] 1、acme.sh register .."
-    /root/.acme.sh/acme.sh --register-account -m $mail
+    /root/.acme.sh/acme.sh --register-account -m $MAIL
 
     echo "[$(date)] 2、acme.sh issue .."
     /root/.acme.sh/acme.sh --issue --nginx $ACME_DOMAIN_OPTION --renew-hook "${RELOAD_CMD}"
