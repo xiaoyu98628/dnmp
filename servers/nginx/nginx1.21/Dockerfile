@@ -4,7 +4,7 @@ FROM nginx:1.21-alpine
 LABEL org.opencontainers.image.authors="XiaoYu <1765841705@qq.com>"
 
 RUN apk update && apk upgrade \
-    && apk add --no-cache bash curl \
+    && apk add --no-cache bash crond curl \
     && curl https://get.acme.sh | sh \
     && ln -s ~/.acme.sh/acme.sh /usr/local/bin/acme.sh
 
