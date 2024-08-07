@@ -277,11 +277,34 @@ PHP收到后，就到指定的目录下查找PHP文件并解析，完成后再�
 **但是，如果他们在不同的容器呢？**   
 未做任何处理的情况，Nginx容器中的站点根目录，PHP-FPM容器肯定不存在。 所以，这里需要保证Nginx和PHP-FPM都挂载了宿主机的 `./www`。 （当然，你也可以指定别的目录）
 #### 2.2.4 配置https
-1. `ssl` 证书存放位置
+> 这是一个可以自动申请（并自动更新）免费ssl证书的nginx镜像。证书申请和更新使用的是开源工具acme.sh。当前你也可以把它当普通镜像使用。使用方法如下
+1. env 配置说明（下面是按照nginx1.21版本，如需修改版本请手动修改对应的版本号）
+    ```dotenv
+    # +--------------+
+    # Nginx1.21 Related Configuration
+    # +--------------+
+    NGINX_REGISTER_ACME_MAIL_1_21=
+    NGINX_RELOAD_CMD_1_21="nginx -s reload"
+    NGINX_SSL_DOMAINS_1_21=
+    NGINX_SSL_SERVER_1_21=letsencrypt
+    NGINX_SSL_BASE_DIR_1_21=/usr/panel/ssl/nginx/nginx1.21
+    NGINX_SSL_DNS_1_21=
+
+    # 参数说明
+    # NGINX_REGISTER_ACME_MAIL_1_21 申请ssl证书所需的邮箱
+    # NGINX_RELOAD_CMD_1_21 自动更新后自动执行nginx命令 推荐使用 nginx -s reload
+    # NGINX_SSL_DOMAINS_1_21 需要申请ssl证书的域名，但是需要申请证书的域名http可以正常访问,如果为空或者不填，这就是个普通的nginx镜像，不会启动证书acme
+    # NGINX_SSL_SERVER_1_21 证书服务商 默认使用：zerossl，还可以使用letsencrypt，buypass，ssl等等或者letsencrypt的测试地址：https://acme-staging-v02.api.letsencrypt.org/directory 具体使用请看：https://github.com/acmesh-official/acme.sh/wiki/%E8%AF%B4%E6%98%8E
+    # NGINX_SSL_BASE_DIR_1_21 证书存放位置，不建议修改，如果修改了nginx配置文件中以及挂载也需要修改
+    # NGINX_SSL_DNS_1_21 域名采用dns验证，可选参数为：dns_ali，dns_aws，dns_cf，dns_dp，，。。。更多参数请查看：https://github.com/acmesh-official/acme.sh/wiki/dnsapi例如1： 为空时，请查看控制台日志中的dns记录，并手动为域名添加解析；例如2： -e dns=“dns_ali” -e Ali_Key=“sdfsdfsdfljlbjkljlkjsdfoiwje” -e Ali_Secret=“jlsdflanljkljlfdsaklkjflsa” 使用云厂商api，请添加对应的key、secret等"添加域名解析"授权参数
+    ```
+2. 手动配置ssl证书  
+    请参考 acme 官方文档 [https://github.com/acmesh-official/acme.sh/wiki/How-to-issue-a-cert](https://github.com/acmesh-official/acme.sh/wiki/How-to-issue-a-cert)
+3. `ssl` 证书存放位置
    ```
-   ./panel/ssl/nginx/nginx版本/站点名称/证书
+   ./panel/ssl/nginx/nginx1.21/站点名称/证书
    ```
-2. `nginx.conf` 配置文件修改
+4. `nginx.conf` 配置文件修改
    ```
    server {
       listen       80;
@@ -300,8 +323,8 @@ PHP收到后，就到指定的目录下查找PHP文件并解析，完成后再�
       server_name  xxx; # 您的域名和上面的域名一致
    
       #ssl证书地址
-      ssl_certificate /usr/panel/ssl/nginx/nginx版本/站点名称/xxx; # 公钥
-      ssl_certificate_key /usr/panel/ssl/nginx/nginx版本/站点名称/xxx; # 私钥
+      ssl_certificate /usr/panel/ssl/nginx/nginx1.21/站点名称/xxx; # 公钥
+      ssl_certificate_key /usr/panel/ssl/nginx/nginx1.21/站点名称/xxx; # 私钥
 
       #ssl验证相关配置
       ssl_session_timeout  5m;    #缓存有效期
@@ -312,7 +335,7 @@ PHP收到后，就到指定的目录下查找PHP文件并解析，完成后再�
       ...
    }
    ```
-3. 修改完成重启（重载）即可
+5. 修改完成重启（重载）即可
    ```shell
    # 方式一：重启 docker compose restart 服务ID
    docker compose restart nginx1.21
@@ -509,6 +532,7 @@ docker import php72.tar php72:v1
 该项目起初参考了很多**开源项目**的**解决方案，开源不易，感谢分享**
 * 该项目参考 **yeszao/dnmp** 仓库：<a href="https://github.com/yeszao/dnmp" target="_blank"> https://github.com/yeszao/dnmp </a>
 * 该项目使用了 **docker-php-extension-installer** 快速安装PHP扩展脚本：<a href="https://github.com/mlocati/docker-php-extension-installer" target="_blank"> https://github.com/mlocati/docker-php-extension-installer </a>
+* 该项目使用了 **acme.sh** 实现ACME客户端协议的纯Unix shell脚本：<a href="https://github.com/acmesh-official/acme.sh" target="_blank"> https://github.com/acmesh-official/acme.sh </a>
 ## 开源共建
 开源项目离不开大家的支持，如果您有好的想法，遇到一些 BUG 并修复了，欢迎小伙伴们提交 Pull Request 参与开源贡献
 1. **fork** 本项目到自己的 **repo**
