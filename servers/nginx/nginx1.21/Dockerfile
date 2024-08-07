@@ -27,7 +27,7 @@ RUN apk update && apk upgrade \
     # 安装 acme.sh \
     && cd /acme.sh && ./acme.sh --install -m ${NGINX_REGISTER_ACME_MAIL_1_21} \
     && ln -s ~/.acme.sh/acme.sh /usr/local/bin/acme.sh \
-    && rm -r /acme.sh \
+    && rm -rf /acme.sh \
     && apk del .build-deps
 
 ADD config/extensions/nginx-ssl-setup.sh /usr/local/bin/
