@@ -32,7 +32,7 @@ RUN apk update && apk upgrade \
 
 # 安装扩展
 RUN docker-php-source extract \
-    && if [ "${PHP_EXTENSIONS_80}" != "" ]; \
+    && if [ ${PHP_EXTENSIONS_80} ]; \
         then \
             apk add --no-cache --virtual .build-deps autoconf g++ make libtool linux-headers \
             && apk add --no-cache libstdc++; \
