@@ -8,21 +8,13 @@ ARG CONTAINER_PACKAGE_URL
 ARG NGINX_REGISTER_ACME_MAIL_1_21
 
 # 资源替换 更换镜像
-RUN if [ ${CONTAINER_PACKAGE_URL} ]; \
-    then \
-      sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories; \
-    fi
+RUN if [ ${CONTAINER_PACKAGE_URL} ]; then sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories; fi
 
 WORKDIR /acme.sh
 ADD config/acme.sh /acme.sh
 
 RUN apk update && apk upgrade \
-    && if [ ${TZ} ]; \
-        then \
-            apk add --no-cache --virtual .build-deps tzdata \
-            && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime \
-            && echo "${TZ}" > /etc/timezone; \
-        fi \
+    && if [ ${TZ} ]; then apk add --no-cache --virtual .build-deps tzdata && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone; fi \
     && apk add --no-cache openssl bash cronie \
     # 安装 acme.sh \
     && cd /acme.sh && ./acme.sh --install -m ${NGINX_REGISTER_ACME_MAIL_1_21} \
