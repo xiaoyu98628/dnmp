@@ -74,7 +74,7 @@ server {
     #location ~ [^/]\.php(/|$) {
     #    # 注意这里和php-fpm的挂载目录一致
     #    root           /var/www/html/localhost;
-    #    include enable-php-74.conf;
+    #    include php/enable-php-74.conf;
     #}
 
     # deny access to .htaccess files, if Apache's document root
@@ -97,7 +97,7 @@ server{
     location ~ [^/]\.php(/|$) {
         # 注意这里和php-fpm的挂载目录一致
         root           /var/www/html/localhost;
-        include enable-php-72.conf;
+        include php/enable-php-72.conf;
     }
 }
 
@@ -111,7 +111,7 @@ server{
     location ~ [^/]\.php(/|$) {
         # 注意这里和php-fpm的挂载目录一致
         root           /var/www/html/localhost;
-        include enable-php-73.conf;
+        include php/enable-php-73.conf;
     }
 }
 
@@ -125,7 +125,7 @@ server{
     location ~ [^/]\.php(/|$) {
         # 注意这里和php-fpm的挂载目录一致
         root           /var/www/html/localhost;
-        include enable-php-74.conf;
+        include php/enable-php-74.conf;
     }
 }
 
@@ -139,7 +139,7 @@ server{
     location ~ [^/]\.php(/|$) {
         # 注意这里和php-fpm的挂载目录一致
         root           /var/www/html/localhost;
-        include enable-php-80.conf;
+        include php/enable-php-80.conf;
     }
 }
 
@@ -153,7 +153,7 @@ server{
     location ~ [^/]\.php(/|$) {
         # 注意这里和php-fpm的挂载目录一致
         root           /var/www/html/localhost;
-        include enable-php-81.conf;
+        include php/enable-php-81.conf;
     }
 }
 
@@ -167,7 +167,7 @@ server{
     location ~ [^/]\.php(/|$) {
         # 注意这里和php-fpm的挂载目录一致
         root           /var/www/html/localhost;
-        include enable-php-82.conf;
+        include php/enable-php-82.conf;
     }
 }
 
@@ -181,7 +181,7 @@ server{
     location ~ [^/]\.php(/|$) {
         # 注意这里和php-fpm的挂载目录一致
         root           /var/www/html/localhost;
-        include enable-php-83.conf;
+        include php/enable-php-83.conf;
     }
 }
 # +------------------ end ------------------+
