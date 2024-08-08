@@ -174,7 +174,7 @@ RUN docker-php-source extract \
     && if [ -z "${EXTENSIONS##*,swoole,*}" ]; \
         then \
             echo "---------- Install swoole ----------" \
-            && printf "\n" | pecl install swoole \
+            && printf "\n" | pecl install swoole-5.1.3 \
             && docker-php-ext-enable swoole; \
         fi \
     && if [ -z "${EXTENSIONS##*,mcrypt,*}" ]; \
