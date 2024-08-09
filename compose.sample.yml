@@ -56,7 +56,7 @@ services:
       - "./servers/php/php7.2/config/supervisor/supervisord.conf:/etc/supervisord.conf:ro"    # supervisor配置文件
       - "./logs/php/php7.2:/var/log/php"                                                      # 日志文件
       - "./panel:/usr/panel"                                                                  # nginx使用unix sock连接文件
-      - "./www:/var/www/html"                                                                 # 文件路径
+      - "${PROJECT_DIRECTORY}:/var/www/html"                                                  # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -82,7 +82,7 @@ services:
       - "./servers/php/php7.3/config/supervisor/supervisord.conf:/etc/supervisord.conf:ro"    # supervisor配置文件
       - "./logs/php/php7.3:/var/log/php"                                                      # 日志文件
       - "./panel:/usr/panel"                                                                  # nginx使用unix sock连接文件
-      - "./www:/var/www/html"                                                                 # 文件路径
+      - "${PROJECT_DIRECTORY}:/var/www/html"                                                  # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -108,7 +108,7 @@ services:
       - "./servers/php/php7.4/config/supervisor/supervisord.conf:/etc/supervisord.conf:ro"    # supervisor配置文件
       - "./logs/php/php7.4:/var/log/php"                                                      # 日志文件
       - "./panel:/usr/panel"                                                                  # nginx使用unix连接文件
-      - "./www:/var/www/html"                                                                 # 文件路径
+      - "${PROJECT_DIRECTORY}:/var/www/html"                                                  # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -134,7 +134,7 @@ services:
       - "./servers/php/php8.0/config/supervisor/supervisord.conf:/etc/supervisord.conf:ro"    # supervisor配置文件
       - "./logs/php/php8.0:/var/log/php"                                                      # 日志文件
       - "./panel:/usr/panel"                                                                  # nginx使用unix连接文件
-      - "./www:/var/www/html"                                                                 # 文件路径
+      - "${PROJECT_DIRECTORY}:/var/www/html"                                                  # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -160,7 +160,7 @@ services:
       - "./servers/php/php8.1/config/supervisor/supervisord.conf:/etc/supervisord.conf:ro"    # supervisor配置文件
       - "./logs/php/php8.1:/var/log/php"                                                      # 日志文件
       - "./panel:/usr/panel"                                                                  # nginx使用unix连接文件
-      - "./www:/var/www/html"                                                                 # 文件路径
+      - "${PROJECT_DIRECTORY}:/var/www/html"                                                  # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -186,7 +186,7 @@ services:
       - "./servers/php/php8.2/config/supervisor/supervisord.conf:/etc/supervisord.conf:ro"    # supervisor配置文件
       - "./logs/php/php8.2:/var/log/php"                                                      # 日志文件
       - "./panel:/usr/panel"                                                                  # nginx使用unix连接文件
-      - "./www:/var/www/html"                                                                 # 文件路径
+      - "${PROJECT_DIRECTORY}:/var/www/html"                                                  # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -212,7 +212,7 @@ services:
       - "./servers/php/php8.3/config/supervisor/supervisord.conf:/etc/supervisord.conf:ro"    # supervisor配置文件
       - "./logs/php/php8.3:/var/log/php"                                                      # 日志文件
       - "./panel:/usr/panel"                                                                  # nginx使用unix连接文件
-      - "./www:/var/www/html"                                                                 # 文件路径
+      - "${PROJECT_DIRECTORY}:/var/www/html"                                                  # 文件路径
     cap_add:
       - SYS_PTRACE
     networks:
@@ -234,7 +234,7 @@ services:
       - "./servers/nginx/nginx1.21/config:/etc/nginx"   # 配置文件
       - "./logs/nginx/nginx1.21:/var/log/nginx"         # 日志文件
       - "./panel:/usr/panel"                            # php unix连接文件
-      - "./www:/usr/share/nginx/html"                   # 文件路径
+      - "${PROJECT_DIRECTORY}:/usr/share/nginx/html"    # 文件路径
     environment:
       - "SSL_DOMAINS=${NGINX_SSL_DOMAINS_1_21}"
       - "SSL_SERVER=${NGINX_SSL_SERVER_1_21}"
