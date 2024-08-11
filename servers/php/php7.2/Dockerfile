@@ -242,7 +242,9 @@ RUN docker-php-source extract \
             echo "---------- Install grpc ----------" \
             && apk add --no-cache zlib-dev \
             && printf "\n" | pecl install grpc \
-            && docker-php-ext-enable grpc; \
+            && docker-php-ext-enable grpc \
+            && echo "[grpc]" >> /usr/local/etc/php/conf.d/docker-php-ext-grpc.ini \
+            && echo "grpc.enable_fork_support = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-grpc.ini; \
         fi \
     && if [ -z "${EXTENSIONS##*,igbinary,*}" ]; \
         then \
