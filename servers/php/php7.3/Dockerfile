@@ -218,7 +218,7 @@ RUN docker-php-source extract \
         then \
             echo "---------- Install amqp ----------" \
             && apk add --no-cache rabbitmq-c-dev \
-            && printf "\n" | pecl install amqp \
+            && printf "\n" | pecl install amqp-2.0.0 \
             && docker-php-ext-enable amqp; \
         fi \
     && if [ -z "${EXTENSIONS##*,psr,*}" ]; \
