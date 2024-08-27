@@ -23,21 +23,21 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
-      - name: Load test.env file
+      - name: Load .env file
         run: |
-          if [ -f .github/workflows/test.env ]; then
-            export $(grep -v '^#' .github/workflows/test.env | xargs)
+          if [ -f .github/workflows/.env ]; then
+            export $(grep -v '^#' .github/workflows/.env | xargs)
           fi
 
-      - name: Build Docker images with test.env
-        run: docker-compose -f .github/workflows/compose.yml --env-file .github/workflows/test.env build
+      - name: Build Docker images with .env
+        run: docker-compose -f .github/workflows/compose.yml --env-file .github/workflows/.env build
         env:
           DOCKER_BUILDKIT: 1
           COMPOSE_DOCKER_CLI_BUILD: 1
 
-      - name: Verify Docker image with test.env
+      - name: Verify Docker image with .env
         run: |
-          docker-compose -f .github/workflows/compose.yml --env-file .github/workflows/test.env up -d
+          docker-compose -f .github/workflows/compose.yml --env-file .github/workflows/.env up -d
           docker-compose -f .github/workflows/compose.yml exec -T php72 php -v # 验证 PHP72 version
           docker-compose -f .github/workflows/compose.yml exec -T php72 php -m # 验证 PHP72 extensions
           docker-compose -f .github/workflows/compose.yml exec -T php73 php -v # 验证 PHP73 version
