@@ -5,11 +5,11 @@
 # MacOS 系统特有文件
 **/.DS_Store
 
-# 环境变量文件
-.env
+# 根目录下环境变量文件
+/.env
 
-# docker compose 文件
-compose*
+# 跟目录下 docker compose 文件
+/compose*
 
 # 需要上传的文件
-!compose.sample.yml
+/!compose.sample.yml
