@@ -1,5 +1,6 @@
 # 编辑器文件
 /.idea
+/.vscode
 
 # MacOS 系统特有文件
 **/.DS_Store
