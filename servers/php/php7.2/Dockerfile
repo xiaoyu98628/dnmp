@@ -225,7 +225,7 @@ RUN docker-php-source extract \
         then \
             echo "---------- Install protobuf ----------" \
             && printf "\n" | pecl install protobuf \
-            && docker-php-ext-enable protobuf; \
+            && docker-php-ext-enable protobuf-3.15.8; \
         fi \
     && if [ -z "${EXTENSIONS##*,psr,*}" ]; \
         then \
