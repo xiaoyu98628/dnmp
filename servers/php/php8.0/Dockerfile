@@ -175,9 +175,9 @@ RUN docker-php-source extract \
         then \
             echo "---------- Install swoole ----------" \
             && printf "\n" | pecl install swoole-5.1.3 \
-            && docker-php-ext-enable swoole; \
+            && docker-php-ext-enable swoole \
             && echo "[swoole]" >> /usr/local/etc/php/conf.d/docker-php-ext-swoole.ini \
-            && echo "swoole.enable_fiber_mock = On" >> /usr/local/etc/php/conf.d/docker-php-ext-swoole.ini \
+            && echo "swoole.enable_fiber_mock = On" >> /usr/local/etc/php/conf.d/docker-php-ext-swoole.ini; \
         fi \
     && if [ -z "${EXTENSIONS##*,mcrypt,*}" ]; \
         then \
