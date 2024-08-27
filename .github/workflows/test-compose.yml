@@ -30,33 +30,33 @@ jobs:
           fi
 
       - name: Build Docker images with .env
-        run: docker-compose -f .github/workflows/compose.yml --env-file .github/workflows/.env build
+        run: docker compose -f .github/workflows/compose.yml --env-file .github/workflows/.env build
         env:
           DOCKER_BUILDKIT: 1
           COMPOSE_DOCKER_CLI_BUILD: 1
 
       - name: Verify Docker image with .env
         run: |
-          docker-compose -f .github/workflows/compose.yml --env-file .github/workflows/.env up -d
-          docker-compose -f .github/workflows/compose.yml exec -T php72 php -v # 验证 PHP72 version
-          docker-compose -f .github/workflows/compose.yml exec -T php72 php -m # 验证 PHP72 extensions
-          docker-compose -f .github/workflows/compose.yml exec -T php73 php -v # 验证 PHP73 version
-          docker-compose -f .github/workflows/compose.yml exec -T php73 php -m # 验证 PHP73 extensions
-          docker-compose -f .github/workflows/compose.yml exec -T php74 php -v # 验证 PHP74 version
-          docker-compose -f .github/workflows/compose.yml exec -T php74 php -m # 验证 PHP74 extensions
-          docker-compose -f .github/workflows/compose.yml exec -T php80 php -v # 验证 PHP80 version
-          docker-compose -f .github/workflows/compose.yml exec -T php80 php -m # 验证 PHP80 extensions
-          docker-compose -f .github/workflows/compose.yml exec -T php81 php -v # 验证 PHP81 version
-          docker-compose -f .github/workflows/compose.yml exec -T php81 php -m # 验证 PHP81 extensions
-          docker-compose -f .github/workflows/compose.yml exec -T php82 php -v # 验证 PHP82 version
-          docker-compose -f .github/workflows/compose.yml exec -T php82 php -m # 验证 PHP82 extensions
-          docker-compose -f .github/workflows/compose.yml exec -T php83 php -v # 验证 PHP83 version
-          docker-compose -f .github/workflows/compose.yml exec -T php83 php -m # 验证 PHP83 extensions
+          docker compose -f .github/workflows/compose.yml --env-file .github/workflows/.env up -d
+          docker compose -f .github/workflows/compose.yml exec -T php72 php -v # 验证 PHP72 version
+          docker compose -f .github/workflows/compose.yml exec -T php72 php -m # 验证 PHP72 extensions
+          docker compose -f .github/workflows/compose.yml exec -T php73 php -v # 验证 PHP73 version
+          docker compose -f .github/workflows/compose.yml exec -T php73 php -m # 验证 PHP73 extensions
+          docker compose -f .github/workflows/compose.yml exec -T php74 php -v # 验证 PHP74 version
+          docker compose -f .github/workflows/compose.yml exec -T php74 php -m # 验证 PHP74 extensions
+          docker compose -f .github/workflows/compose.yml exec -T php80 php -v # 验证 PHP80 version
+          docker compose -f .github/workflows/compose.yml exec -T php80 php -m # 验证 PHP80 extensions
+          docker compose -f .github/workflows/compose.yml exec -T php81 php -v # 验证 PHP81 version
+          docker compose -f .github/workflows/compose.yml exec -T php81 php -m # 验证 PHP81 extensions
+          docker compose -f .github/workflows/compose.yml exec -T php82 php -v # 验证 PHP82 version
+          docker compose -f .github/workflows/compose.yml exec -T php82 php -m # 验证 PHP82 extensions
+          docker compose -f .github/workflows/compose.yml exec -T php83 php -v # 验证 PHP83 version
+          docker compose -f .github/workflows/compose.yml exec -T php83 php -m # 验证 PHP83 extensions
           
       - name: Tear down
         if: always()
         run: |
-          docker-compose -f .github/workflows/compose.yml down
+          docker compose -f .github/workflows/compose.yml down
           docker image prune -af # 删除所有未被使用的 Docker 镜像。
           docker volume prune -f # 删除所有未被使用的 Docker 数据卷。
           docker system prune -af # 删除所有未被使用的 Docker 容器、网络和缓存数据。
