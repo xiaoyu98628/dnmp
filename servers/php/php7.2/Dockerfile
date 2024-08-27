@@ -211,7 +211,7 @@ RUN docker-php-source extract \
         then \
             echo "---------- Install mongodb ----------" \
             && apk add --no-cache curl-dev openssl-dev \
-            && printf "\n" | pecl install mongodb \
+            && printf "\n" | pecl install mongodb-1.16.2 \
             && docker-php-ext-enable mongodb; \
         fi \
     && if [ -z "${EXTENSIONS##*,amqp,*}" ]; \
