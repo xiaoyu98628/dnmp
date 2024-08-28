@@ -35,7 +35,9 @@ RUN docker-php-source extract \
     && if [ ${PHP_EXTENSIONS_73} ]; \
         then \
             apk add --no-cache --virtual .build-deps autoconf g++ make libtool linux-headers \
-            && apk add --no-cache libstdc++; \
+            && apk add --no-cache libstdc++ \
+            # 更新 PECL 通道
+            && pecl channel-update pecl.php.net; \
         fi \
     && if [ -z "${EXTENSIONS##*,pdo_mysql,*}" ]; \
         then \
@@ -221,12 +223,6 @@ RUN docker-php-source extract \
             && printf "\n" | pecl install amqp-1.11.0 \
             && docker-php-ext-enable amqp; \
         fi \
-    && if [ -z "${EXTENSIONS##*,psr,*}" ]; \
-        then \
-            echo "---------- Install psr ----------" \
-            && printf "\n" | pecl install psr \
-            && docker-php-ext-enable psr; \
-        fi \
     && if [ -z "${EXTENSIONS##*,phalcon,*}" ]; \
         then \
             echo "---------- Install phalcon ----------" \
@@ -238,8 +234,14 @@ RUN docker-php-source extract \
     && if [ -z "${EXTENSIONS##*,protobuf,*}" ]; \
         then \
             echo "---------- Install protobuf ----------" \
-            && printf "\n" | pecl install protobuf \
-            && docker-php-ext-enable protobuf-3.21.5; \
+            && printf "\n" | pecl install protobuf-3.24.4 \
+            && docker-php-ext-enable protobuf; \
+        fi \
+    && if [ -z "${EXTENSIONS##*,psr,*}" ]; \
+        then \
+            echo "---------- Install psr ----------" \
+            && printf "\n" | pecl install psr \
+            && docker-php-ext-enable psr; \
         fi \
     && if [ -z "${EXTENSIONS##*,grpc,*}" ]; \
         then \
