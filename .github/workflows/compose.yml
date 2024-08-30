@@ -1,4 +1,41 @@
 services:
+  # 使用前最好阅读一遍（README.md）说明文件，以便快速上手，遇到问题也能及时排查
+  mysql8.0:
+    image: mysql:8.0
+    container_name: mysql80
+    restart: always
+    privileged: true
+    ports:
+      - "3306:3306"
+    volumes:
+      - "../../servers/mysql/mysql8.0/config:/etc/mysql"  # 配置文件
+      - "../../data/mysql/mysql8.0:/var/lib/mysql"        # 数据库文件
+      - "../../logs/mysql/mysql8.0:/var/log/mysql"        # 日志文件
+    environment:
+      - "TZ=${TZ}"
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD_80}"
+      - "MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST_80}"
+      - "MYSQL_USER=${MYSQL_USER_80}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD_80}"
+    networks:
+      - dnmp-net
+
+  redis6.2:
+    image: redis:6.2-alpine
+    container_name: redis62
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - "../../servers/redis/redis6.2/config:/etc/redis"  # 配置文件
+      - "../../data/redis/redis6.2:/data"                 # 数据文件
+      - "../../logs/redis/redis6.2:/var/log/redis"        # 日志文件
+    environment:
+      - "TZ=${TZ}"
+    entrypoint: ["redis-server", "/etc/redis/docker.conf", "--requirepass", "${REDIS_PASSWORD_62}"]
+    networks:
+      - dnmp-net
+
 
   php72:
     build:
@@ -179,6 +216,32 @@ services:
       - "${PROJECT_DIRECTORY}:/var/www/html"                                                  # 文件路径
     cap_add:
       - SYS_PTRACE
+    networks:
+      - dnmp-net
+
+  nginx1.21:
+    build:
+      context: ../../servers/nginx/nginx1.21
+      args:
+        TZ: ${TZ}
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        NGINX_REGISTER_ACME_MAIL_1_21: ${NGINX_REGISTER_ACME_MAIL_1_21}
+    container_name: nginx1.21
+    restart: no
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "../../servers/nginx/nginx1.21/config:/etc/nginx"   # 配置文件
+      - "../../logs/nginx/nginx1.21:/var/log/nginx"         # 日志文件
+      - "../../panel:/usr/panel"                            # php unix连接文件
+      - "${PROJECT_DIRECTORY}:/usr/share/nginx/html"    # 文件路径
+    environment:
+      - "SSL_DOMAINS=${NGINX_SSL_DOMAINS_1_21}"
+      - "SSL_SERVER=${NGINX_SSL_SERVER_1_21}"
+      - "SSL_DNS=${NGINX_SSL_DNS_1_21}"
+      - "SSL_BASE_DIR=${NGINX_SSL_BASE_DIR_1_21}"
+      - "RELOAD_CMD=${NGINX_RELOAD_CMD_1_21}"
     networks:
       - dnmp-net
 
