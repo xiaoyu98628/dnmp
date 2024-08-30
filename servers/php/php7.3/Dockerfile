@@ -240,8 +240,8 @@ RUN docker-php-source extract \
         then \
             echo "---------- Install phalcon ----------" \
             # 查看 pecl支持的版本 https://pecl.php.net/package/phalcon
-            && printf "\n" | pecl install psr phalcon-4.1.2 \
-            && docker-php-ext-enable psr phalcon; \
+            && printf "\n" | pecl install phalcon-4.1.2 \
+            && docker-php-ext-enable phalcon; \
         fi \
     && if [ -z "${EXTENSIONS##*,grpc,*}" ]; \
         then \
