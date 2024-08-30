@@ -240,7 +240,7 @@ RUN docker-php-source extract \
             echo "---------- Install phalcon ----------" \
             # 对于 phalcon 4.x，需要完成诸如安装 psr 之类的附加步骤 可参考php7.3/Dockerfile
             # 查看 pecl支持的版本 https://pecl.php.net/package/phalcon
-            && printf "\n" | pecl install phalcon \
+            && printf "\n" | pecl install phalcon-5.4.0 \
             && docker-php-ext-enable phalcon; \
         fi \
     && if [ -z "${EXTENSIONS##*,grpc,*}" ]; \
