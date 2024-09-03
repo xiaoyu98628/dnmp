@@ -1,4 +1,4 @@
 *
-.gitignore
 !.gitignore
 !ini.sample
+!php-fpm.ini
