@@ -16,28 +16,20 @@ ADD config/extensions/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions
 
 # 资源替换 更换镜像
-RUN if [ ${CONTAINER_PACKAGE_URL} ]; \
-    then \
-      sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories; \
-    fi
+RUN if [ ${CONTAINER_PACKAGE_URL} ]; then sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories; fi
 
-# 更新 apk 修改时间
+# 修改时间
+RUN if [ ${TZ} ]; then apk add --no-cache --virtual .fetch-deps tzdata && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone && apk del .fetch-deps; fi
+
+# 更新包索引 安装扩展
 RUN apk update && apk upgrade \
-    && if [ ${TZ} ]; \
-        then \
-            apk add --no-cache --virtual .build-deps tzdata \
-            && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime \
-            && echo "${TZ}" > /etc/timezone; \
-        fi
-
-# 安装扩展
-RUN docker-php-source extract \
+    && docker-php-source extract \
     && if [ ${PHP_EXTENSIONS_83} ]; \
         then \
             apk add --no-cache --virtual .build-deps autoconf g++ make libtool linux-headers \
             && apk add --no-cache libstdc++ \
             # 更新 PECL 通道
-            && pecl channel-update pecl.php.net; \
+            && pecl update-channels; \
         fi \
     && if [ -z "${EXTENSIONS##*,pdo_mysql,*}" ]; \
         then \
@@ -282,6 +274,11 @@ RUN docker-php-source extract \
     && if [ ${COMPOSER_IMAGE_URL} ]; then composer config -g repo.packagist composer ${COMPOSER_IMAGE_URL}; fi \
     && echo "---------- Install supervisor ----------" \
     && apk add --no-cache supervisor \
-    && apk del .build-deps
+    # 删除 pecl 下载的扩展包
+    && rm -rf /tmp/pear \
+    # 删除虚拟包
+    && apk del .build-deps \
+    # 删除 apk 下载的包
+    && rm -rf /var/cache/apk/*
 
 CMD ["supervisord", "-c", "/etc/supervisord.conf", "-n"]
