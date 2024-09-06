@@ -38,6 +38,7 @@ docker compose 快速部署LNMP环境又名DNMP 包括但不限于 Nginx，Mysql
    http[s]://[你的域名]/81       # PHP81
    http[s]://[你的域名]/82       # PHP82
    http[s]://[你的域名]/83       # PHP83
+   http[s]://[你的域名]/84       # PHP84
    ```
 # 目录
 - [1 目录结构](#1-目录结构)

@@ -15,6 +15,7 @@ echo '<div><a href="/80/">PHP8.0</a></div>';
 echo '<div><a href="/81/">PHP8.1</a></div>';
 echo '<div><a href="/82/">PHP8.2</a></div>';
 echo '<div><a href="/83/">PHP8.3</a></div>';
+echo '<div><a href="/84/">PHP8.4</a></div>';
 echo '</div>';
 
 echo '<h2>版本信息：</h2>';
