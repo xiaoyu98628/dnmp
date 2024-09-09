@@ -7,21 +7,34 @@ on:
   pull_request:
     branches:
       - main  # 在拉取请求合并到 main 分支时触发
+  schedule:
+    - cron: '0 0 * * 1' # 每周一0点开始
 
 jobs:
-  build:
-
+  build_docker_images:
+    strategy:
+      fail-fast: false  # 让所有任务运行完成，失败不会中断其他任务
+      matrix:
+        php_version:
+          - php72
+          - php73
+          - php74
+          - php80
+          - php81
+          - php82
+          - php83  # 分别测试不同的 PHP 版本
     runs-on: ubuntu-latest
+    name: Build and Test ${{ matrix.php_version }} Docker Image
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # 检出代码
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v3  # 设置 Buildx 环境
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v3  # 设置 QEMU 以支持多架构
 
       - name: Load .env file
         run: |
@@ -34,26 +47,24 @@ jobs:
               fi
             done
           fi
-        shell: /usr/bin/bash -e {0}
+        shell: /usr/bin/bash -e {0}  # 加载 .env 文件，导出符合格式的环境变量
 
-      - name: Build Docker images with .env
-        run: docker compose -f .github/workflows/compose.yml --env-file .github/workflows/.env build
+      - name: Build Docker image for ${{ matrix.php_version }}
+        run: docker compose -f .github/workflows/compose.yml --env-file .github/workflows/.env build ${{ matrix.php_version }}
         env:
           DOCKER_BUILDKIT: 1
           COMPOSE_DOCKER_CLI_BUILD: 1
 
-      - name: Verify Docker image with .env
+      - name: Verify ${{ matrix.php_version }} Docker image
         run: |
-          docker compose -f .github/workflows/compose.yml --env-file .github/workflows/.env up -d
-          for php_version in php72 php73 php74 php80 php81 php82 php83; do
-            docker compose -f .github/workflows/compose.yml exec -T $php_version php -v # 验证 PHP 版本
-            docker compose -f .github/workflows/compose.yml exec -T $php_version php -m # 验证 PHP 扩展
-          done
-          
-      - name: Tear down
+          docker compose -f .github/workflows/compose.yml --env-file .github/workflows/.env up -d ${{ matrix.php_version }}
+          docker compose -f .github/workflows/compose.yml exec -T ${{ matrix.php_version }} php -v  # 验证 PHP 版本
+          docker compose -f .github/workflows/compose.yml exec -T ${{ matrix.php_version }} php -m  # 验证 PHP 扩展
+
+      - name: Tear down ${{ matrix.php_version }} environment
         if: always()
         run: |
-          docker compose -f .github/workflows/compose.yml down
-          docker image prune -af # 删除所有未被使用的 Docker 镜像。
-          docker volume prune -f # 删除所有未被使用的 Docker 数据卷。
-          docker system prune -af # 删除所有未被使用的 Docker 容器、网络和缓存数据。
+          docker compose -f .github/workflows/compose.yml down ${{ matrix.php_version }}
+          docker image prune -af  # 清理未使用的 Docker 镜像
+          docker volume prune -f  # 清理未使用的 Docker 数据卷
+          docker system prune -af  # 清理未使用的 Docker 容器、网络和缓存数据
