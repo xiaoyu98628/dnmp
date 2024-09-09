@@ -340,5 +340,18 @@ services:
     networks:
       - dnmp-net
 
+  node22:
+    build:
+      context: ./servers/node/node22
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        TZ: ${TZ}
+    container_name: node22
+    restart: always
+    stdin_open: true
+    tty: true
+    networks:
+      - dnmp-net
+
 networks:
   dnmp-net:
