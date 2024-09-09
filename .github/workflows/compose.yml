@@ -219,6 +219,32 @@ services:
     networks:
       - dnmp-net
 
+  php84:
+    build:
+      context: ../../servers/php/php8.4
+      args:
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        PHP_EXTENSIONS_84: ${PHP_EXTENSIONS_84}
+        COMPOSER_IMAGE_URL: ${COMPOSER_IMAGE_URL}
+        COMPOSER_DOWNLOAD_URL: ${COMPOSER_DOWNLOAD_URL}
+        TZ: ${TZ}
+    container_name: php84
+    restart: always
+    ports:
+      - "9007:9000"
+    volumes:
+      - "../../servers/php/php8.4/config/php.ini:/usr/local/etc/php/php.ini:ro"                   # php.ini
+      - "../../servers/php/php8.4/config/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw"             # php-fpm.conf
+      - "../../servers/php/php8.4/config/php-fpm.d:/usr/local/etc/php-fpm.d"                      # php-fpm.d
+      - "../../servers/php/php8.4/config/supervisor/supervisord.conf:/etc/supervisord.conf:ro"    # supervisor配置文件
+      - "../../logs/php/php8.4:/var/log/php"                                                      # 日志文件
+      - "../../panel:/usr/panel"                                                                  # nginx使用unix连接文件
+      - "${PROJECT_DIRECTORY}:/var/www/html"                                                  # 文件路径
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      - dnmp-net
+
   nginx1.21:
     build:
       context: ../../servers/nginx/nginx1.21

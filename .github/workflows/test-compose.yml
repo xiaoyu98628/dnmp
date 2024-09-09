@@ -45,7 +45,7 @@ jobs:
       - name: Verify Docker image with .env
         run: |
           docker compose -f .github/workflows/compose.yml --env-file .github/workflows/.env up -d
-          for php_version in php72 php73 php74 php80 php81 php82 php83; do
+          for php_version in php72 php73 php74 php80 php81 php82 php83 php84; do
             docker compose -f .github/workflows/compose.yml exec -T $php_version php -v # 验证 PHP 版本
             docker compose -f .github/workflows/compose.yml exec -T $php_version php -m # 验证 PHP 扩展
           done
