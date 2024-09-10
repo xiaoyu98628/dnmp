@@ -21,7 +21,7 @@ if ! which docker-php-ext-configure >/dev/null || ! which docker-php-ext-enable 
 	exit 1
 fi
 
-IPE_VERSION=2.3.6
+IPE_VERSION=2.5.0
 
 StandWithUkraine() {
 	if test -t 1 && ! grep -Eq '^VERSION=.*jessie' /etc/os-release; then
@@ -1010,6 +1010,9 @@ buildRequiredPackageLists() {
 				;;
 			interbase@alpine)
 				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile icu-dev ncurses-dev"
+				if ! isFirebirdInstalled; then
+					COMPILE_LIBS="$COMPILE_LIBS firebird"
+				fi
 				;;
 			interbase@debian)
 				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libfbclient2"
@@ -1185,6 +1188,20 @@ buildRequiredPackageLists() {
 				;;
 			pdo_firebird@alpine)
 				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile icu-dev ncurses-dev"
+				if ! isFirebirdInstalled; then
+					COMPILE_LIBS="$COMPILE_LIBS firebird"
+					if test $PHP_MAJMIN_VERSION -ge 804; then
+						buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libstdc++"
+						buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile zlib-dev"
+						if ! isLibTommathInstalled; then
+							COMPILE_LIBS="$COMPILE_LIBS libtommath"
+							buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile cmake"
+						fi
+						if ! isLibTomcryptInstalled; then
+							COMPILE_LIBS="$COMPILE_LIBS libtomcrypt"
+						fi
+					fi
+				fi
 				;;
 			pdo_firebird@debian)
 				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libfbclient2"
@@ -1200,6 +1217,20 @@ buildRequiredPackageLists() {
 				;;
 			php_trie@alpine)
 				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libstdc++"
+				;;
+			phpy@alpine)
+				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent python3"
+				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile python3-dev"
+				;;
+			phpy@debian)
+				if test $DISTRO_VERSION_NUMBER -ge 12; then
+					buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libpython3.11"
+				elif test $DISTRO_VERSION_NUMBER -ge 11; then
+					buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libpython3.9"
+				else
+					buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libpython3.7"
+				fi
+				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile python3-dev"
 				;;
 			pkcs11@alpine)
 				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent softhsm"
@@ -1522,6 +1553,12 @@ buildRequiredPackageLists() {
 				;;
 			xmlrpc@debian)
 				buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libxml2-dev"
+				;;
+			xpass@alpine)
+				if ! isLibXCryptInstalled; then
+					buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile linux-headers"
+					COMPILE_LIBS="$COMPILE_LIBS libxcrypt"
+				fi
 				;;
 			xsl@alpine)
 				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libxslt"
@@ -2326,6 +2363,91 @@ installLibThai() {
 	cd - >/dev/null
 }
 
+isLibTommathInstalled() {
+	if test -f /usr/local/lib/libtommath.a && test -f /usr/local/include/tommath.h; then
+		return 0
+	fi
+	return 1
+}
+
+installLibTommath() {
+	printf 'Installing libtommath\n'
+	installLibTommath_src="$(getPackageSource https://github.com/libtom/libtommath/releases/download/v1.3.0/ltm-1.3.0.tar.xz)"
+	mkdir -p "$installLibTommath_src/build"
+	cd -- "$installLibTommath_src/build"
+	CFLAGS='-fPIC' cmake -DCMAKE_BUILD_TYPE=Release ..
+	make -j$(getProcessorCount)
+	make install
+	cd - >/dev/null
+}
+
+isLibTomcryptInstalled() {
+	if test -f /usr/local/lib/libtomcrypt.a && test -f /usr/local/include/tomcrypt.h; then
+		return 0
+	fi
+	return 1
+}
+
+installLibTomcrypt() {
+	printf 'Installing libtomcrypt\n'
+	installLibTomcrypt_src="$(getPackageSource https://github.com/libtom/libtomcrypt/releases/download/v1.18.2/crypt-1.18.2.tar.xz)"
+	cd -- "$installLibTomcrypt_src"
+	CFLAGS='-fPIC' make -j$(getProcessorCount)
+	make install
+}
+
+isFirebirdInstalled() {
+	if test -f /usr/lib/libfbclient.so && test -f /usr/include/ibase.h; then
+		return 0
+	fi
+	if test -d /tmp/src/firebird; then
+		return 0
+	fi
+	return 1
+}
+
+installFirebird() {
+	printf 'Installing firebird\n'
+	if test $PHP_MAJMIN_VERSION -ge 804; then
+		installFirebird_src="$(getPackageSource https://github.com/FirebirdSQL/firebird/releases/download/v5.0.1/Firebird-5.0.1.1469-0-source.tar.xz)"
+		cd -- "$installFirebird_src"
+		./configure --enable-client-only
+		make -j$(getProcessorCount)
+		cp -Rd gen/Release/firebird/include/* /usr/include
+		cp -Rd gen/Release/firebird/lib/* /usr/lib
+		cd - >/dev/null
+	else
+		mv "$(getPackageSource https://github.com/FirebirdSQL/firebird/releases/download/R2_5_9/Firebird-2.5.9.27139-0.tar.bz2)" /tmp/src/firebird
+		cd /tmp/src/firebird
+		# Patch rwlock.h (this has been fixed in later release of firebird 3.x)
+		sed -i '194s/.*/#if 0/' src/common/classes/rwlock.h
+		./configure --with-system-icu
+		# -j option can't be used: make targets must be compiled sequentially
+		make -s btyacc_binary gpre_boot libfbstatic libfbclient
+		cp gen/firebird/lib/libfbclient.so /usr/lib/
+		ln -s /usr/lib/libfbclient.so /usr/lib/libfbclient.so.2
+		cd - >/dev/null
+	fi
+}
+
+isLibXCryptInstalled() {
+	if ! test -f /usr/local/lib/libcrypt.so && ! test -f /usr/lib/libcrypt.so && ! test -f /usr/lib/x86_64*/libcrypt.so; then
+		return 1
+	fi
+	return 0
+}
+
+installLibXCrypt() {
+	printf 'Installing libxcrypt\n'
+	installLibXCrypt_version=4.4.36
+	installLibXCrypt_src="$(getPackageSource "https://github.com/besser82/libxcrypt/releases/download/v$installLibXCrypt_version/libxcrypt-$installLibXCrypt_version.tar.xz")"
+	cd -- "$installLibXCrypt_src"
+	./configure --prefix /usr
+	make -j$(getProcessorCount)
+	make install
+	cd - >/dev/null
+}
+
 # Install Composer
 installComposer() {
 	installComposer_version="$(getWantedPHPModuleVersion @composer)"
@@ -2512,6 +2634,18 @@ compileLibs() {
 	if stringInList libavif "$COMPILE_LIBS"; then
 		installLibavif
 	fi
+	if stringInList libtommath "$COMPILE_LIBS"; then
+		installLibTommath
+	fi
+	if stringInList libtomcrypt "$COMPILE_LIBS"; then
+		installLibTomcrypt
+	fi
+	if stringInList firebird "$COMPILE_LIBS"; then
+		installFirebird
+	fi
+	if stringInList libxcrypt "$COMPILE_LIBS"; then
+		installLibXCrypt
+	fi
 }
 
 # Install a bundled PHP module given its handle
@@ -2645,19 +2779,9 @@ EOF
 		interbase | pdo_firebird)
 			case "$DISTRO" in
 				alpine)
-					if ! test -d /tmp/src/firebird; then
-						mv "$(getPackageSource https://github.com/FirebirdSQL/firebird/releases/download/R2_5_9/Firebird-2.5.9.27139-0.tar.bz2)" /tmp/src/firebird
-						cd /tmp/src/firebird
-						# Patch rwlock.h (this has been fixed in later release of firebird 3.x)
-						sed -i '194s/.*/#if 0/' src/common/classes/rwlock.h
-						./configure --with-system-icu
-						# -j option can't be used: make targets must be compiled sequentially
-						make -s btyacc_binary gpre_boot libfbstatic libfbclient
-						cp gen/firebird/lib/libfbclient.so /usr/lib/
-						ln -s /usr/lib/libfbclient.so /usr/lib/libfbclient.so.2
-						cd - >/dev/null
+					if test $PHP_MAJMIN_VERSION -lt 804; then
+						CFLAGS='-I/tmp/src/firebird/src/jrd -I/tmp/src/firebird/src/include -I/tmp/src/firebird/src/include/gen' docker-php-ext-configure $1
 					fi
-					CFLAGS='-I/tmp/src/firebird/src/jrd -I/tmp/src/firebird/src/include -I/tmp/src/firebird/src/include/gen' docker-php-ext-configure $1
 					;;
 			esac
 			;;
@@ -2969,6 +3093,13 @@ installRemoteModule() {
 		ecma_intl)
 			if test -z "$installRemoteModule_version"; then
 				installRemoteModule_version=alpha
+			fi
+			;;
+		ev)
+			if test -z "$installRemoteModule_version"; then
+				if test $PHP_MAJMIN_VERSION -lt 800; then
+					installRemoteModule_version=1.1.5
+				fi
 			fi
 			;;
 		event)
@@ -3743,10 +3874,10 @@ installRemoteModule() {
 		snuffleupagus)
 			if test -z "$installRemoteModule_path"; then
 				if test -z "$installRemoteModule_version"; then
-					if test $PHP_MAJMIN_VERSION -le 704; then
+					if test $PHP_MAJMIN_VERSION -le 800; then
 						installRemoteModule_version=0.9.0
 					else
-						installRemoteModule_version=0.10.0
+						installRemoteModule_version=0.11.0
 					fi
 				fi
 				installRemoteModule_src="$(getPackageSource https://codeload.github.com/jvoisin/snuffleupagus/tar.gz/v$installRemoteModule_version)"
