@@ -53,27 +53,27 @@ jobs:
           docker compose -f compose.sample.yml exec -T ${{ matrix.php_version }} php -v  # 验证 PHP 版本
           docker compose -f compose.sample.yml exec -T ${{ matrix.php_version }} php -m  # 验证 PHP 扩展
 
-cleanup:
-  runs-on: ubuntu-latest
-  needs: build_docker_images  # 等待所有 build 任务完成
-  if: always()  # 确保清理任务在所有任务完成后执行
-  steps:
-    - name: Stop and delete all containers and networks # 停止并删除所有容器和网络
-      run: |
-        docker compose -f compose.sample.yml down
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: build_docker_images  # 等待所有 build 任务完成
+    if: always()  # 确保清理任务在所有任务完成后执行
+    steps:
+      - name: Stop and delete all containers and networks # 停止并删除所有容器和网络
+        run: |
+          docker compose -f compose.sample.yml down
 
-    - name: Delete unused Docker images # 删除未使用的 Docker 镜像
-      run: |
-        docker image prune -af
+      - name: Delete unused Docker images # 删除未使用的 Docker 镜像
+        run: |
+          docker image prune -af
 
-    - name: Delete unused Docker data volumes # 删除未使用的 Docker 数据卷
-      run: |
-        docker volume prune -f
+      - name: Delete unused Docker data volumes # 删除未使用的 Docker 数据卷
+        run: |
+          docker volume prune -f
 
-    - name: Delete unused Docker networks # 删除未使用的 Docker 网络
-      run: |
-        docker network prune -f
+      - name: Delete unused Docker networks # 删除未使用的 Docker 网络
+        run: |
+          docker network prune -f
 
-    - name: Delete unused Docker system resources # 删除未使用的 Docker 系统资源
-      run: |
-        docker system prune -af
+      - name: Delete unused Docker system resources # 删除未使用的 Docker 系统资源
+        run: |
+          docker system prune -af
