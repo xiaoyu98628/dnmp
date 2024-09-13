@@ -79,12 +79,12 @@ jobs:
         run: |
           docker compose -f compose.sample.yml --env-file .github/workflows/.env up -d ${{ matrix.service }}
           # 根据服务类型执行相应的验证步骤
-          if [ "${{ matrix.services }}" == "nginx1.21" ]; then
-            docker compose -f compose.sample.yml exec -T ${{ matrix.services }} nginx -v
-          elif [ "${{ matrix.services }}" == "redis6.2" ]; then
-            docker compose -f compose.sample.yml exec -T ${{ matrix.services }} redis-server --version
-          elif [ "${{ matrix.services }}" == "mysql8.0" ]; then
-            docker compose -f compose.sample.yml exec -T ${{ matrix.services }} mysql --version
+          if [ "${{ matrix.service }}" = "nginx1.21" ]; then
+            docker compose -f compose.sample.yml exec -T ${{ matrix.service }} nginx -v
+          elif [ "${{ matrix.service }}" = "redis6.2" ]; then
+            docker compose -f compose.sample.yml exec -T ${{ matrix.service }} redis-server --version
+          elif [ "${{ matrix.service }}" = "mysql8.0" ]; then
+            docker compose -f compose.sample.yml exec -T ${{ matrix.service }} mysql --version
           fi
 
   cleanup:
