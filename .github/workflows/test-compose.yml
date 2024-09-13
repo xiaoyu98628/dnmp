@@ -37,9 +37,17 @@ jobs:
         uses: docker/setup-qemu-action@v3  # 设置 QEMU 以支持多架构
 
       - name: Load .env file
-        uses: direnv/direnv-action@v1
-        with:
-          env-file: .github/workflows/.env
+        run: |
+          if [ -f .github/workflows/.env ]; then
+            # 只导出符合格式的环境变量
+            grep -v '^#' .github/workflows/.env | grep '=' | while IFS= read -r line; do
+              # 忽略以 '=' 开头的行和空行
+              if [[ "$line" =~ ^[^=]+=.+$ ]]; then
+                export "$line"
+              fi
+            done
+          fi
+        shell: /usr/bin/bash -e {0}  # 加载 .env 文件，导出符合格式的环境变量
 
       - name: Build Docker image for ${{ matrix.php_version }}
         run: docker compose -f compose.sample.yml --env-file .github/workflows/.env build ${{ matrix.php_version }}
