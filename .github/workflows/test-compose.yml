@@ -133,7 +133,8 @@ jobs:
 
       - name: Stop and delete all containers and networks # 停止并删除所有容器和网络
         run: |
-          pwd
+          cd ..
+          ls -al
           docker compose -f ./compose.sample.yml --env-file ./.github/workflows/.env down
         working-directory: ./
 
