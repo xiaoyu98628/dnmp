@@ -118,6 +118,19 @@ jobs:
     needs: [build_php_images, build_service_images]  # 等待所有 build 任务完成
     if: always()  # 确保清理任务在所有任务完成后执行
     steps:
+      - name: Load .env file
+        run: |
+          if [ -f .github/workflows/.env ]; then
+            # 只导出符合格式的环境变量
+            grep -v '^#' .github/workflows/.env | grep '=' | while IFS= read -r line; do
+              # 忽略以 '=' 开头的行和空行
+              if [[ "$line" =~ ^[^=]+=.+$ ]]; then
+                export "$line"
+              fi
+            done
+          fi
+        shell: /usr/bin/bash -e {0}  # 加载 .env 文件，导出符合格式的环境变量
+
       - name: Stop and delete all containers and networks # 停止并删除所有容器和网络
         run: |
           docker compose -f compose.sample.yml --env-file .github/workflows/.env down
