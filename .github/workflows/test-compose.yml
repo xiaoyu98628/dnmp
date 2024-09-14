@@ -1,9 +1,9 @@
 name: Build Docker PHP image
 
 on:
-  push:
-    branches:
-      - main  # 在推送到 main 分支时触发
+#  push:
+#    branches:
+#      - main  # 在推送到 main 分支时触发
   pull_request:
     branches:
       - main  # 在拉取请求合并到 main 分支时触发

@@ -13,7 +13,7 @@ docker compose 快速部署LNMP环境又名DNMP 包括但不限于 Nginx，Mysql
    ```shell
    git clone https://github.com/xiaoyu98628/dnmp.git
    # 或者
-   git clone https://gitee.com/xiaoyucc521/dnmp.git
+   git clone https://gitee.com/xiaoyu98628/dnmp.git
    ```
 3. 拷贝并命名配置文件，启动 **(注意：[需要设置部分挂载目录的权限](#3-容器挂载路径权限问题))**
    ```shell
