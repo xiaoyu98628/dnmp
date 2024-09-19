@@ -39,6 +39,7 @@ services:
   php72:
     build:
       context: ./servers/php/php7.2
+      dockerfile: Dockerfile
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_72: ${PHP_EXTENSIONS_72}
@@ -65,6 +66,7 @@ services:
   php73:
     build:
       context: ./servers/php/php7.3
+      dockerfile: Dockerfile
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_73: ${PHP_EXTENSIONS_73}
@@ -91,6 +93,7 @@ services:
   php74:
     build:
       context: ./servers/php/php7.4
+      dockerfile: Dockerfile
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_74: ${PHP_EXTENSIONS_74}
@@ -117,6 +120,7 @@ services:
   php80:
     build:
       context: ./servers/php/php8.0
+      dockerfile: Dockerfile
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_80: ${PHP_EXTENSIONS_80}
@@ -143,6 +147,7 @@ services:
   php81:
     build:
       context: ./servers/php/php8.1
+      dockerfile: Dockerfile
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_81: ${PHP_EXTENSIONS_81}
@@ -169,6 +174,7 @@ services:
   php82:
     build:
       context: ./servers/php/php8.2
+      dockerfile: Dockerfile
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_82: ${PHP_EXTENSIONS_82}
@@ -195,6 +201,7 @@ services:
   php83:
     build:
       context: ./servers/php/php8.3
+      dockerfile: Dockerfile
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_83: ${PHP_EXTENSIONS_83}
@@ -221,6 +228,7 @@ services:
   nginx1.21:
     build:
       context: ./servers/nginx/nginx1.21
+      dockerfile: Dockerfile
       args:
         TZ: ${TZ}
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
@@ -281,6 +289,7 @@ services:
   rabbitmq3.11:
     build:
       context: ./servers/rabbitmq/rabbitmq3.11
+      dockerfile: Dockerfile
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         RABBITMQ_PLUGINS_3_11: ${RABBITMQ_PLUGINS_3_11}
@@ -343,6 +352,7 @@ services:
   node22:
     build:
       context: ./servers/node/node22
+      dockerfile: Dockerfile
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         TZ: ${TZ}
