@@ -358,6 +358,10 @@ services:
         TZ: ${TZ}
     container_name: node22
     restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - "${PROJECT_DIRECTORY}:/www"    # 站点文件路径
     stdin_open: true
     tty: true
     networks:
