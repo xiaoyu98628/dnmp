@@ -1,4 +1,4 @@
-name: Build Docker PHP image
+name: Build Docker image
 
 on:
 #  push:
@@ -69,6 +69,7 @@ jobs:
           - nginx1.21
           - redis6.2
           - mysql8.0
+          - node22
     runs-on: ubuntu-latest
     name: Build and Test ${{ matrix.service }} Docker Image
 
