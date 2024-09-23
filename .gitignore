@@ -1,15 +1,41 @@
-# 编辑器文件
-/.idea
-/.vscode
+# 忽略当前文件夹下所有文件上传 git
+*
 
-# MacOS 系统特有文件
-**/.DS_Store
+# 排除 .gitignore 文件
+!.gitignore
 
-# 根目录下环境变量文件
-/.env
+# 排除 .github 文件
+!.github
 
-# 跟目录下 docker compose 文件
-/compose*
+# 排除 data 文件
+!data
 
-# 需要上传的文件
-/!compose.sample.yml
+# 排除 logs 文件
+!logs
+
+# 排除 panel 文件
+!panel
+
+# 排除 resource 文件
+!resource
+
+# 排除 servers 文件
+!servers
+
+# 排除 www 文件
+!www
+
+# 排除 compose.sample.yml 文件
+!compose.sample.yml
+
+# 排除 LICENSE 文件
+!LICENSE
+
+# 排除 README.md 文件
+!README.md
+
+# 排除 sample.bashrc 文件
+!sample.bashrc
+
+# 排除 sample.env 文件
+!sample.env

@@ -4,5 +4,9 @@
 # 排除 .gitignore 文件
 !.gitignore
 
-# 排除 localhost 文件夹
-!localhost
+# 排除 config 文件夹
+!config
+
+# 排除 Dockerfile 文件
+!Dockerfile
+

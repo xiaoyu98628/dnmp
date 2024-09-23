@@ -4,5 +4,5 @@
 # 排除 .gitignore 文件
 !.gitignore
 
-# 排除 localhost 文件夹
-!localhost
+# 排除 kibana.yml 文件
+!kibana.yml

@@ -1,3 +1,8 @@
+# 忽略当前文件夹下所有文件上传 git
 *
-!localhost.conf.sample
+
+# 排除 .gitignore 文件
 !.gitignore
+
+# 排除 localhost.conf.sample 文件
+!localhost.conf.sample
