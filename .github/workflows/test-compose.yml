@@ -112,4 +112,6 @@ jobs:
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} redis-server --version
           elif [ "${{ matrix.service }}" = "mysql8.0" ]; then
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} mysql --version
+          elfi [ "${{ matrix.service }}" = "node22" ]; then
+            docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} node -v
           fi
