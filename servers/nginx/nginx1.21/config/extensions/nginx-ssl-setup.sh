@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # 域名 使用 ; 隔开
+# shellcheck disable=SC2155
 export DOMAINS=$(echo "$SSL_DOMAINS" | tr -s ';' ' ')
 # 服务厂商
 export SSL_SERVER="$SSL_SERVER"
@@ -60,7 +61,6 @@ function StartAcmeSh() {
     echo "[$(date)] 3、acme.sh install-cert .."
     /root/.acme.sh/acme.sh --install-cert $ACME_DOMAIN_OPTION \
       --fullchain-file ${ssl_dir}/${domain}.fullchain.pem \
-      --cert-file ${ssl_dir}/${domain}.cert.pem \
       --key-file ${ssl_dir}/${domain}.key \
       --reloadcmd "${RELOAD_CMD}"
   done
