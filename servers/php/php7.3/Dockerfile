@@ -162,7 +162,7 @@ RUN apk update && apk upgrade \
     && if [ -z "${EXTENSIONS##*,redis,*}" ]; \
         then \
             echo "---------- Install redis ----------" \
-            && printf "\n" | pecl install redis \
+            && printf "\n" | pecl install redis-6.0.2 \
             && docker-php-ext-enable redis; \
         fi \
     && if [ -z "${EXTENSIONS##*,swoole,*}" ]; \
