@@ -1,14 +1,15 @@
 name: Build Docker image
 
 on:
-#  push:
-#    branches:
-#      - main  # 在推送到 main 分支时触发
+  workflow_dispatch: # 手动触发工作流程
   pull_request:
     branches:
       - main  # 在拉取请求合并到 main 分支时触发
   schedule:
     - cron: '0 0 * * 1' # 每周一 0点（UTC），相当于中国时间每周一凌晨8点
+#  push:
+#    branches:
+#      - main  # 在推送到 main 分支时触发
 
 jobs:
   build_php_images:
