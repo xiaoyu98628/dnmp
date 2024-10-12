@@ -21,7 +21,7 @@ if ! which docker-php-ext-configure >/dev/null || ! which docker-php-ext-enable 
 	exit 1
 fi
 
-IPE_VERSION=2.5.0
+IPE_VERSION=2.5.2
 
 StandWithUkraine() {
 	if test -t 1 && ! grep -Eq '^VERSION=.*jessie' /etc/os-release; then
@@ -3729,6 +3729,8 @@ installRemoteModule() {
 					installRemoteModule_version=4.3.0
 				elif test $PHP_MAJMIN_VERSION -le 701; then
 					installRemoteModule_version=5.3.7
+				elif test $PHP_MAJMIN_VERSION -le 703; then
+					installRemoteModule_version=6.0.2
 				fi
 			else
 				installRemoteModule_version="$(resolvePeclStabilityVersion "$installRemoteModule_module" "$installRemoteModule_version")"
@@ -3921,7 +3923,7 @@ installRemoteModule() {
 		spx)
 			if test -z "$installRemoteModule_path"; then
 				if test -z "$installRemoteModule_version"; then
-					installRemoteModule_version=v0.4.16
+					installRemoteModule_version=v0.4.17
 				fi
 				if test "${installRemoteModule_version%.*}" = "$installRemoteModule_version"; then
 					installRemoteModule_displayVersion="$installRemoteModule_version"
