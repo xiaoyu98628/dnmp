@@ -15,10 +15,12 @@ ADD config/acme.sh /acme.sh
 
 RUN apk update && apk upgrade \
     && if [ ${TZ} ]; then apk add --no-cache --virtual .build-deps tzdata && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone; fi \
-    && apk add --no-cache openssl bash cronie \
-    # 安装 acme.sh \
+    && apk add --no-cache openssl bash cronie dos2unix \
+    # 安装 acme.sh
     && chmod +x /acme.sh/acme.sh \
-    && cd /acme.sh && ./acme.sh --install -m ${NGINX_REGISTER_ACME_MAIL_1_21} \
+    # 修改换行格式
+    && dos2unix /acme.sh/acme.sh \
+    && bash ./acme.sh --install -m ${NGINX_REGISTER_ACME_MAIL_1_21} \
     && ln -s ~/.acme.sh/acme.sh /usr/local/bin/acme.sh \
     && rm -rf /acme.sh \
     && apk del .build-deps
