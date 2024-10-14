@@ -18,7 +18,7 @@ RUN apk update && apk upgrade \
     && apk add --no-cache openssl bash cronie dos2unix \
     # 安装 acme.sh
     && chmod +x /acme.sh/acme.sh \
-    # 修改换行格式
+    # 修改换行格式 将 Windows 下 CRLF 转换成 LF
     && dos2unix /acme.sh/acme.sh \
     && bash ./acme.sh --install -m ${NGINX_REGISTER_ACME_MAIL_1_21} \
     && ln -s ~/.acme.sh/acme.sh /usr/local/bin/acme.sh \
