@@ -12,21 +12,23 @@ RUN if [ ${CONTAINER_PACKAGE_URL} ]; then sed -i "s/dl-cdn.alpinelinux.org/${CON
 
 WORKDIR /acme.sh
 ADD config/acme.sh /acme.sh
+ADD config/extensions/nginx-ssl-setup.sh /usr/local/bin/
 
 RUN apk update && apk upgrade \
     && if [ ${TZ} ]; then apk add --no-cache --virtual .build-deps tzdata && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone; fi \
-    && apk add --no-cache openssl bash cronie dos2unix \
+    && apk add --no-cache openssl bash cronie  \
     # 安装 acme.sh
     && chmod +x /acme.sh/acme.sh \
     # 修改换行格式 将 Windows 下 CRLF 转换成 LF
+    && apk add --no-cache --virtual .build-deps dos2unix \
     && dos2unix /acme.sh/acme.sh \
     && bash ./acme.sh --install -m ${NGINX_REGISTER_ACME_MAIL_1_21} \
     && ln -s ~/.acme.sh/acme.sh /usr/local/bin/acme.sh \
+    && chmod +x /usr/local/bin/nginx-ssl-setup.sh \
+    # 修改换行格式 将 Windows 下 CRLF 转换成 LF
+    && dos2unix /usr/local/bin/nginx-ssl-setup.sh \
     && rm -rf /acme.sh \
     && apk del .build-deps
-
-ADD config/extensions/nginx-ssl-setup.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/nginx-ssl-setup.sh
 
 WORKDIR /usr/share/nginx/html
 
