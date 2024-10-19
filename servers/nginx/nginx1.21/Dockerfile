@@ -31,7 +31,7 @@ RUN chmod +x /usr/local/bin/nginx-ssl-setup.sh \
     && apk add --no-cache --virtual .dos-deps dos2unix \
     # 修改换行格式 将 Windows 下 CRLF 转换成 LF
     && dos2unix /usr/local/bin/nginx-ssl-setup.sh \
-    && && apk del .dos-deps
+    && apk del .dos-deps
 
 WORKDIR /usr/share/nginx/html
 
