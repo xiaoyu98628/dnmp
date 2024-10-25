@@ -63,7 +63,6 @@ function getMysqlVersion(): string
     } else {
         return 'PDO_MYSQL 扩展未安装 ×';
     }
-
 }
 
 /**
