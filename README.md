@@ -65,6 +65,7 @@ docker compose 快速部署LNMP环境又名DNMP 包括但不限于 Nginx，Mysql
   - [2.7 MySQL](#27-mysql)
     - [2.7.1 mysql 密码问题](#271-mysql-密码问题)
     - [2.7.2 权限问题](#272-权限问题)
+    - [2.7.3 windows 下文件权限导致 mysql 配置文件不生效导致 php7.2 和 php7.3 连接 mysql 密码问题](#273-windows-下文件权限导致-mysql-配置文件不生效导致-php72-和-php73-连接-mysql-密码问题)
 - [3 容器挂载路径权限问题](#3-容器挂载路径权限问题)
   - [3.1 mysql](#31-mysql)
   - [3.2 Elasticsearch](#32-elasticsearch)
@@ -426,7 +427,14 @@ GRANT privileges ON database_name.table_name TO 'username'@'host';
 GRANT SELECT,INSERT ON test.user TO 'xiaoyu'@'%';
 GRANT ALL ON *.* TO 'xiaoyu'@'%';
 GRANT ALL ON test.* TO 'xiaoyu'@'%';
+
+-- 刷新权限
+FLUSH PRIVILEGES; 
 ```
+#### 2.7.3 windows 下文件权限导致 mysql 配置文件不生效导致 php7.2 和 php7.3 连接 mysql 密码问题
+1、配置文件权限问题：成功创建容器进入容器修改配置文件权限及用户和用户组 `chown -R mysql:mysql /etc/mysql`, `chown -R 755 /etc/mysql`， 重启 mysql 容器  
+2、连接问题：原因是因为 在 MySQL 8.0 及更高版本中，默认的认证插件从 mysql_native_password 更改为 caching_sha2_password。如果你的 MySQL 服务器不再使用 mysql_native_password 插件，php7.3 及低版本中可能会因为不支持 caching_sha2_password 而无法连接数据库。  
+    解决办法：修改密码；例如`ALTER USER 'xiaoyu'@'%' IDENTIFIED WITH mysql_native_password BY 'xiaoyu';`
 ## 3 容器挂载路径权限问题
 由于数据卷和日志卷分离的原因，部分容器启动需要对应的权限，然而宿主机上没有与之对应的权限，所以我们直接赋予`777`权限即可
 ### 3.1 mysql
