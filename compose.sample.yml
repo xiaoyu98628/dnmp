@@ -325,8 +325,8 @@ services:
       - "./panel/plugins/elasticsearch/elasticsearch8.4:/usr/share/elasticsearch/plugins" # 插件文件
     environment:
       - "TZ=${TZ}"
-      - "discovery.type=single-node"      # 单节点设置
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # 设置内存大小
+      - "discovery.type=single-node"      # 单一节点模式启动
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # 设置使用jvm内存大小
     networks:
       - dnmp-net
 
@@ -340,9 +340,9 @@ services:
       - "./servers/kibana/kibana8.4/kibana.yml:/usr/share/kibana/config/kibana.yml:ro" # 配置文件
     environment:
       - "TZ=${TZ}"
-      - "ELASTICSEARCH_HOSTS=${KIBANA_ELASTICSEARCH_HOSTS_84}"
-      - "ELASTICSEARCH_USERNAME=${KIBANA_ELASTICSEARCH_USERNAME_84}"
-      - "ELASTICSEARCH_PASSWORD=${KIBANA_ELASTICSEARCH_PASSWORD_84}"
+      - "ELASTICSEARCH_HOSTS=${KIBANA_ELASTICSEARCH_HOSTS_8_4}"
+      - "ELASTICSEARCH_USERNAME=${KIBANA_ELASTICSEARCH_USERNAME_8_4}"
+      - "ELASTICSEARCH_PASSWORD=${KIBANA_ELASTICSEARCH_PASSWORD_8_4}"
       - "I18N_LOCALE=zh-CN"
     depends_on: # 依赖ES先启动
       - elasticsearch8.4
