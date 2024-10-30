@@ -379,9 +379,10 @@ PASSWORD elastic = {密码}
 ```
 ### 2.4 Kibana
 #### 2.4.1 Kibana连接Elasticsearch问题
-```
-elasticsearch.username: "kibana_system或kibana"
-elasticsearch.password: "上面Elasticsearch生成的密码"
+```dotenv
+# 在 .env 文件中找到 kibana 对应的配置修改
+KIBANA_ELASTICSEARCH_USERNAME_8_4="kibana_system或kibana"
+KIBANA_ELASTICSEARCH_PASSWORD_8_4="上面Elasticsearch生成的密码"
 ```
 ### 2.5 Mongo
 #### 2.5.1 `system.sessions`文档没权限访问
