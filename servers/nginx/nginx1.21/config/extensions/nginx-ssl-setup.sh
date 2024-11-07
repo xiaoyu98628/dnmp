@@ -16,7 +16,6 @@ export RELOAD_CMD="$RELOAD_CMD"
 # 检查域名变量
 if [ -z "$DOMAINS" ]; then
   echo "[$(date)] ERROR: Empty env var SSL_DOMAINS" | tee -a "$LOG_FILE"
-  exit 1
 fi
 
 # 设置默认 SSL 目录和重载命令
