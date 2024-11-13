@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # 检出代码
+        uses: actions/checkout@v4  # 检出代码
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3  # 设置 Buildx 环境
@@ -76,7 +76,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
