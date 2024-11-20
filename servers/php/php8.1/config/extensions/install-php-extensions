@@ -21,7 +21,7 @@ if ! which docker-php-ext-configure >/dev/null || ! which docker-php-ext-enable 
 	exit 1
 fi
 
-IPE_VERSION=2.5.2
+IPE_VERSION=2.6.4
 
 StandWithUkraine() {
 	if test -t 1 && ! grep -Eq '^VERSION=.*jessie' /etc/os-release; then
@@ -273,6 +273,13 @@ EOT
 #   Nothing
 processPHPModuleArgument() {
 	processPHPModuleArgument_arg="$1"
+	case "$processPHPModuleArgument_arg" in
+		imagick)
+			if test $PHP_MAJMIN_VERSION -ge 803; then
+				processPHPModuleArgument_arg=imagick/imagick@28f27044e435a2b203e32675e942eb8de620ee58
+			fi
+			;;
+	esac
 	# Convert GitHub short form to long url,
 	# for example: from
 	# php-memcached-dev/php-memcached@8f106564e6bb005ca6100b12ccc89000daafa9d8
@@ -597,6 +604,10 @@ sortModulesToInstall() {
 	checkRequiredModule relay igbinary
 	# pq requires raphf
 	checkRequiredModule pq raphf
+	# phalcon up to v5.0.0beta3 requires psr
+	if test $PHP_MAJMINPAT_VERSION -lt 70401; then
+		checkRequiredModule phalcon psr
+	fi
 	# Some module installation may use sockets if available: move it before other modules
 	if stringInList 'sockets' "$PHP_MODULES_TO_INSTALL"; then
 		PHP_MODULES_TO_INSTALL="$(removeStringFromList 'sockets' "$PHP_MODULES_TO_INSTALL")"
@@ -783,8 +794,11 @@ buildRequiredPackageLists() {
 						buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile enchant2-dev"
 					else
 						# The system provides libenchant2, supported since PHP 8.0: we need to build libenchant1 on our own
-						buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent glib aspell-libs libhunspell"
-						buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile glib-dev aspell-dev hunspell-dev"
+						if ! isLibenchant1Installed; then
+							buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent glib aspell-libs libhunspell"
+							buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile glib-dev aspell-dev hunspell-dev"
+							COMPILE_LIBS="$COMPILE_LIBS libenchant1"
+						fi
 					fi
 				else
 					buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent enchant"
@@ -797,9 +811,12 @@ buildRequiredPackageLists() {
 						buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libenchant-2-2"
 						buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libenchant-2-dev"
 					else
-						# The system provides libenchant2, supported since PHP 8.0: we need to build libenchant1 on our own
-						buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent aspell-en libhunspell-1.7-0"
-						buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libglib2.0-dev libaspell-dev libhunspell-dev"
+						if ! isLibenchant1Installed; then
+							# The system provides libenchant2, supported since PHP 8.0: we need to build libenchant1 on our own
+							buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent aspell-en libhunspell-1.7-0"
+							buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile libglib2.0-dev libaspell-dev libhunspell-dev"
+							COMPILE_LIBS="$COMPILE_LIBS libenchant1"
+						fi
 					fi
 				else
 					buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libenchant1c2a"
@@ -2198,17 +2215,7 @@ isLibaomInstalled() {
 # Install libaom
 installLibaom() {
 	printf 'Installing libaom\n'
-	installLibaom_version=3.8.1
-	case "$DISTRO_VERSION" in
-		debian@10)
-			case $(uname -m) in
-				aarch* | arm*)
-					#see https://bugs.chromium.org/p/aomedia/issues/detail?id=3543
-					installLibaom_version=3.5.0
-					;;
-			esac
-			;;
-	esac
+	installLibaom_version=3.10.0
 	installLibaom_dir="$(getPackageSource https://aomedia.googlesource.com/aom/+archive/v$installLibaom_version.tar.gz)"
 	mkdir -- "$installLibaom_dir/my.build"
 	cd -- "$installLibaom_dir/my.build"
@@ -2448,6 +2455,23 @@ installLibXCrypt() {
 	cd - >/dev/null
 }
 
+isLibenchant1Installed() {
+	if test -f /usr/lib/libenchant.so || test -f /usr/local/lib/libenchant.so; then
+		return 0
+	fi
+	return 1
+}
+
+installLibenchant1() {
+	printf 'Installing libenchant1\n'
+	installLibenchant1_src="$(getPackageSource https://github.com/rrthomas/enchant/releases/download/enchant-1-6-1/enchant-1.6.1.tar.gz)"
+	cd -- "$installLibenchant1_src"
+	./configure
+	make -j$(getProcessorCount)
+	make install
+	cd - >/dev/null
+}
+
 # Install Composer
 installComposer() {
 	installComposer_version="$(getWantedPHPModuleVersion @composer)"
@@ -2646,6 +2670,9 @@ compileLibs() {
 	if stringInList libxcrypt "$COMPILE_LIBS"; then
 		installLibXCrypt
 	fi
+	if stringInList libenchant1 "$COMPILE_LIBS"; then
+		installLibenchant1
+	fi
 }
 
 # Install a bundled PHP module given its handle
@@ -2686,32 +2713,6 @@ installBundledModule() {
 EOF
 			fi
 			docker-php-ext-configure dba --with-db4
-			;;
-		enchant)
-			installBundledModule_tmp=0
-			if test $PHP_MAJMIN_VERSION -lt 800; then
-				case "$DISTRO" in
-					alpine)
-						if test $DISTRO_MAJMIN_VERSION -ge 312; then
-							installBundledModule_tmp=1
-						fi
-						;;
-					debian)
-						if test $DISTRO_VERSION_NUMBER -ge 11; then
-							installBundledModule_tmp=1
-						fi
-						;;
-				esac
-			fi
-			if test $installBundledModule_tmp -eq 1 && ! test -f /usr/lib/libenchant.so && ! test -f /usr/local/lib/libenchant.so; then
-				# We need to install libenchant1 from source
-				installBundledModule_src="$(getPackageSource https://github.com/AbiWord/enchant/releases/download/enchant-1-6-1/enchant-1.6.1.tar.gz)"
-				cd -- "$installBundledModule_src"
-				./configure
-				make -j$(getProcessorCount)
-				make install
-				cd - >/dev/null
-			fi
 			;;
 		ftp)
 			if test $PHP_MAJMIN_VERSION -ge 804; then
@@ -2990,7 +2991,7 @@ installRemoteModule() {
 					installRemoteModule_distro=linux
 					;;
 			esac
-			installRemoteModule_tmp2=$(php -r 'echo PHP_MAJOR_VERSION . PHP_MINOR_VERSION;')
+			installRemoteModule_tmp2=$(php -r 'echo PHP_MAJOR_VERSION . PHP_MINOR_VERSION . (ZEND_THREAD_SAFE ? "-zts" : "");')
 			installRemoteModule_tmp="$(mktemp -p /tmp/src -d)"
 			cd "$installRemoteModule_tmp"
 			curl -sSLf --user-agent Docker https://blackfire.io/api/v1/releases/probe/php/$installRemoteModule_distro/$installRemoteModule_tmp1/$installRemoteModule_tmp2 | tar xz
@@ -3644,6 +3645,15 @@ installRemoteModule() {
 				fi
 			fi
 			;;
+		phalcon)
+			if test -z "$installRemoteModule_version"; then
+				if test $PHP_MAJMINPAT_VERSION -lt 70401; then
+					installRemoteModule_version=4.1.2
+				elif test $PHP_MAJMIN_VERSION -lt 800; then
+					installRemoteModule_version=5.4.0
+				fi
+			fi
+			;;
 		php_trie)
 			if ! test -f /usr/local/include/hat-trie/include/tsl/htrie_map.h; then
 				installRemoteModule_src="$(getPackageSource https://codeload.github.com/Tessil/hat-trie/tar.gz/v0.6.0)"
@@ -3670,6 +3680,17 @@ installRemoteModule() {
 					installRemoteModule_version=3.24.4
 				elif test $PHP_MAJMIN_VERSION -lt 801; then
 					installRemoteModule_version=3.25.3
+				fi
+			fi
+			;;
+		psr)
+			if test -z "$installRemoteModule_version"; then
+				if test $PHP_MAJMIN_VERSION -lt 506; then
+					installRemoteModule_version=0.5.1
+				elif test $PHP_MAJMIN_VERSION -lt 700; then
+					installRemoteModule_version=0.6.1
+				elif test $PHP_MAJMIN_VERSION -lt 703; then
+					installRemoteModule_version=1.1.0
 				fi
 			fi
 			;;
