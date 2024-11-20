@@ -59,8 +59,7 @@ function StartAcmeSh() {
 
     echo "[$(date)] INFO: Installing certificate for $domain..." | tee -a "$LOG_FILE"
     /root/.acme.sh/acme.sh --install-cert $ACME_DOMAIN_OPTION \
-      --fullchain-file ${ssl_dir}/${domain}.fullchain.pem \
-      --cert-file ${ssl_dir}/${domain}.pem \
+      --fullchain-file ${ssl_dir}/${domain}.pem \
       --key-file ${ssl_dir}/${domain}.key \
       --reloadcmd "${RELOAD_CMD}"
 
