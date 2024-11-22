@@ -1,5 +1,5 @@
-# 指定基于 php:8.4-rc-fpm-alpine 创建
-FROM php:8.4-rc-fpm-alpine
+# 指定基于 php:8.4-fpm-alpine 创建
+FROM php:8.4-fpm-alpine
 
 LABEL org.opencontainers.image.authors="XiaoYu <1765841705@qq.com>"
 
