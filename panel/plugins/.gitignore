@@ -1,0 +1,13 @@
+# 忽略当前文件夹下所有文件上传 git
+*
+
+# 排除 .gitignore 文件
+!.gitignore
+
+# 排除 elasticsearch 文件
+!elasticsearch
+!elasticsearch/**
+
+# 排除 php 文件
+!php
+!php/**

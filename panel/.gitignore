@@ -1,0 +1,21 @@
+# 忽略当前文件夹下所有文件上传 git
+*
+
+# 排除 .gitignore 文件
+!.gitignore
+
+# 排除 plugins 文件
+!plugins
+!plugins/**
+
+# 排除 sock 文件
+!sock
+!sock/**
+
+# 排除 ssl 文件
+!ssl
+!ssl/**
+
+# 排除 vhost 文件
+!vhost
+!vhost/**

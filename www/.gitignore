@@ -6,3 +6,4 @@
 
 # 排除 localhost 文件
 !localhost
+!localhost/**

@@ -4,9 +4,6 @@
 # 排除 .gitignore 文件
 !.gitignore
 
-# 排除 Dockerfile 文件
-!Dockerfile
-
-# 排除 conf.d 文件夹
-!conf.d
-!conf.d/**
+# 排除 rabbitmq3.11 文件
+!redis6.2
+!redis6.2/**

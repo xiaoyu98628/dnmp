@@ -6,3 +6,4 @@
 
 # 排除 config 文件夹
 !config
+!config/**

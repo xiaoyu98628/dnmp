@@ -1,29 +1,39 @@
 # 忽略当前文件夹下所有文件上传 git
 *
 
+# 忽略 MacOS 系统特有文件
+.DS_Store
+
 # 排除 .gitignore 文件
 !.gitignore
 
 # 排除 .github 文件
 !.github
+!.github/**
 
 # 排除 data 文件
 !data
+!data/**
 
 # 排除 logs 文件
 !logs
+!logs/**
 
 # 排除 panel 文件
 !panel
+!panel/**
 
 # 排除 resource 文件
 !resource
+!resource/**
 
 # 排除 servers 文件
 !servers
+!servers/**
 
 # 排除 www 文件
 !www
+!www/**
 
 # 排除 compose.sample.yml 文件
 !compose.sample.yml

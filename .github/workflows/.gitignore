@@ -4,9 +4,9 @@
 # 排除 .gitignore 文件
 !.gitignore
 
-# 排除 Dockerfile 文件
-!Dockerfile
+# 排除 .env 文件
+!.env
 
-# 排除 conf.d 文件夹
-!conf.d
-!conf.d/**
+# 排除 test-compose.yml 文件
+!test-compose.yml
+

@@ -1,0 +1,27 @@
+# 忽略当前文件夹下所有文件上传 git
+*
+
+# 排除 .gitignore 文件
+!.gitignore
+
+# 排除 images 文件
+!images
+!images/**
+
+# 排除 apk-details.md 文件
+!apk-details.md
+
+# 排除 install-php-extensions.md 文件
+!install-php-extensions.md
+
+# 排除 mysql-user-permissions.md 文件
+!mysql-user-permissions.md
+
+# 排除 php-install-ext.md 文件
+!php-install-ext.md
+
+# 排除 phpstorm-xdebug.md 文件
+!phpstorm-xdebug.md
+
+# 排除 supervisor-detail.md 文件
+!supervisor-detail.md

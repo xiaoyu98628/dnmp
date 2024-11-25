@@ -1,0 +1,41 @@
+# 忽略当前文件夹下所有文件上传 git
+*
+
+# 排除 .gitignore 文件
+!.gitignore
+
+# 排除 elasticsearch 文件
+!elasticsearch
+!elasticsearch/**
+
+# 排除 kibana 文件
+!kibana
+!kibana/**
+
+# 排除 mongo 文件
+!mongo
+!mongo/**
+
+# 排除 mysql 文件
+!mysql
+!mysql/**
+
+# 排除 nginx 文件
+!nginx
+!nginx/**
+
+# 排除 node 文件
+!node
+!node/**
+
+# 排除 php 文件
+!php
+!php/**
+
+# 排除 rabbitmq 文件
+!rabbitmq
+!rabbitmq/**
+
+# 排除 redis 文件
+!redis
+!redis/**
