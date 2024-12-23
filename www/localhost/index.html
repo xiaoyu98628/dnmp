@@ -29,11 +29,10 @@
         // 设置元素的文本
         currentTimeEle.innerHTML =  moment(date).format("YYYY-MM-DD HH:mm:ss");
     }
-    // 页面出来直接渲染
-    getTime();
 
     // 定时器，动态更新时间
-    setInterval(function(){
-        getTime()
-    }, 1000); // 每秒更新一次
+    setInterval(getTime, 1000); // 每秒更新一次
+
+    // 初始化时间
+    getTime();
 </script>
