@@ -245,7 +245,7 @@ services:
       - "./servers/php/php8.4/config/supervisor/supervisord.conf:/etc/supervisord.conf:ro"    # supervisor配置文件
       - "./logs/php/php8.4:/var/log/php"                                                      # 日志文件
       - "./panel:/usr/panel"                                                                  # nginx使用unix连接文件
-      - "${PROJECT_DIRECTORY}:/var/www/html"                                                  # 文件路径
+      - "${PROJECT_DIRECTORY}:/var/www/html"                                                  # 站点文件路径
     cap_add:
       - SYS_PTRACE
     networks:
