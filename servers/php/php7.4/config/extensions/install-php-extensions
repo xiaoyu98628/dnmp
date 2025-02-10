@@ -21,7 +21,7 @@ if ! which docker-php-ext-configure >/dev/null || ! which docker-php-ext-enable 
 	exit 1
 fi
 
-IPE_VERSION=2.7.7
+IPE_VERSION=2.7.23
 
 StandWithUkraine() {
 	if test -t 1 && ! grep -Eq '^VERSION=.*jessie' /etc/os-release; then
@@ -1435,12 +1435,17 @@ buildRequiredPackageLists() {
 						buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile sqlite-dev zstd-dev"
 					fi
 				fi
-				# iouring support in swoole 6 requires liburing 2.5+: available since Alpine 3.19
-				# but with Alpine 3.19 we have a "invalid use of incomplete type 'const struct statx'" error
-				if test $DISTRO_MAJMIN_VERSION -ge 320; then
-					buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent liburing"
-					buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile liburing-dev"
-				fi
+				case "${IPE_SWOOLE_WITHOUT_IOURING:-}" in
+					1 | y* | Y*) ;;
+					*)
+						# iouring support in swoole 6 requires liburing 2.5+: available since Alpine 3.19
+						# but with Alpine 3.19 we have a "invalid use of incomplete type 'const struct statx'" error
+						if test $DISTRO_MAJMIN_VERSION -ge 320; then
+							buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent liburing"
+							buildRequiredPackageLists_volatile="$buildRequiredPackageLists_volatile liburing-dev"
+						fi
+						;;
+				esac
 				;;
 			swoole@debian)
 				buildRequiredPackageLists_persistent="$buildRequiredPackageLists_persistent libcurl3-gnutls libpq5"
@@ -2540,30 +2545,41 @@ actuallyInstallComposer() {
 
 # Install ionCube Loader
 installIonCubeLoader() {
+	installIonCubeLoader_version=''
+	if test $PHP_MAJMIN_VERSION -lt 804; then
+		# For 14.4.0 we have a Segmentation Fault
+		installIonCubeLoader_version=14.0.0
+	fi
+	installIonCubeLoader_versionForUrl=''
+	installIonCubeLoader_versionForMessage=latest
+	if test -n "$installIonCubeLoader_version"; then
+		installIonCubeLoader_versionForUrl="_$installIonCubeLoader_version"
+		installIonCubeLoader_versionForMessage="v$installIonCubeLoader_version"
+	fi
 	# See https://www.ioncube.com/loaders.php
 	case $PHP_BITS in
 		32)
 			case $(uname -m) in
 				aarch* | arm*)
-					installIonCubeLoader_url="https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_armv7l.tar.gz"
+					installIonCubeLoader_url="https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_armv7l$installIonCubeLoader_versionForUrl.tar.gz"
 					;;
 				*)
-					installIonCubeLoader_url="https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86.tar.gz"
+					installIonCubeLoader_url="https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86$installIonCubeLoader_versionForUrl.tar.gz"
 					;;
 			esac
 			;;
 		*)
 			case $(uname -m) in
 				aarch64 | arm64 | armv8)
-					installIonCubeLoader_url="https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_aarch64.tar.gz"
+					installIonCubeLoader_url="https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_aarch64$installIonCubeLoader_versionForUrl.tar.gz"
 					;;
 				*)
-					installIonCubeLoader_url="https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz"
+					installIonCubeLoader_url="https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64$installIonCubeLoader_versionForUrl.tar.gz"
 					;;
 			esac
 			;;
 	esac
-	printf 'Downloading ionCube Loader... '
+	printf 'Downloading ionCube Loader (%s)... ' "$installIonCubeLoader_versionForMessage"
 	installIonCubeLoader_dir="$(getPackageSource $installIonCubeLoader_url)"
 	echo 'done.'
 	installIonCubeLoader_so=$(php -r "printf('ioncube_loader_lin_%s.%s%s.so', PHP_MAJOR_VERSION, PHP_MINOR_VERSION, ZEND_THREAD_SAFE ? '_ts' : '');")
@@ -2612,15 +2628,31 @@ installCargo() {
 	if command -v cargo >/dev/null; then
 		return
 	fi
-	printf '# Installing cargo\n'
-	case "$DISTRO" in
-		alpine)
-			# see https://github.com/hyperledger/indy-vdr/issues/69#issuecomment-998104850
-			export RUSTFLAGS='-C target-feature=-crt-static'
-			;;
-	esac
-	curl https://sh.rustup.rs -sSf | sh -s -- -y -q
+	installCargo_cargoversion=
+	if ! test -f "$HOME/.cargo/env"; then
+		printf '# Installing cargo\n'
+		case "$DISTRO" in
+			alpine)
+				# see https://github.com/hyperledger/indy-vdr/issues/69#issuecomment-998104850
+				export RUSTFLAGS='-C target-feature=-crt-static'
+				;;
+		esac
+		curl https://sh.rustup.rs -sSf | sh -s -- -y -q
+		case "$DISTRO" in
+			alpine)
+				if test $DISTRO_MAJMIN_VERSION -le 310; then
+					# With version 1.84.0 we have this error:
+					# Error relocating /root/.rustup/toolchains/stable-x86_64-unknown-linux-musl/bin/cargo: posix_spawn_file_actions_addchdir_np: symbol not found
+					# See https://github.com/rust-lang/rust/pull/131851#issue-2595663507
+					installCargo_cargoversion=1.83.0
+				fi
+				;;
+		esac
+	fi
 	. "$HOME/.cargo/env"
+	if test -n "$installCargo_cargoversion"; then
+		rustup default -- "$installCargo_cargoversion"
+	fi
 	if test -z "${IPE_UNINSTALL_CARGO:-}"; then
 		IPE_UNINSTALL_CARGO=y
 	fi
@@ -2628,14 +2660,20 @@ installCargo() {
 
 installNewRelic() {
 	printf '# Installing newrelic\n'
+	# see https://docs.newrelic.com/docs/apm/agents/php-agent/getting-started/php-agent-compatibility-requirements/
+	if test $PHP_MAJMIN_VERSION -le 701; then
+		installNewRelic_baseUrl=https://download.newrelic.com/php_agent/archive/10.21.0.11/
+	else
+		installNewRelic_baseUrl=https://download.newrelic.com/php_agent/release/
+	fi
 	installNewRelic_search='\bnewrelic-php[0-9.]*-[0-9]+(\.[0-9]+)*-linux'
 	case "$DISTRO" in
 		alpine)
 			installNewRelic_search="$installNewRelic_search-musl"
 			;;
 	esac
-	installNewRelic_file="$(curl -sSLf -o- https://download.newrelic.com/php_agent/release/ | sed -E 's/<[^>]*>//g' | grep -Eo "$installNewRelic_search.tar.gz" | sort | head -1)"
-	installNewRelic_url="https://download.newrelic.com/php_agent/release/$installNewRelic_file"
+	installNewRelic_file="$(curl -sSLf -o- "$installNewRelic_baseUrl" | sed -E 's/<[^>]*>//g' | grep -Eo "$installNewRelic_search.tar.gz" | sort | head -1)"
+	installNewRelic_url="$installNewRelic_baseUrl$installNewRelic_file"
 	installNewRelic_src="$(getPackageSource "$installNewRelic_url")"
 	cd -- "$installNewRelic_src"
 	NR_INSTALL_USE_CP_NOT_LN=1 NR_INSTALL_SILENT=1 ./newrelic-install install
@@ -3189,6 +3227,8 @@ installRemoteModule() {
 			if test -z "$installRemoteModule_version"; then
 				if test $PHP_MAJMIN_VERSION -le 506; then
 					installRemoteModule_version=1.1.2
+				elif test $PHP_MAJMIN_VERSION -le 700; then
+					installRemoteModule_version=2.1.3
 				fi
 			fi
 			case "$DISTRO" in
@@ -3276,7 +3316,7 @@ installRemoteModule() {
 				if ! test -e /usr/local/lib/libidnkit.so; then
 					installRemoteModule_src="$(getPackageSource https://jprs.co.jp/idn/idnkit-2.3.tar.bz2)"
 					cd -- "$installRemoteModule_src"
-					./configure
+					CFLAGS=-Wno-incompatible-pointer-types ./configure
 					make -j$(getProcessorCount) install
 					cd - >/dev/null
 				fi
@@ -3318,7 +3358,7 @@ installRemoteModule() {
 					git submodule update -q
 					mkdir -p build
 					cd build
-					cmake -DCMAKE_BUILD_TYPE=Release .. -Wno-dev
+					CFLAGS='-Wno-incompatible-pointer-types -Wno-stringop-overflow -Wno-discarded-qualifiers' cmake -DCMAKE_BUILD_TYPE=Release .. -Wno-dev
 					make clean
 					make -j$(getProcessorCount) install
 				)
@@ -3539,6 +3579,8 @@ installRemoteModule() {
 					installRemoteModule_version=4.10.0
 				elif test $PHP_MAJMIN_VERSION -lt 801; then
 					installRemoteModule_version=22.0.0
+				elif test $PHP_MAJMIN_VERSION -lt 802; then
+					installRemoteModule_version=22.1.2
 				fi
 			else
 				installRemoteModule_version="$(resolvePeclStabilityVersion "$installRemoteModule_module" "$installRemoteModule_version")"
@@ -3672,6 +3714,7 @@ installRemoteModule() {
 					installRemoteModule_version=5.4.0
 				fi
 			fi
+			installRemoteModule_cppflags='-Wno-incompatible-pointer-types'
 			;;
 		php_trie)
 			if ! test -f /usr/local/include/hat-trie/include/tsl/htrie_map.h; then
@@ -3899,6 +3942,9 @@ installRemoteModule() {
 				fi
 			fi
 			;;
+		seaslog)
+			installRemoteModule_cppflags='-Wno-incompatible-pointer-types'
+			;;
 		smbclient)
 			if test -z "$installRemoteModule_version"; then
 				if test $PHP_MAJMIN_VERSION -le 506; then
@@ -3927,6 +3973,8 @@ installRemoteModule() {
 				if test -z "$installRemoteModule_version"; then
 					if test $PHP_MAJMIN_VERSION -le 800; then
 						installRemoteModule_version=0.9.0
+					elif test $PHP_MAJMIN_VERSION -le 801; then
+						installRemoteModule_version=0.10.0
 					else
 						installRemoteModule_version=0.11.0
 					fi
@@ -3972,7 +4020,7 @@ installRemoteModule() {
 		spx)
 			if test -z "$installRemoteModule_path"; then
 				if test -z "$installRemoteModule_version"; then
-					installRemoteModule_version=v0.4.17
+					installRemoteModule_version=v0.4.18
 				fi
 				if test "${installRemoteModule_version%.*}" = "$installRemoteModule_version"; then
 					installRemoteModule_displayVersion="$installRemoteModule_version"
@@ -4078,12 +4126,6 @@ installRemoteModule() {
 					fi
 					;;
 			esac
-			if test $PHP_MAJMIN_VERSION -ge 800; then
-				# see https://github.com/swoole/swoole-src/issues/5365
-				installRemoteModule_curl=no
-			else
-				installRemoteModule_curl=yes
-			fi
 			if test $PHP_THREADSAFE -eq 1; then
 				installRemoteModule_zts=yes
 			else
@@ -4091,27 +4133,42 @@ installRemoteModule() {
 			fi
 			installRemoteModule_sqlite=yes
 			installRemoteModule_iouring=no
+			installRemoteModule_curl=yes
 			case "$DISTRO" in
 				alpine)
 					if test $DISTRO_MAJMIN_VERSION -lt 317; then
 						# we need sqlite3 >= 3.7.7
 						installRemoteModule_sqlite=no
 					fi
-					# iouring support in swoole 6 requires liburing 2.5+: available since Alpine 3.19
-					# but with Alpine 3.19 we have a "invalid use of incomplete type 'const struct statx'" error
-					if test $DISTRO_MAJMIN_VERSION -ge 320; then
-						installRemoteModule_iouring=yes
-					fi
+					case "${IPE_SWOOLE_WITHOUT_IOURING:-}" in
+						1 | y* | Y*) ;;
+						*)
+							# iouring support in swoole 6 requires liburing 2.5+: available since Alpine 3.19
+							# but with Alpine 3.19 we have a "invalid use of incomplete type 'const struct statx'" error
+							if test $DISTRO_MAJMIN_VERSION -ge 320; then
+								installRemoteModule_iouring=yes
+							fi
+							;;
+					esac
 					;;
 				debian)
+					if test $PHP_MAJMIN_VERSION -ge 800; then
+						# see https://github.com/swoole/swoole-src/issues/5365
+						installRemoteModule_curl=no
+					fi
 					if test $DISTRO_MAJMIN_VERSION -lt 1200; then
 						# we need sqlite3 >= 3.7.7
 						installRemoteModule_sqlite=no
 					fi
-					if test $DISTRO_VERSION_NUMBER -ge 13; then
-						# iouring support in swoole 6 requires liburing 2.5+: available since Debian Trixie (13)
-						installRemoteModule_iouring=yes
-					fi
+					case "${IPE_SWOOLE_WITHOUT_IOURING:-}" in
+						1 | y* | Y*) ;;
+						*)
+							if test $DISTRO_VERSION_NUMBER -ge 13; then
+								# iouring support in swoole 6 requires liburing 2.5+: available since Debian Trixie (13)
+								installRemoteModule_iouring=yes
+							fi
+							;;
+					esac
 					;;
 			esac
 			installRemoteModule_zstd=yes
@@ -4341,6 +4398,7 @@ installRemoteModule() {
 			fi
 			;;
 		tensor)
+			installRemoteModule_cppflags='-Wno-incompatible-pointer-types'
 			if test -z "$installRemoteModule_version"; then
 				if test $PHP_MAJMIN_VERSION -le 703; then
 					installRemoteModule_version=2.2.3
@@ -4408,6 +4466,7 @@ installRemoteModule() {
 			installRemoteModule_manuallyInstalled=1
 			;;
 		uopz)
+			installRemoteModule_cppflags='-Wno-incompatible-pointer-types'
 			if test -z "$installRemoteModule_version"; then
 				if test $PHP_MAJMIN_VERSION -le 506; then
 					installRemoteModule_version=2.0.7
@@ -4601,8 +4660,6 @@ installRemoteModule() {
 			if test -z "$installRemoteModule_version"; then
 				if test $PHP_MAJMIN_VERSION -le 506; then
 					installRemoteModule_version=0.5.0
-				else
-					installRemoteModule_version=alpha
 				fi
 			fi
 			installRemoteModule_version="$(resolvePeclStabilityVersion "$installRemoteModule_module" "$installRemoteModule_version")"
@@ -4946,8 +5003,12 @@ fixLetsEncrypt() {
 # Cleanup everything at the end of the execution
 cleanup() {
 	if test "${IPE_UNINSTALL_CARGO:-}" = y; then
-		. "$HOME/.cargo/env"
-		rustup self uninstall -y
+		if test -f "$HOME/.cargo/env"; then
+			. "$HOME/.cargo/env"
+		fi
+		if command -v rustup >/dev/null; then
+			rustup self uninstall -y
+		fi
 	fi
 	if test -n "$UNNEEDED_PACKAGE_LINKS"; then
 		printf '### REMOVING UNNEEDED PACKAGE LINKS ###\n'
