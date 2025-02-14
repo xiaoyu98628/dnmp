@@ -7,6 +7,7 @@
 # 排除 .env 文件
 !.env
 
-# 排除 test-compose.yml 文件
-!test-compose.yml
+# 排除 build-images-compose.yml 文件
+!build-images-compose.yml
+!test-images-compose.yml
 
