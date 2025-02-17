@@ -1,4 +1,5 @@
-name: Build Docker image
+# 测试失败的容器
+name: Test Docker image
 
 on:
   workflow_dispatch: # 手动触发工作流程
@@ -51,7 +52,7 @@ jobs:
         run: |
           version_number=$(echo "${{ matrix.php_version }}" | sed 's/php//')
           if [ "$version_number" = "84" ]; then
-            echo "PHP_EXTENSIONS_${version_number}=phalcon,swoole,mcrypt" >> .github/workflows/.env
+            echo "PHP_EXTENSIONS_${version_number}=swoole,mcrypt,phalcon" >> .github/workflows/.env
           else
             echo "PHP_EXTENSIONS_${version_number}=phalcon" >> .github/workflows/.env
           fi
@@ -61,10 +62,6 @@ jobs:
         env:
           DOCKER_BUILDKIT: 1
           COMPOSE_DOCKER_CLI_BUILD: 1
-          PHP_EXTENSIONS_81: phalcon
-          PHP_EXTENSIONS_82: phalcon
-          PHP_EXTENSIONS_83: phalcon
-          PHP_EXTENSIONS_84: phalcon,swoole.mcrypt
 
       - name: Verify ${{ matrix.php_version }} Docker image
         run: |
