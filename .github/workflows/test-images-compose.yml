@@ -62,6 +62,10 @@ jobs:
         env:
           DOCKER_BUILDKIT: 1
           COMPOSE_DOCKER_CLI_BUILD: 1
+          PHP_EXTENSIONS_81: phalcon
+          PHP_EXTENSIONS_82: phalcon
+          PHP_EXTENSIONS_83: phalcon
+          PHP_EXTENSIONS_84: swoole.mcrypt,phalcon
 
       - name: Verify ${{ matrix.php_version }} Docker image
         run: |
