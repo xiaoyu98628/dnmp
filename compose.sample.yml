@@ -228,6 +228,7 @@ services:
   php84:
     build:
       context: ./servers/php/php8.4
+      dockerfile: Dockerfile
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
         PHP_EXTENSIONS_84: ${PHP_EXTENSIONS_84}
