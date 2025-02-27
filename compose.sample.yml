@@ -18,7 +18,7 @@ services:
       - "MYSQL_USER=${MYSQL_USER_80}"
       - "MYSQL_PASSWORD=${MYSQL_PASSWORD_80}"
     networks:
-      - dnmp-net
+      - dnmp
 
   redis6.2:
     image: redis:6.2-alpine
@@ -34,7 +34,7 @@ services:
       - "TZ=${TZ}"
     entrypoint: ["redis-server", "/etc/redis/docker.conf", "--requirepass", "${REDIS_PASSWORD_62}"]
     networks:
-      - dnmp-net
+      - dnmp
 
   php72:
     build:
@@ -61,7 +61,7 @@ services:
     cap_add:
       - SYS_PTRACE
     networks:
-      - dnmp-net
+      - dnmp
 
   php73:
     build:
@@ -88,7 +88,7 @@ services:
     cap_add:
       - SYS_PTRACE
     networks:
-      - dnmp-net
+      - dnmp
 
   php74:
     build:
@@ -115,7 +115,7 @@ services:
     cap_add:
       - SYS_PTRACE
     networks:
-      - dnmp-net
+      - dnmp
 
   php80:
     build:
@@ -142,7 +142,7 @@ services:
     cap_add:
       - SYS_PTRACE
     networks:
-      - dnmp-net
+      - dnmp
 
   php81:
     build:
@@ -169,7 +169,7 @@ services:
     cap_add:
       - SYS_PTRACE
     networks:
-      - dnmp-net
+      - dnmp
 
   php82:
     build:
@@ -196,7 +196,7 @@ services:
     cap_add:
       - SYS_PTRACE
     networks:
-      - dnmp-net
+      - dnmp
 
   php83:
     build:
@@ -223,7 +223,7 @@ services:
     cap_add:
       - SYS_PTRACE
     networks:
-      - dnmp-net
+      - dnmp
 
   php84:
     build:
@@ -250,7 +250,7 @@ services:
     cap_add:
       - SYS_PTRACE
     networks:
-      - dnmp-net
+      - dnmp
 
   nginx1.21:
     build:
@@ -277,7 +277,7 @@ services:
       - "SSL_BASE_DIR=${NGINX_SSL_BASE_DIR_1_21}"
       - "RELOAD_CMD=${NGINX_RELOAD_CMD_1_21}"
     networks:
-      - dnmp-net
+      - dnmp
 
   mongo6.0:
     image: mongo:6.0
@@ -295,7 +295,7 @@ services:
       - "MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD_60}"
     command: "mongod --config /etc/mongo.conf"
     networks:
-      - dnmp-net
+      - dnmp
 
   mongo-express:
     image: mongo-express
@@ -311,7 +311,7 @@ services:
     depends_on:
       - mongo6.0
     networks:
-      - dnmp-net
+      - dnmp
 
   rabbitmq3.11:
     build:
@@ -335,7 +335,7 @@ services:
       - "RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER_3_11}"
       - "RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS_3_11}"
     networks:
-      - dnmp-net
+      - dnmp
 
   elasticsearch8.4:
     image: elasticsearch:8.4.0
@@ -355,7 +355,7 @@ services:
       - "discovery.type=single-node"      # 单一节点模式启动
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # 设置使用jvm内存大小
     networks:
-      - dnmp-net
+      - dnmp
 
   kibana8.4:
     image: kibana:8.4.0
@@ -374,7 +374,7 @@ services:
     depends_on: # 依赖ES先启动
       - elasticsearch8.4
     networks:
-      - dnmp-net
+      - dnmp
 
   node22:
     build:
@@ -392,7 +392,9 @@ services:
     stdin_open: true
     tty: true
     networks:
-      - dnmp-net
+      - dnmp
 
 networks:
-  dnmp-net:
+  dnmp:
+    name: dnmp
+    driver: bridge
