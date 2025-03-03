@@ -86,6 +86,7 @@ docker compose 快速部署LNMP环境又名DNMP 包括但不限于 Nginx，Mysql
   - [5.3 SQLSTATE[HY000] [1044] Access denied for user '你的用户名'@'%' to database 'mysql'](#53-sqlstatehy000-1044-access-denied-for-user-你的用户名-to-database-mysql)
   - [5.4 [output clipped, Log limit 1MiB reached] 日志限制达到1MiB](#54-output-clipped-log-limit-1mib-reached-日志限制达到1mib)
   - [5.5 supervisor 常见问题](#55-supervisor-常见问题)
+  - [5.6 php 容器中 supervisor 守护php进程问题（导致php不能启动）](#56-php-容器中-supervisor-守护php进程问题导致php不能启动)
 - [6. alpine 镜像内 apk 部分命令详解](#6-alpine-镜像内-apk-部分命令详解)
 ## 1 目录结构
 ```markdown
@@ -545,6 +546,13 @@ docker import php72.tar php72:v1
 3. 启动了多个supervisord服务，导致无法正常关闭服务
     问题描述：在运行`supervisord -c /etc/supervisord.conf`之前，运行过`supervisord -c /etc/supervisor.d/xx.conf`导致有些进程被多个supervisord管理，无法正常关闭进程。
     解决办法：使用`ps -fe | grep supervisord`查看所有启动过的supervisord服务，kill相关的进程
+### 5.6 php容器中 supervisor 守护php进程问题（导致php不能启动）
+查看 `logs/php/php版本/php-fpm.log` 日志
+```
+ERROR: unable to bind listening socket for address '/usr/panel/sock/php/php-fpm82.sock': Not supported (95)
+ERROR: FPM initialization failed
+```
+如果出现上述错误描述，是因为php容器异常关闭导致，需要删除 `panel/sock/php/php版本-fpm.sock` 套接字文件，重启容器即可
 ## 6 alpine 镜像内 apk 部分命令详解
 [**apk 部分命令详解**](resource/apk-details.md)
 ## 致谢
