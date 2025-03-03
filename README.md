@@ -549,7 +549,7 @@ docker import php72.tar php72:v1
 ### 5.6 php容器中 supervisor 守护php进程问题（导致php不能启动）
 查看 `logs/php/php版本/php-fpm.log` 日志
 ```
-ERROR: unable to bind listening socket for address '/usr/panel/sock/php/php-fpm82.sock': Not supported (95)
+ERROR: unable to bind listening socket for address '/usr/panel/sock/php/php82-fpm.sock': Not supported (95)
 ERROR: FPM initialization failed
 ```
 如果出现上述错误描述，是因为php容器异常关闭导致，需要删除 `panel/sock/php/php版本-fpm.sock` 套接字文件，重启容器即可
