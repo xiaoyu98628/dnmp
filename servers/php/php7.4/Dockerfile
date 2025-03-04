@@ -209,7 +209,7 @@ RUN apk update && apk upgrade \
         then \
             echo "---------- Install mongodb ----------" \
             && apk add --no-cache curl-dev openssl-dev \
-            && printf "\n" | pecl install mongodb \
+            && printf "\n" | pecl install mongodb-1.20.1 \
             && docker-php-ext-enable mongodb; \
         fi \
     && if [ -z "${EXTENSIONS##*,amqp,*}" ]; \
