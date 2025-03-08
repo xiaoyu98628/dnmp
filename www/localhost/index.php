@@ -25,6 +25,7 @@ echo '<li>服务器软件信息：', $_SERVER['SERVER_SOFTWARE'], '</li>';
 echo '<li>MySQL服务器版本：', getMysqlVersion(), '</li>';
 echo '<li>Redis服务器版本：', getRedisVersion(), '</li>';
 echo '<li>MongoDB服务器版本：', getMongoVersion(), '</li>';
+echo '<li>RabbitMQ服务器版本：', getRabbitMQVersion(), '</li>';
 echo '</ul>';
 
 echo '<h2>已安装扩展：</h2>';
@@ -49,7 +50,7 @@ setInterval(function(){
 ';
 
 /**
- * 获取MySQL版本
+ * 获取 MySQL 版本
  * @return string
  */
 function getMysqlVersion(): string
@@ -67,7 +68,7 @@ function getMysqlVersion(): string
 }
 
 /**
- * 获取Redis版本
+ * 获取 Redis 版本
  * @return string
  */
 function getRedisVersion(): string
@@ -88,7 +89,7 @@ function getRedisVersion(): string
 }
 
 /**
- * 获取MongoDB版本
+ * 获取 MongoDB 版本
  * @return string
  */
 function getMongoVersion(): string
@@ -108,6 +109,41 @@ function getMongoVersion(): string
         }
     } else {
         return 'MongoDB 扩展未安装 ×';
+    }
+}
+
+/**
+ * 获取 rabbitmq 版本
+ * @return string
+ */
+function getRabbitMQVersion(): string
+{
+    if (extension_loaded('amqp')) {
+        try {
+            $url = "http://rabbitmq3.11:15672/api/overview";
+            // 使用 cURL 获取 RabbitMQ 版本信息
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERPWD, "root:root");
+            curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept: application/json"]);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 5); // 5秒超时，避免长时间无响应
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            if ($response) {
+                $data = json_decode($response, true);
+                return $data['rabbitmq_version'];
+            } else {
+                return "无法获取 RabbitMQ 版本，请检查 HTTP API 是否开启。";
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    } else {
+        return 'Amqp 扩展未安装 ×';
     }
 }
 
