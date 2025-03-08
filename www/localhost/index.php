@@ -118,7 +118,7 @@ function getMongoVersion(): string
  */
 function getRabbitMQVersion(): string
 {
-    if (extension_loaded('amqp')) {
+    if (extension_loaded('curl')) {
         try {
             $url = "http://rabbitmq3.11:15672/api/overview";
             // 使用 cURL 获取 RabbitMQ 版本信息
@@ -131,19 +131,24 @@ function getRabbitMQVersion(): string
             curl_setopt($ch, CURLOPT_TIMEOUT, 5); // 5秒超时，避免长时间无响应
 
             $response = curl_exec($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
 
-            if ($response) {
-                $data = json_decode($response, true);
-                return $data['rabbitmq_version'];
-            } else {
+            if ($http_code <= 0) {
+                return "容器未启动";
+            }
+
+            if (empty($response)) {
                 return "无法获取 RabbitMQ 版本，请检查 HTTP API 是否开启。";
             }
+
+            $data = json_decode($response, true);
+            return $data['rabbitmq_version'];
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     } else {
-        return 'Amqp 扩展未安装 ×';
+        return 'curl 扩展未安装 ×';
     }
 }
 
