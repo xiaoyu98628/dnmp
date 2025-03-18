@@ -38,14 +38,18 @@ echo '
 // 获取元素
 let currentTimeEle = document.getElementById("current-time");
 
-// 定时器，动态更新时间
-setInterval(function(){
+function getTime() {
     // 获取当前时间
     let date = new Date();
-
     // 设置元素的文本
     currentTimeEle.innerHTML = moment(date).format("YYYY-MM-DD HH:mm:ss");
-}, 1000); // 每秒更新一次
+}
+
+// 定时器，动态更新时间
+setInterval(getTime, 1000); // 每秒更新一次
+
+// 初始化时间
+getTime();
 </script>
 ';
 
