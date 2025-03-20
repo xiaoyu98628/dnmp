@@ -103,6 +103,11 @@ server{
         root           /var/www/html/localhost;
         include php/enable-php-72.conf;
     }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
+        include php/enable-php-72.conf;
+    }
 }
 
 server{
@@ -115,6 +120,11 @@ server{
     location ~ [^/]\.php(/|$) {
         # 注意这里和php-fpm的挂载目录一致
         root           /var/www/html/localhost;
+        include php/enable-php-73.conf;
+    }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
         include php/enable-php-73.conf;
     }
 }
@@ -131,6 +141,11 @@ server{
         root           /var/www/html/localhost;
         include php/enable-php-74.conf;
     }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
+        include php/enable-php-74.conf;
+    }
 }
 
 server{
@@ -143,6 +158,11 @@ server{
     location ~ [^/]\.php(/|$) {
         # 注意这里和php-fpm的挂载目录一致
         root           /var/www/html/localhost;
+        include php/enable-php-80.conf;
+    }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
         include php/enable-php-80.conf;
     }
 }
@@ -159,6 +179,11 @@ server{
         root           /var/www/html/localhost;
         include php/enable-php-81.conf;
     }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
+        include php/enable-php-81.conf;
+    }
 }
 
 server{
@@ -171,6 +196,11 @@ server{
     location ~ [^/]\.php(/|$) {
         # 注意这里和php-fpm的挂载目录一致
         root           /var/www/html/localhost;
+        include php/enable-php-82.conf;
+    }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
         include php/enable-php-82.conf;
     }
 }
@@ -187,6 +217,11 @@ server{
         root           /var/www/html/localhost;
         include php/enable-php-83.conf;
     }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
+        include php/enable-php-83.conf;
+    }
 }
 
 server{
@@ -199,6 +234,11 @@ server{
     location ~ [^/]\.php(/|$) {
         # 注意这里和php-fpm的挂载目录一致
         root           /var/www/html/localhost;
+        include php/enable-php-84.conf;
+    }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
         include php/enable-php-84.conf;
     }
 }
