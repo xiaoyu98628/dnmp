@@ -21,7 +21,7 @@ if ! which docker-php-ext-configure >/dev/null || ! which docker-php-ext-enable 
 	exit 1
 fi
 
-IPE_VERSION=2.7.23
+IPE_VERSION=2.7.28
 
 StandWithUkraine() {
 	if test -t 1 && ! grep -Eq '^VERSION=.*jessie' /etc/os-release; then
@@ -2440,7 +2440,7 @@ isFirebirdInstalled() {
 installFirebird() {
 	printf 'Installing firebird\n'
 	if test $PHP_MAJMIN_VERSION -ge 804; then
-		installFirebird_src="$(getPackageSource https://github.com/FirebirdSQL/firebird/releases/download/v5.0.1/Firebird-5.0.1.1469-0-source.tar.xz)"
+		installFirebird_src="$(getPackageSource https://github.com/FirebirdSQL/firebird/releases/download/v5.0.2/Firebird-5.0.2.1613-0-source.tar.xz)"
 		cd -- "$installFirebird_src"
 		./configure --enable-client-only
 		make -j$(getProcessorCount)
@@ -2546,10 +2546,12 @@ actuallyInstallComposer() {
 # Install ionCube Loader
 installIonCubeLoader() {
 	installIonCubeLoader_version=''
-	if test $PHP_MAJMIN_VERSION -lt 804; then
-		# For 14.4.0 we have a Segmentation Fault
-		installIonCubeLoader_version=14.0.0
-	fi
+	case "$DISTRO" in
+		alpine)
+			# For 14.4.0 we have a Segmentation Fault
+			installIonCubeLoader_version=14.0.0
+			;;
+	esac
 	installIonCubeLoader_versionForUrl=''
 	installIonCubeLoader_versionForMessage=latest
 	if test -n "$installIonCubeLoader_version"; then
@@ -3510,6 +3512,8 @@ installRemoteModule() {
 					installRemoteModule_version=1.11.1
 				elif test $PHP_MAJMIN_VERSION -le 703; then
 					installRemoteModule_version=1.16.2
+				elif test $PHP_MAJMIN_VERSION -le 800; then
+					installRemoteModule_version=1.20.1
 				fi
 			fi
 			if test -z "$installRemoteModule_version" || test $(compareVersions "$installRemoteModule_version" 1.17.0) -ge 0; then
@@ -3674,6 +3678,11 @@ installRemoteModule() {
 				addConfigureOption enable-swoole-json yes
 				# enable curl support?
 				addConfigureOption enable-swoole-curl yes
+			fi
+			;;
+		operator)
+			if test -z "$installRemoteModule_version"; then
+				installRemoteModule_version=beta
 			fi
 			;;
 		parallel)
@@ -4582,6 +4591,17 @@ installRemoteModule() {
 			if test -z "$installRemoteModule_version" || test $(compareVersions "$installRemoteModule_version" 1.2.7) -ge 0; then
 				# enable reader supports?
 				addConfigureOption enable-reader yes
+			fi
+			;;
+		xmldiff)
+			installRemoteModule_version="$(resolvePeclStabilityVersion "$installRemoteModule_module" "$installRemoteModule_version")"
+			if test -z "$installRemoteModule_version"; then
+				case "$DISTRO_VERSION" in
+					debian@8)
+						# The gcc version of Debian Jessie is too old => error: 'nullptr' was not declared in this scope
+						installRemoteModule_version=1.1.4
+						;;
+				esac
 			fi
 			;;
 		xmlrpc)
