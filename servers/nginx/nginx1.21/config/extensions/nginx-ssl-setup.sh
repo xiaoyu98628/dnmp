@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 日志文件
-LOG_FILE="/var/log/nginx/nginx-ssl-setup.log"
+export LOG_FILE="/var/log/nginx/nginx-ssl-setup.log"
 
 # 域名 使用 ; 隔开
 # shellcheck disable=SC2155
