@@ -1,114 +1,79 @@
 #!/usr/bin/env bash
 
+# 日志文件
+export LOG_FILE="/var/log/nginx/nginx-ssl-setup.log"
+
 # 域名 使用 ; 隔开
-export DOMAINS=$(echo "$SSL_DOMAINS" | tr -s ';')
+# shellcheck disable=SC2155
+export DOMAINS=$(echo "$SSL_DOMAINS" | tr -s ';' ' ')
 # 服务厂商
 export SSL_SERVER="$SSL_SERVER"
-# 邮箱
-export MAIL="$MAIL"
-export DNS="$DNS"
+export DNS="$SSL_DNS"
 # 生成证书的文件夹
 export SSL_BASE_DIR="$SSL_BASE_DIR"
 export RELOAD_CMD="$RELOAD_CMD"
 
-# 存放和设置默认邮件
-if [ -z "$MAIL" ]; then
-  echo "[$(date)] Empty env var MAIL, set MAIL=\"youmail@example.com\""
-  MAIL="youmail@example.com"
-fi
-
 # 检查域名变量
 if [ -z "$DOMAINS" ]; then
-  echo "[$(date)] Empty env var SSL_DOMAINS"
+  echo "[$(date)] ERROR: Empty env var SSL_DOMAINS" | tee -a "$LOG_FILE"
 fi
 
-# 存放和设置默认证书的文件夹
+# 设置默认 SSL 目录和重载命令
 if [ -z "$SSL_BASE_DIR" ]; then
-  echo "[$(date)] Empty env var SSL_BASE_DIR, set SSL_BASE_DIR=\"/usr/panel/ssl/nginx/nginx1.21\""
+  echo "[$(date)] INFO: Empty env var SSL_BASE_DIR, setting default SSL_BASE_DIR=\"/usr/panel/ssl/nginx/nginx1.21\"" | tee -a "$LOG_FILE"
   SSL_BASE_DIR="/usr/panel/ssl/nginx/nginx1.21"
 fi
 
 if [ -z "$RELOAD_CMD" ]; then
-  echo "[$(date)] Empty env var RELOAD_CMD, set RELOAD_CMD=\"nginx -s reload\""
+  echo "[$(date)] INFO: Empty env var RELOAD_CMD, setting default RELOAD_CMD=\"nginx -s reload\"" | tee -a "$LOG_FILE"
   RELOAD_CMD="nginx -s reload"
 fi
 
 # 创建SSL证书目录
-mkdir -p ${SSL_BASE_DIR}/
-
-function CreateDefault() {
-  local domain=$1
-  local ssl_dir="${SSL_BASE_DIR}/${domain}"
-  mkdir -p ${ssl_dir}
-
-  if [ -s "${ssl_dir}/${domain}_fullchain.pem" ]; then
-    echo "[$(date)] default cert exists in :${ssl_dir}"
-  else
-    echo "[$(date)] create default cert to :${ssl_dir}"
-    openssl req -x509 -newkey rsa:4096 -nodes -days 365 \
-      -subj "/C=CA/ST=QC/O=Company Inc/CN=${domain}" \
-      -out ${ssl_dir}/${domain}_fullchain.pem \
-      -keyout ${ssl_dir}/${domain}_key.pem
-    chmod +w ${ssl_dir}/*
-  fi
-}
+mkdir -p ${SSL_BASE_DIR}/ || { echo "[$(date)] ERROR: Failed to create SSL base directory"; exit 1; }
 
 # 函数：启动acme.sh并处理证书
 function StartAcmeSh() {
-  echo "[$(date)] sleep 2 second to start Acme.sh..."
-  sleep 2
-  echo "[$(date)] Start Acme.sh..."
-  echo "[$(date)] SSL_BASE_DIR :${SSL_BASE_DIR}"
-  echo "[$(date)] MAIL :${MAIL}"
-  echo "[$(date)] RELOAD_CMD :${RELOAD_CMD}"
+  echo "[$(date)] INFO: Starting Acme.sh..." | tee -a "$LOG_FILE"
+  sleep 2  # Sleep for 2 seconds before starting
+  echo "[$(date)] INFO: Using SSL_BASE_DIR: ${SSL_BASE_DIR} and RELOAD_CMD: ${RELOAD_CMD}" | tee -a "$LOG_FILE"
 
-  IFS=' '
-  read -ra list <<<"$DOMAINS"
-
+  IFS=' ' read -ra list <<<"$DOMAINS"
   for domain in "${list[@]}"; do
     local ssl_dir="${SSL_BASE_DIR}/${domain}"
-    mkdir -p ${ssl_dir}
+    mkdir -p ${ssl_dir} || { echo "[$(date)] ERROR: Failed to create SSL directory for $domain"; continue; }
 
     ACME_DOMAIN_OPTION="-d ${domain}"
     if [[ -n "$DNS" ]]; then
       ACME_DOMAIN_OPTION+=" --dns $DNS"
     fi
 
-    echo "[$(date)] Issue the cert: $domain with options $ACME_DOMAIN_OPTION"
+    echo "[$(date)] INFO: Issuing cert for $domain with options $ACME_DOMAIN_OPTION" | tee -a "$LOG_FILE"
 
     if [[ -n "$SSL_SERVER" ]]; then
       /root/.acme.sh/acme.sh --set-default-ca --server $SSL_SERVER
     fi
 
-    echo "[$(date)] 1、acme.sh register .."
-    /root/.acme.sh/acme.sh --register-account -m $MAIL
-
-    echo "[$(date)] 2、acme.sh issue .."
+    echo "[$(date)] INFO: Running acme.sh to issue certificate..." | tee -a "$LOG_FILE"
     /root/.acme.sh/acme.sh --issue --nginx $ACME_DOMAIN_OPTION --renew-hook "${RELOAD_CMD}"
 
-    echo "[$(date)] 3、acme.sh install-cert .."
+    echo "[$(date)] INFO: Installing certificate for $domain..." | tee -a "$LOG_FILE"
     /root/.acme.sh/acme.sh --install-cert $ACME_DOMAIN_OPTION \
-      --fullchain-file ${ssl_dir}/${domain}.fullchain.pem \
-      --cert-file ${ssl_dir}/${domain}.cert.pem \
+      --fullchain-file ${ssl_dir}/${domain}.pem \
       --key-file ${ssl_dir}/${domain}.key \
       --reloadcmd "${RELOAD_CMD}"
+
   done
 
-  echo "[$(date)] Start acme.sh crond "
+  echo "[$(date)] INFO: Starting acme.sh cron job..." | tee -a "$LOG_FILE"
   crond
 }
 
+# 如果域名存在，则启动 acme.sh
 if [[ -n "$DOMAINS" ]]; then
-  echo "[$(date)] 生成默认证书, 配置文件中使用，否则nginx启动会失败"
-  IFS=' '
-  read -ra list <<<"$DOMAINS"
-  for domain in "${list[@]}"; do
-    CreateDefault "$domain"
-  done
-
   export -f StartAcmeSh
-  nohup bash -c StartAcmeSh "${SSL_BASE_DIR}" "${RELOAD_CMD}" &
+  nohup bash -c StartAcmeSh "${SSL_BASE_DIR}" "${RELOAD_CMD}" &>> "$LOG_FILE" &
 fi
 
-echo "[$(date)] Start nginx"
+echo "[$(date)] INFO: Starting Nginx..." | tee -a "$LOG_FILE"
 nginx -g "daemon off;"
