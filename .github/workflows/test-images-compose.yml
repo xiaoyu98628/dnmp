@@ -52,7 +52,7 @@ jobs:
         run: |
           version_number=$(echo "${{ matrix.php_version }}" | sed 's/php//')
           if [ "$version_number" = "84" ]; then
-            echo "PHP_EXTENSIONS_${version_number}=swoole,mcrypt,phalcon" >> .github/workflows/.env
+            echo "PHP_EXTENSIONS_${version_number}=swoole,phalcon" >> .github/workflows/.env
           else
             echo "PHP_EXTENSIONS_${version_number}=phalcon" >> .github/workflows/.env
           fi
