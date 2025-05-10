@@ -254,6 +254,13 @@ RUN apk update && apk upgrade \
             && printf "\n" | pecl install igbinary \
             && docker-php-ext-enable igbinary; \
         fi \
+    && if [ -z "${EXTENSIONS##*,imagick,*}" ]; \
+        then \
+            echo "---------- Install imagick ----------" \
+            && apk add --no-cache imagemagick-dev libgomp \
+            && printf "\n" | pecl install imagick \
+            && docker-php-ext-enable imagick; \
+        fi \
     && if [ -z "${EXTENSIONS##*,xlswriter,*}" ]; \
         then \
             echo "---------- Install xlswriter ----------" \
