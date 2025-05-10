@@ -1,0 +1,5 @@
+# 忽略当前文件夹下所有文件上传 git
+*
+
+# 排除 .gitignore 文件
+!.gitignore

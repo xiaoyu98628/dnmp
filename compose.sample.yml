@@ -1,5 +1,25 @@
 services:
   # 使用前最好阅读一遍（README.md）说明文件，以便快速上手，遇到问题也能及时排查
+  mysql5.7:
+    image: mysql:5.7
+    container_name: mysql57
+    restart: always
+    privileged: true
+    ports:
+      - "3307:3306"
+    volumes:
+      - "./servers/mysql/mysql5.7/config:/etc/mysql"  # 配置文件
+      - "./data/mysql/mysql5.7:/var/lib/mysql"        # 数据库文件
+      - "./logs/mysql/mysql5.7:/var/log/mysql"        # 日志文件
+    environment:
+      - "TZ=${TZ}"
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD_57}"
+      - "MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST_57}"
+      - "MYSQL_USER=${MYSQL_USER_57}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD_57}"
+    networks:
+      - dnmp
+
   mysql8.0:
     image: mysql:8.0
     container_name: mysql80

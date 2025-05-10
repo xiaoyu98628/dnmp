@@ -7,3 +7,7 @@
 # 排除 mysql8.0 文件
 !mysql8.0
 !mysql8.0/**
+
+# 排除 mysql5.7 文件
+!mysql5.7
+!mysql5.7/**
