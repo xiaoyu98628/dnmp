@@ -357,6 +357,7 @@ services:
     environment:
       - "RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER_3_11}"
       - "RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS_3_11}"
+      - "RABBITMQ_NODENAME=rabbit@rabbitmq3.11"
     networks:
       - dnmp
 
