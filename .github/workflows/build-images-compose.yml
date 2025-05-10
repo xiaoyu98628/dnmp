@@ -122,8 +122,10 @@ jobs:
           elif [ "${{ matrix.service }}" = "node22" ]; then
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} node -v
           elif [ "${{ matrix.service }}" = "rabbitmq3.11" ]; then
-            sleep 10 # 等待10秒，确保 RabbitMQ 启动完成
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} rabbitmqctl status | grep "RabbitMQ version"
           elif [ "${{ matrix.service }}" = "mongo6.0" ]; then
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} mongod --version
           fi
+          
+          # 输出容器日志
+          docker compose -f compose.sample.yml --env-file .github/workflows/.env logs ${{ matrix.service }}
