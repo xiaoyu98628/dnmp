@@ -358,6 +358,7 @@ services:
       - "RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER_3_11}"
       - "RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS_3_11}"
       - "RABBITMQ_NODENAME=rabbit@rabbitmq3.11"
+      - "RABBITMQ_USE_LONGNAME=true"                                          # 设置短名称
     networks:
       - dnmp
 
