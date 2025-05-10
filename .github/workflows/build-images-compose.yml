@@ -110,6 +110,8 @@ jobs:
       - name: Verify ${{ matrix.service }} Docker image
         run: |
           docker compose -f compose.sample.yml --env-file .github/workflows/.env up -d ${{ matrix.service }}
+          # 输出容器日志
+          docker compose -f compose.sample.yml --env-file .github/workflows/.env logs ${{ matrix.service }}
           # 根据服务类型执行相应的验证步骤
           if [ "${{ matrix.service }}" = "nginx1.21" ]; then
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} nginx -v
@@ -126,6 +128,3 @@ jobs:
           elif [ "${{ matrix.service }}" = "mongo6.0" ]; then
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} mongod --version
           fi
-          
-          # 输出容器日志
-          docker compose -f compose.sample.yml --env-file .github/workflows/.env logs ${{ matrix.service }}
