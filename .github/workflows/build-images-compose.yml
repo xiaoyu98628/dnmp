@@ -122,7 +122,7 @@ jobs:
           elif [ "${{ matrix.service }}" = "node22" ]; then
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} node -v
           elif [ "${{ matrix.service }}" = "rabbitmq3.11" ]; then
-            docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} rabbitmqctl status | grep "RabbitMQ version"
+            docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} rabbitmqctl status --longnames | grep "RabbitMQ version"
           elif [ "${{ matrix.service }}" = "mongo6.0" ]; then
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} mongod --version
           fi
