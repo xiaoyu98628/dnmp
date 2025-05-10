@@ -411,21 +411,21 @@ REDIS_PASSWORD_62=123456
 ```
 ### 2.8 MySQL
 #### 2.8.1 mysql 密码问题
-当前mysql容器提供两个账户，`root账户`，默认在容器内部访问 `xiaoyu账户` 默认权限不足
+当前mysql容器提供两个账户，`root账户`，默认在容器内部访问 `admin账户` 默认权限不足
 ```dotenv
 # +--------------+
 # mysql8.0
 # +--------------+
 MYSQL_ROOT_PASSWORD_80=root
 MYSQL_ROOT_HOST_80=localhost
-MYSQL_USER_80=xiaoyu
-MYSQL_PASSWORD_80=xiaoyu
+MYSQL_USER_80=admin
+MYSQL_PASSWORD_80=admin
 ```
 如需修改请在 `.env` 文件中找到相应配置，对应修改  
 - `MYSQL_ROOT_PASSWORD_80` 默认账户 `root` 对应的密码
 - `MYSQL_ROOT_HOST_80` 默认账户 `root` 对应的访问权限
-- `MYSQL_USER_80` 新建账户 `xiaoyu` 用户名
-- `MYSQL_PASSWORD_80` 新建账户 `xiaoyu` 对应的密码
+- `MYSQL_USER_80` 新建账户 `admin` 用户名
+- `MYSQL_PASSWORD_80` 新建账户 `admin` 对应的密码
 #### 2.8.2 权限问题
 如需修改权限，对照下面命令修改
 ```sql
@@ -435,9 +435,9 @@ MYSQL_PASSWORD_80=xiaoyu
 GRANT privileges ON database_name.table_name TO 'username'@'host';
 
 -- 例子：
-GRANT SELECT,INSERT ON test.user TO 'xiaoyu'@'%';
-GRANT ALL ON *.* TO 'xiaoyu'@'%';
-GRANT ALL ON test.* TO 'xiaoyu'@'%';
+GRANT SELECT,INSERT ON test.user TO 'admin'@'%';
+GRANT ALL ON *.* TO 'admin'@'%';
+GRANT ALL ON test.* TO 'admin'@'%';
 
 -- 刷新权限
 FLUSH PRIVILEGES; 
@@ -445,7 +445,7 @@ FLUSH PRIVILEGES;
 #### 2.8.3 windows 下文件权限导致 mysql 配置文件不生效导致 php7.2 和 php7.3 连接 mysql 密码问题
 1、配置文件权限问题：成功创建容器进入容器修改配置文件权限及用户和用户组 `chown -R mysql:mysql /etc/mysql`, `chown -R 755 /etc/mysql`， 重启 mysql 容器  
 2、连接问题：原因是因为 在 MySQL 8.0 及更高版本中，默认的认证插件从 mysql_native_password 更改为 caching_sha2_password。如果你的 MySQL 服务器不再使用 mysql_native_password 插件，php7.3 及低版本中可能会因为不支持 caching_sha2_password 而无法连接数据库。  
-    解决办法：修改密码；例如`ALTER USER 'xiaoyu'@'%' IDENTIFIED WITH mysql_native_password BY 'xiaoyu';`
+    解决办法：修改密码；例如`ALTER USER 'admin'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';`
 ## 3 容器挂载路径权限问题
 由于数据卷和日志卷分离的原因，部分容器启动需要对应的权限，然而宿主机上没有与之对应的权限，所以我们直接赋予`777`权限即可
 ### 3.1 mysql
