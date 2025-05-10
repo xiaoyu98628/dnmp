@@ -70,8 +70,11 @@ jobs:
         service:
           - nginx1.21
           - redis6.2
+          - mysql5.7
           - mysql8.0
           - node22
+          - rabbitmq3.11
+          - mongo6.0
     runs-on: ubuntu-latest
     name: Build and Test ${{ matrix.service }} Docker Image
 
@@ -112,8 +115,14 @@ jobs:
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} nginx -v
           elif [ "${{ matrix.service }}" = "redis6.2" ]; then
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} redis-server --version
+          elif [ "${{ matrix.service }}" = "mysql5.7" ]; then
+            docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} mysql --version
           elif [ "${{ matrix.service }}" = "mysql8.0" ]; then
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} mysql --version
           elif [ "${{ matrix.service }}" = "node22" ]; then
             docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} node -v
+          elif [ "${{ matrix.service }}" = "rabbitmq3.11" ]; then
+            docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} rabbitmqctl status | grep "RabbitMQ version"
+          elif [ "${{ matrix.service }}" = "mongo6.0" ]; then
+            docker compose -f compose.sample.yml --env-file .github/workflows/.env exec ${{ matrix.service }} mongod --version
           fi
