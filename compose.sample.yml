@@ -359,7 +359,7 @@ services:
       - "RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS_3_11}"
       - "RABBITMQ_NODENAME=rabbit@rabbitmq3.11"
       - "RABBITMQ_USE_LONGNAME=true"                                          # 设置短名称
-      - "RABBITMQ_ERLANG_COOKIE=secret-cookie"                               # 确保使用一致的 Erlang cookie
+      - "RABBITMQ_ERLANG_COOKIE=secret-cookie"                                # 确保使用一致的 Erlang cookie
     networks:
       - dnmp
 
