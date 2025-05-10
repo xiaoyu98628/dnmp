@@ -177,13 +177,6 @@ RUN apk update && apk upgrade \
             && echo "[swoole]" >> /usr/local/etc/php/conf.d/docker-php-ext-swoole.ini \
             && echo "swoole.enable_fiber_mock = On" >> /usr/local/etc/php/conf.d/docker-php-ext-swoole.ini; \
         fi \
-    && if [ -z "${EXTENSIONS##*,mcrypt,*}" ]; \
-        then \
-            echo "---------- Install mcrypt ----------" \
-            && apk add --no-cache libmcrypt-dev \
-            && printf "\n" | pecl install mcrypt \
-            && docker-php-ext-enable mcrypt; \
-        fi \
     && if [ -z "${EXTENSIONS##*,memcached,*}" ]; \
         then \
             echo "---------- Install memcached ----------" \
