@@ -20,8 +20,8 @@ fi
 
 # 设置默认 SSL 目录和重载命令
 if [ -z "$SSL_BASE_DIR" ]; then
-  echo "[$(date)] INFO: Empty env var SSL_BASE_DIR, setting default SSL_BASE_DIR=\"/usr/panel/ssl/nginx/nginx1.21\"" | tee -a "$LOG_FILE"
-  SSL_BASE_DIR="/usr/panel/ssl/nginx/nginx1.21"
+  echo "[$(date)] INFO: Empty env var SSL_BASE_DIR, setting default SSL_BASE_DIR=\"/usr/panel/ssl/nginx/nginx1.28\"" | tee -a "$LOG_FILE"
+  SSL_BASE_DIR="/usr/panel/ssl/nginx/nginx1.28"
 fi
 
 if [ -z "$RELOAD_CMD" ]; then
