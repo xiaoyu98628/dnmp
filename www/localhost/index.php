@@ -62,7 +62,7 @@ getTime();
  */
 function getPhpFpmStatus()
 {
-    $url = 'http://nginx1.21/'.PHP_MAJOR_VERSION.PHP_MINOR_VERSION.'/fpm-status';
+    $url = 'http://nginx1.28/'.PHP_MAJOR_VERSION.PHP_MINOR_VERSION.'/fpm-status';
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);

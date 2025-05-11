@@ -1,0 +1,12 @@
+# 忽略当前文件夹下所有文件上传 git
+*
+
+# 排除 .gitignore 文件
+!.gitignore
+
+# 排除 Dockerfile 文件
+!Dockerfile
+
+# 排除 config 文件夹
+!config
+!config/**

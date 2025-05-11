@@ -1,0 +1,245 @@
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+    root   /usr/share/nginx/html/localhost;
+    index  index.php index.html index.htm;
+
+    access_log  /var/log/nginx/localhost.log main;
+    error_log  /var/log/nginx/localhost.error.log info;
+
+    charset utf-8; #防止txt文本出现乱码
+
+    # 伪静态
+    #location / {
+    #    if (!-e $request_filename){
+    #        rewrite  ^(.*)$  /index.php?s=$1  last;
+    #        break;
+    #    }
+    #}
+
+    location / {
+        root   /usr/share/nginx/html/localhost;
+        index  index.html;
+    }
+
+    # 这里配置的代理转发，方便看PHP版本,不需要可以删除
+    # +----------------- start -----------------+
+    location /72/ {
+        proxy_pass http://localhost:81/;
+    }
+
+    location /73/ {
+        proxy_pass http://localhost:82/;
+    }
+
+    location /74/ {
+        proxy_pass http://localhost:83/;
+    }
+
+    location /80/ {
+        proxy_pass http://localhost:84/;
+    }
+
+    location /81/ {
+        proxy_pass http://localhost:85/;
+    }
+
+    location /82/ {
+        proxy_pass http://localhost:86/;
+    }
+
+    location /83/ {
+        proxy_pass http://localhost:87/;
+    }
+
+    location /84/ {
+        proxy_pass http://localhost:88/;
+    }
+    # +------------------ end ------------------+
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    #error_page   500 502 503 504  /50x.html;
+    #location = /50x.html {
+    #    root   /usr/share/nginx/html/localhost;
+    #}
+
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+    #
+    #location ~ \.php$ {
+    #    proxy_pass   http://127.0.0.1;
+    #}
+
+    # Pass the PHP script to the FastCGI server
+    #
+    #location ~ [^/]\.php(/|$) {
+    #    # 注意这里和php-fpm的挂载目录一致
+    #    root           /var/www/html/localhost;
+    #    include php/enable-php-74.conf;
+    #}
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    #location ~ /\.ht {
+    #    deny  all;
+    #}
+}
+
+# 这里配置的代理转发，方便看PHP版本,不需要可以删除
+# +----------------- start -----------------+
+server{
+    listen       81;
+    listen  [::]:81;
+    server_name  localhost;
+    root   /usr/share/nginx/html/localhost;
+    index  index.php index.html index.htm;
+
+    location ~ [^/]\.php(/|$) {
+        # 注意这里和php-fpm的挂载目录一致
+        root           /var/www/html/localhost;
+        include php/enable-php-72.conf;
+    }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
+        include php/enable-php-72.conf;
+    }
+}
+
+server{
+    listen       82;
+    listen  [::]:82;
+    server_name  localhost;
+    root   /usr/share/nginx/html/localhost;
+    index  index.php index.html index.htm;
+
+    location ~ [^/]\.php(/|$) {
+        # 注意这里和php-fpm的挂载目录一致
+        root           /var/www/html/localhost;
+        include php/enable-php-73.conf;
+    }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
+        include php/enable-php-73.conf;
+    }
+}
+
+server{
+    listen       83;
+    listen  [::]:83;
+    server_name  localhost;
+    root   /usr/share/nginx/html/localhost;
+    index  index.php index.html index.htm;
+
+    location ~ [^/]\.php(/|$) {
+        # 注意这里和php-fpm的挂载目录一致
+        root           /var/www/html/localhost;
+        include php/enable-php-74.conf;
+    }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
+        include php/enable-php-74.conf;
+    }
+}
+
+server{
+    listen       84;
+    listen  [::]:84;
+    server_name  localhost;
+    root   /usr/share/nginx/html/localhost;
+    index  index.php index.html index.htm;
+
+    location ~ [^/]\.php(/|$) {
+        # 注意这里和php-fpm的挂载目录一致
+        root           /var/www/html/localhost;
+        include php/enable-php-80.conf;
+    }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
+        include php/enable-php-80.conf;
+    }
+}
+
+server{
+    listen       85;
+    listen  [::]:85;
+    server_name  localhost;
+    root   /usr/share/nginx/html/localhost;
+    index  index.php index.html index.htm;
+
+    location ~ [^/]\.php(/|$) {
+        # 注意这里和php-fpm的挂载目录一致
+        root           /var/www/html/localhost;
+        include php/enable-php-81.conf;
+    }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
+        include php/enable-php-81.conf;
+    }
+}
+
+server{
+    listen       86;
+    listen  [::]:86;
+    server_name  localhost;
+    root   /usr/share/nginx/html/localhost;
+    index  index.php index.html index.htm;
+
+    location ~ [^/]\.php(/|$) {
+        # 注意这里和php-fpm的挂载目录一致
+        root           /var/www/html/localhost;
+        include php/enable-php-82.conf;
+    }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
+        include php/enable-php-82.conf;
+    }
+}
+
+server{
+    listen       87;
+    listen  [::]:87;
+    server_name  localhost;
+    root   /usr/share/nginx/html/localhost;
+    index  index.php index.html index.htm;
+
+    location ~ [^/]\.php(/|$) {
+        # 注意这里和php-fpm的挂载目录一致
+        root           /var/www/html/localhost;
+        include php/enable-php-83.conf;
+    }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
+        include php/enable-php-83.conf;
+    }
+}
+
+server{
+    listen       88;
+    listen  [::]:88;
+    server_name  localhost;
+    root   /usr/share/nginx/html/localhost;
+    index  index.php index.html index.htm;
+
+    location ~ [^/]\.php(/|$) {
+        # 注意这里和php-fpm的挂载目录一致
+        root           /var/www/html/localhost;
+        include php/enable-php-84.conf;
+    }
+
+    # php-fpm 进程状态监控
+    location /fpm-status {
+        include php/enable-php-84.conf;
+    }
+}
+# +------------------ end ------------------+

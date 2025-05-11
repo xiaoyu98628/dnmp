@@ -299,6 +299,33 @@ services:
     networks:
       - dnmp
 
+  nginx1.28:
+    build:
+      context: ./servers/nginx/nginx1.28
+      dockerfile: Dockerfile
+      args:
+        TZ: ${TZ}
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        NGINX_REGISTER_ACME_MAIL: ${NGINX_REGISTER_ACME_MAIL_1_28}
+    container_name: nginx1.28
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./servers/nginx/nginx1.28/config:/etc/nginx"   # 配置文件
+      - "./logs/nginx/nginx1.28:/var/log/nginx"         # 日志文件
+      - "./panel:/usr/panel"                            # php unix连接文件
+      - "${PROJECT_DIRECTORY}:/usr/share/nginx/html"    # 站点文件路径
+    environment:
+      - "SSL_DOMAINS=${NGINX_SSL_DOMAINS_1_28}"
+      - "SSL_SERVER=${NGINX_SSL_SERVER_1_28}"
+      - "SSL_DNS=${NGINX_SSL_DNS_1_28}"
+      - "SSL_BASE_DIR=${NGINX_SSL_BASE_DIR_1_28}"
+      - "RELOAD_CMD=${NGINX_RELOAD_CMD_1_28}"
+    networks:
+      - dnmp
+
   mongo6.0:
     image: mongo:6.0
     container_name: mongodb60

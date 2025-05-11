@@ -7,3 +7,7 @@
 # 排除 nginx1.21 文件
 !nginx1.21
 !nginx1.21/**
+
+# 排除 nginx1.28 文件
+!nginx1.28
+!nginx1.28/**
