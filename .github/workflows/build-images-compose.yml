@@ -69,6 +69,7 @@ jobs:
       matrix:
         service:
           - nginx1.21
+          - nginx1.28
           - redis6.2
           - mysql5.7
           - mysql8.0
