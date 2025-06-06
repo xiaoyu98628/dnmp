@@ -11,6 +11,12 @@ ARG TZ
 
 ENV EXTENSIONS=",${PHP_EXTENSIONS_74},"
 
+# 资源替换 更换镜像
+RUN if [ ${CONTAINER_PACKAGE_URL} ]; then sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories; fi
+
+# 修改时间
+RUN if [ ${TZ} ]; then apk add --no-cache --virtual .fetch-deps tzdata && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone && apk del .fetch-deps; fi
+
 # 引入 install-php-extensions 脚本 方便容器内安装扩展
 ADD config/extensions/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions \
@@ -18,12 +24,6 @@ RUN chmod +x /usr/local/bin/install-php-extensions \
     # 修改换行格式 将 Windows 下 CRLF 转换成 LF
     && dos2unix /usr/local/bin/install-php-extensions \
     && apk del .dos-deps
-
-# 资源替换 更换镜像
-RUN if [ ${CONTAINER_PACKAGE_URL} ]; then sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories; fi
-
-# 修改时间
-RUN if [ ${TZ} ]; then apk add --no-cache --virtual .fetch-deps tzdata && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone && apk del .fetch-deps; fi
 
 # 更新包索引 安装扩展
 RUN apk update && apk upgrade \
