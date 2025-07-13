@@ -17,12 +17,14 @@ RUN if [ ${CONTAINER_PACKAGE_URL} ]; then sed -i "s/dl-cdn.alpinelinux.org/${CON
 # 修改时间
 RUN if [ ${TZ} ]; then apk add --no-cache --virtual .fetch-deps tzdata && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone && apk del .fetch-deps; fi
 
-# 引入 install-php-extensions 脚本 方便容器内安装扩展
+# 引入 install-php-extensions 和 docker-entrypoint 脚本 方便容器内安装扩展 和 清理残留 socket 文件
 ADD config/extensions/install-php-extensions /usr/local/bin/
-RUN chmod +x /usr/local/bin/install-php-extensions \
+ADD config/extensions/docker-entrypoint /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/install-php-extensions /usr/local/bin/docker-entrypoint \
     && apk add --no-cache --virtual .dos-deps dos2unix \
     # 修改换行格式 将 Windows 下 CRLF 转换成 LF
-    && dos2unix /usr/local/bin/install-php-extensions \
+    && dos2unix /usr/local/bin/install-php-extensions /usr/local/bin/docker-entrypoint \
     && apk del .dos-deps
 
 # 更新包索引 安装扩展
@@ -299,4 +301,5 @@ RUN apk update && apk upgrade \
 RUN apk add --no-cache --repository https://${CONTAINER_PACKAGE_URL}/alpine/v3.13/community gnu-libiconv=1.15-r3
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
+ENTRYPOINT ["docker-entrypoint"]
 CMD ["supervisord", "-c", "/etc/supervisord.conf", "-n"]
