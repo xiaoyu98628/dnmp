@@ -174,6 +174,7 @@ RUN apk update && apk upgrade \
     && if [ -z "${EXTENSIONS##*,swoole,*}" ]; \
         then \
             echo "---------- Install swoole ----------" \
+            && apk add --no-cache pkgconf brotli-dev \
             && printf "\n" | pecl install swoole \
             && docker-php-ext-enable swoole \
             && echo "[swoole]" >> /usr/local/etc/php/conf.d/docker-php-ext-swoole.ini \
