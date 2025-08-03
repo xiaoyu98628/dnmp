@@ -65,7 +65,7 @@ jobs:
           PHP_EXTENSIONS_81: phalcon
           PHP_EXTENSIONS_82: phalcon
           PHP_EXTENSIONS_83: phalcon
-          PHP_EXTENSIONS_84: swoole.mcrypt,phalcon
+          PHP_EXTENSIONS_84: phalcon
 
       - name: Verify ${{ matrix.php_version }} Docker image
         run: |
