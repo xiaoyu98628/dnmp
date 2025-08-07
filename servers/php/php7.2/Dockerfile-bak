@@ -13,7 +13,7 @@ ARG TZ
 ADD config/extensions/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions \
     && apk add --no-cache --virtual .dos-deps dos2unix \
-    # 修改换行格式 将 Windows 下 CRLF 转换成 LF
+    # 修改换行格式 将 Windows 下 CRLF 转换成 LF \
     && dos2unix /usr/local/bin/install-php-extensions \
     && apk del .dos-deps
 
@@ -22,17 +22,17 @@ RUN if [ -n "${CONTAINER_PACKAGE_URL}" ]; then sed -i "s/dl-cdn.alpinelinux.org/
 
 # 更新包索引，升级系统
 RUN apk update && apk upgrade \
-    # 修改时间
+    # 修改时间 \
     && if [ -n "${TZ}" ]; then apk add --no-cache --virtual .build-deps tzdata && cp -r "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone; fi \
-    # 安装依赖和 PHP 扩展
+    # 安装依赖和 PHP 扩展 \
     && if [ -n "${PHP_EXTENSIONS_72}" ]; then install-php-extensions $(echo ${PHP_EXTENSIONS_72} | tr ',' ' '); fi \
-    # 安装 Composer
+    # 安装 Composer \
     && echo "---------- Install composer ----------" \
     && curl -sS ${COMPOSER_DOWNLOAD_URL} | php \
     && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
-    # 替换 Composer 镜像
+    # 替换 Composer 镜像 \
     && if [ -n "${COMPOSER_IMAGE_URL}" ]; then composer config -g repo.packagist composer ${COMPOSER_IMAGE_URL}; fi \
-    # 安装 supervisor
+    # 安装 supervisor \
     && echo "---------- Install supervisor ----------" \
     && apk add --no-cache supervisor \
     && apk del .build-deps

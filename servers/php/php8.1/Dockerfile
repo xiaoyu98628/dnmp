@@ -23,7 +23,7 @@ ADD config/extensions/docker-entrypoint /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/install-php-extensions /usr/local/bin/docker-entrypoint \
     && apk add --no-cache --virtual .dos-deps dos2unix \
-    # 修改换行格式 将 Windows 下 CRLF 转换成 LF
+    # 修改换行格式 将 Windows 下 CRLF 转换成 LF \
     && dos2unix /usr/local/bin/install-php-extensions /usr/local/bin/docker-entrypoint \
     && apk del .dos-deps
 
@@ -34,7 +34,7 @@ RUN apk update && apk upgrade \
         then \
             apk add --no-cache --virtual .build-deps autoconf g++ make libtool linux-headers \
             && apk add --no-cache libstdc++ \
-            # 更新 PECL 通道
+            # 更新 PECL 通道 \
             && pecl update-channels; \
         fi \
     && if [ -z "${EXTENSIONS##*,pdo_mysql,*}" ]; \
@@ -236,8 +236,8 @@ RUN apk update && apk upgrade \
     && if [ -z "${EXTENSIONS##*,phalcon,*}" ]; \
         then \
             echo "---------- Install phalcon ----------" \
-            # 对于 phalcon 4.x，需要完成诸如安装 psr 之类的附加步骤 可参考php7.3/Dockerfile
-            # 查看 pecl支持的版本 https://pecl.php.net/package/phalcon
+            # 对于 phalcon 4.x 需要完成诸如安装 psr 之类的附加步骤 可参考php7.3/Dockerfile \
+            # 查看 pecl支持的版本 https://pecl.php.net/package/phalcon \
             && printf "\n" | pecl install phalcon \
             && docker-php-ext-enable phalcon; \
         fi \
@@ -278,20 +278,20 @@ RUN apk update && apk upgrade \
             && docker-php-ext-enable yaml; \
         fi \
     && docker-php-source delete \
-    # 安装 composer
+    # 安装 composer \
     && echo "---------- Install composer ----------" \
     && apk add --no-cache --virtual .build-deps curl \
     && curl -sS ${COMPOSER_DOWNLOAD_URL} | php \
     && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer \
-    # 替换 composer 镜像
+    # 替换 composer 镜像 \
     && if [ ${COMPOSER_IMAGE_URL} ]; then composer config -g repo.packagist composer ${COMPOSER_IMAGE_URL}; fi \
     && echo "---------- Install supervisor ----------" \
     && apk add --no-cache supervisor \
-    # 删除 pecl 下载的扩展包
+    # 删除 pecl 下载的扩展包 \
     && rm -rf /tmp/pear \
-    # 删除虚拟包
+    # 删除虚拟包 \
     && apk del .build-deps \
-    # 删除 apk 下载的包
+    # 删除 apk 下载的包 \
     && rm -rf /var/cache/apk/*
 
 # iconv 扩展问题，alpine 自带的 gnu-libiconv 版本高，需要降低版本
