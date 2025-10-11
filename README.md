@@ -2,6 +2,8 @@ docker compose 快速部署LNMP环境又名DNMP 包括但不限于 Nginx，Mysql
 
 > 使用前最好阅读一遍下面的说明文件，以便快速上手，遇到问题也能及时排查
 
+# 当前项目内容过于冗余，建议使用新版 [Gitee](https://gitee.com/xiaoyu98628/docker) 和 [Github](https://github.com/xiaoyu98628/docker)
+
 ### QQ交流群: 544315207
 
 ### 快速使用
