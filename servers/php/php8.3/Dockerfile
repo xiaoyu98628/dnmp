@@ -238,7 +238,7 @@ RUN apk update && apk upgrade \
             echo "---------- Install phalcon ----------" \
             # 对于 phalcon 4.x 需要完成诸如安装 psr 之类的附加步骤 可参考php7.3/Dockerfile \
             # 查看 pecl支持的版本 https://pecl.php.net/package/phalcon \
-            && CFLAGS="-Wno-incompatible-pointer-types" \
+            && export CFLAGS="-Wno-incompatible-pointer-types" \
             && printf "\n" | pecl install phalcon \
             && docker-php-ext-enable phalcon; \
         fi \
