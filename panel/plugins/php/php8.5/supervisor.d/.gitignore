@@ -1,0 +1,11 @@
+# 忽略当前文件夹下所有文件上传 git
+.gitignore
+
+# 排除 .gitignore 文件
+!.gitignore
+
+# 排除 ini.sample 文件
+!ini.sample
+
+# 排除 php-fpm.ini 文件
+!php-fpm.ini

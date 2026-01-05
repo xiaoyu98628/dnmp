@@ -8,9 +8,9 @@ on:
       - main  # 在拉取请求合并到 main 分支时触发
   schedule:
     - cron: '0 0 * * *' # 每天 0点（UTC），相当于中国时间每天凌晨8点
-  push:
-    branches:
-      - main  # 在推送到 main 分支时触发
+#  push:
+#    branches:
+#      - main  # 在推送到 main 分支时触发
 
 jobs:
   build_php_images:

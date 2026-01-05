@@ -24,7 +24,8 @@ jobs:
           - php81
           - php82
           - php83
-          - php84  # 分别测试不同的 PHP 版本
+          - php84
+          - php85  # 分别测试不同的 PHP 版本
     runs-on: ubuntu-latest
     name: Build and Test ${{ matrix.php_version }} Docker Image
 
