@@ -278,7 +278,7 @@ services:
       dockerfile: Dockerfile
       args:
         CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
-        PHP_EXTENSIONS: ${PHP_EXTENSIONS}
+        PHP_EXTENSIONS: ${PHP_EXTENSIONS_85}
         COMPOSER_IMAGE_URL: ${COMPOSER_IMAGE_URL}
         TZ: ${TZ}
     container_name: php85
